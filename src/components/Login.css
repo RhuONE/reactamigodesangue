@@ -1,4 +1,6 @@
 .login-container {
+  display: flex;
+  flex-direction: column;
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
@@ -7,6 +9,11 @@
     background: #fff;
   }
   
+  .login-container img{
+    width: 40%;
+    align-self: center;
+    margin-bottom: 24px;
+  }
   .input-group {
     margin-bottom: 15px;
   }
@@ -22,8 +29,9 @@
     box-sizing: border-box;
   }
   
-  button {
+  .login-container button {
     padding: 10px 20px;
+    width: 100%;
     background: #2c3e50;
     color: #fff;
     border: none;
@@ -32,7 +40,7 @@
     transition: background 0.3s;
   }
   
-  button:hover {
-    background: #18bc9c;
+  .login-container button:hover {
+    background: #1888bc;
   }
   

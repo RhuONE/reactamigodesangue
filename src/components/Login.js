@@ -4,6 +4,7 @@ import api from '../services/api'; // Assumindo que seu axios já está configur
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Login.css';
+import logo from '../images/LogoAmgSangue.png';
 
 const Login = () => {
 
@@ -31,6 +32,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <ToastContainer />
+      <img src={logo} alt='logo'/>
       <h2>Login do Administrador</h2>
       <form onSubmit={handleLogin}>
         <div className="input-group">

@@ -48,8 +48,8 @@ const Dashboard = () => {
 
         fetchMetrics();
     }, [loading]);
-
   return (
+    
     <div className="dashboard-content">
       <ToastContainer /> {/** Container para exibir notificações */}
       <h1>Dashboard</h1>
