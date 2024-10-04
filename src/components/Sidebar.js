@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
 import './Sidebar.css';
+import logoExpand from '../images/LogoAmgSangueText.png';
+import logo from '../images/LogoAmgSangue.png';
 
 const Sidebar = () => {
 
@@ -9,20 +11,6 @@ const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-
-        // Adiciona ou remove a classe sidebar-open na div principal quando o menu está aberto/fechado
-        const mainContent = document.querySelector('.main-content');
-        if(mainContent) {
-            if(!isOpen) {
-                mainContent.classList.add('sidebar-open');
-            } else {
-                mainContent.classList.remove('sidebar-open');
-            }
-        }
-
-    };
 
     // Fecha o sidebar automaticamente ao redimensionar para telas menores
     useEffect(() => {
@@ -40,32 +28,32 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Botão Hambúrguer */}
-            <button className='sidebar-button' onClick={toggleSidebar}>
-                <FaBars />
-            </button>
-
-            {/** Overlay */}
-            <div className={`overlay ${isOpen ? 'open' : ''}`} onClick={toggleSidebar}></div>
-
             {/* Sidebar */}
-            <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-                <h2>Amigo de Sangue</h2>
+            <div
+                className={`sidebar ${isOpen ? 'open' : 'closed'}`}
+                onMouseEnter={() => setIsOpen(true)}
+                onMouseLeave={() => setIsOpen(false)}
+            >
+                {isOpen ? (
+                    <img src={logoExpand} alt='Logo Expandido' />
+                ) : (
+                    <img src={logo} alt='Logo Compacto' />
+                )}
                 <ul>
                     <li className={location.pathname === '/dashboard' ? 'active' : ''}>
-                        <Link to='/dashboard'> <FaTachometerAlt /> Dashboard</Link>
+                        <Link to='/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
                     </li>
                     <li className={location.pathname === '/usuarios' ? 'active' : ''}>
-                        <Link to='/usuarios'> <FaUser /> Usuários</Link>
+                        <Link to='/usuarios'> <FaUser /> <p>Usuários</p></Link>
                     </li>
                     <li className={location.pathname === '/hemocentros' ? 'active' : ''}>
-                        <Link to='/hemocentros'> <FaHospital /> Hemocentros</Link>
+                        <Link to='/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
                     </li>
                     <li className={location.pathname === '/campanhas' ? 'active' : ''}>
-                        <Link to='/campanhas'> <FaClipboardList /> Campanhas</Link>
+                        <Link to='/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
                     </li>
                     <li className={location.pathname === '/pendencias' ? 'active' : ''}>
-                        <Link to='/pendencias'><FaExclamationCircle /> Pendências</Link>
+                        <Link to='/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
                     </li>
                 </ul>
             </div>

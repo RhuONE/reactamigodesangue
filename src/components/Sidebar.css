@@ -1,30 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: Poppins;
+    margin: 0;
+    padding: 0;
+}
+
 /* Sidebar padrão (desktop) */
 .sidebar {
-    width: 250px;
+    max-width: 250px;
     height: 100vh;
-    background-color: #2c3e50; /* Cor de fundo escura para parecer moderna */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff; /* Cor de fundo escura para parecer moderna */
     padding: 20px;
-    color: white; /* Texto branco para destacar no fundo escuro */
+    color: rgb(26, 26, 26); /* Texto branco para destacar no fundo escuro */
     position: fixed; /* Fixa o sidebar para que ele não role junto com a página */
     top: 0;
     left: 0;
-    transition: transform 0.3s ease-in-out; /* Adiciona transição suave ao abrir/fechar */
-    transform: translateX(-100%); /* Posição padrão - fechado */
+    transition: 0.3s ease-in-out; /* Adiciona transição suave ao abrir/fechar */
     z-index: 1000; /* Mantém o sidebar sobreposto a outros elementos */
+    -webkit-box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
+    box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
 }
 
-.sidebar.open {
-    transform: translateX(0); /* Sidebar aberto */
+
+
+.sidebar.closed ul li a p{
+    display: none; /* Sidebar fechado fora da tela */
 }
 
-.sidebar.closed {
-    transform: translateX(-100%); /* Sidebar fechado fora da tela */
-}
-
-.sidebar h2 {
+.sidebar.open img {
+    width: 70%;
     margin-bottom: 30px;
-    font-size: 24px;
-    transition: color 0.3s; /* Transição para cor do texto */
+}
+.sidebar.closed img{
+    height: 76px;
+    margin-bottom: 30px;
 }
 
 .sidebar ul {
@@ -33,71 +47,47 @@
 }
 
 .sidebar ul li {
-    margin: 20px 0;
+    margin: 10px 0;
+    min-height: 57px;
+    border-radius: 10px;
     font-size: 18px;
     display: flex;
     align-items: center; /*Alinhar ícone e texto */
-    transition: color 0.3s; /*Transição suave para cor dos itens */
+    transition: 0.3s; /*Transição suave para cor dos itens */
+    justify-content: center;
+    text-decoration: none;
+    color: #555555;
 }
 
 .sidebar ul li svg {
-    margin-right: 10px; /* Espaço entre o ícone e o texto */
     transition: transform 0.3s; /* Transição para ícones */
 }
 
 .sidebar ul li a {
-    color: white; /* Mantenha a cor branca para os links */
+    color: rgb(0, 0, 0); /* Mantenha a cor branca para os links */
     text-decoration: none; /* Remove o sublinhado*/
+    display: flex;
+    gap:10px;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px 20px;
 }
 
 .sidebar ul li:hover {
     cursor: pointer;
-    color: #18bc9c; /* Cor de destaque ao passar o mouse */
+    background-color: #ebebeb; /* Cor de destaque ao passar o mouse */
     transition: color 0.3s;
-    transform: translateX(5px);  /* Efeito de deslizamente ao passar o mouse */
+    transform: scale(1.035);  /* Efeito de deslizamente ao passar o mouse */
 }
 
-.sidebar ul li.active {
-    color: #18bc9c; /* Cor diferenciada para o item ativo */
+.sidebar ul li.active{
+    background-color: #d00e0e;
+}
+.sidebar ul li.active a {
+    color: #ffffff; /* Cor diferenciada para o item ativo */
     font-weight: bold;
 }
 
-/* Botão Hambúrguer */
-.sidebar-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 1100; /* Acima do sidebar */
-    transition: background-color 0.3s;
-}
-
-.sidebar-button:hover {
-    background-color: #18bc9c; /* Cor de destaque ao passar o mouse */
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999; /* Coloca o overlay abaixo do botão de sidebar */
-    opacity: 0; /* Escondido por padrão */
-    visibility: hidden; /* Torna o elemento não clicável */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-}
-
-.overlay.open {
-    opacity: 1; /* Mostra o overlay */
-    visibility: visible;
-}
 
 /* Sidebar escondido em telas menores */
 @media (max-width: 768px) {
