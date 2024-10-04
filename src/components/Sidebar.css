@@ -1,0 +1,125 @@
+/* Sidebar padrão (desktop) */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #2c3e50; /* Cor de fundo escura para parecer moderna */
+    padding: 20px;
+    color: white; /* Texto branco para destacar no fundo escuro */
+    position: fixed; /* Fixa o sidebar para que ele não role junto com a página */
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out; /* Adiciona transição suave ao abrir/fechar */
+    transform: translateX(-100%); /* Posição padrão - fechado */
+    z-index: 1000; /* Mantém o sidebar sobreposto a outros elementos */
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Sidebar aberto */
+}
+
+.sidebar.closed {
+    transform: translateX(-100%); /* Sidebar fechado fora da tela */
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+    font-size: 24px;
+    transition: color 0.3s; /* Transição para cor do texto */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center; /*Alinhar ícone e texto */
+    transition: color 0.3s; /*Transição suave para cor dos itens */
+}
+
+.sidebar ul li svg {
+    margin-right: 10px; /* Espaço entre o ícone e o texto */
+    transition: transform 0.3s; /* Transição para ícones */
+}
+
+.sidebar ul li a {
+    color: white; /* Mantenha a cor branca para os links */
+    text-decoration: none; /* Remove o sublinhado*/
+}
+
+.sidebar ul li:hover {
+    cursor: pointer;
+    color: #18bc9c; /* Cor de destaque ao passar o mouse */
+    transition: color 0.3s;
+    transform: translateX(5px);  /* Efeito de deslizamente ao passar o mouse */
+}
+
+.sidebar ul li.active {
+    color: #18bc9c; /* Cor diferenciada para o item ativo */
+    font-weight: bold;
+}
+
+/* Botão Hambúrguer */
+.sidebar-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 1100; /* Acima do sidebar */
+    transition: background-color 0.3s;
+}
+
+.sidebar-button:hover {
+    background-color: #18bc9c; /* Cor de destaque ao passar o mouse */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999; /* Coloca o overlay abaixo do botão de sidebar */
+    opacity: 0; /* Escondido por padrão */
+    visibility: hidden; /* Torna o elemento não clicável */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.overlay.open {
+    opacity: 1; /* Mostra o overlay */
+    visibility: visible;
+}
+
+/* Sidebar escondido em telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%); /* Sidebar escondido por padrão tem telas pequenas */
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0; /* Ajuste para a main content ocupar a tela toda quando o sidebar estiver escondido */
+    }
+}
+
+.main-content {
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out; /* Transição suave ao abrir/fechar sidebar */
+}
+
+/* Quando o menu está aberto, empurrar o main-content */
+.main-content.sidebar-open {
+    margin-left: 270px; /* Espaço que o sidebar ocupa ao abrir */
+}

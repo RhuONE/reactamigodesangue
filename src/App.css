@@ -1,6 +1,13 @@
 .App {
-  text-align: center;
+  display: flex;
 }
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+
 
 .App-logo {
   height: 40vmin;

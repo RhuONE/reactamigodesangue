@@ -1,25 +1,33 @@
-import logo from './logo.svg';
+import React from 'react';
+import Sidebar from './components/Sidebar';
+import Login from './components/Login';
+import Dashboard from './pages/Dashboard';
+import Usuarios from './components/Usuarios';
+import Hemocentros from './components/Hemocentros';
+import Campanhas from './components/Campanhas';
+import Pendencias from './components/Pendencias';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-function App() {
+function App(){
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div className='App'>
+        <Sidebar />
+        <div className='main-content'>
+          <Routes>          
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/usuarios" element={<Usuarios />} />
+            <Route path="/hemocentros" element={<Hemocentros />} />
+            <Route path='/campanhas' element={<Campanhas />} />
+            <Route path='/pendencias' element={<Pendencias />} />
+          {/*Aqui você pode adicionar gráfico e cards do dashborad */}
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  )
 }
 
 export default App;
