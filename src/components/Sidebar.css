@@ -63,12 +63,15 @@
 }
 
 .sidebar ul {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Faz a lista crescer para ocupar o espaço disponível */
     list-style: none;
     padding: 0;
 }
 
 .sidebar ul li {
-    position: relative;
     margin: 10px 0;
     min-height: 57px;
     border-radius: 10px;
@@ -93,7 +96,6 @@
     align-items: center;
     padding: 15px 20px;
 }
-
 .sidebar ul li:hover {
     cursor: pointer;
     background-color: #ebebeb; /* Cor de destaque ao passar o mouse */
@@ -115,7 +117,6 @@
 }
 .sidebar ul li.active a {
     font-weight: bold;
-    color: #0a93a1;
 }
 
 
@@ -142,4 +143,16 @@
 /* Quando o menu está aberto, empurrar o main-content */
 .main-content.sidebar-open {
     margin-left: 270px; /* Espaço que o sidebar ocupa ao abrir */
+}
+
+li.logoutBtn{
+    position: absolute;
+    bottom: 15px;
+}
+
+.sidebar ul li.logoutBtn:hover{
+    background-color: #ed1700;
+}
+.sidebar ul li.logoutBtn:hover a{
+    color: #FFF;
 }
