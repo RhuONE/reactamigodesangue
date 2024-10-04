@@ -7,7 +7,7 @@ const MetricCard = ({ title, value, icon}) => {
             <div className='metric-icon'>
                 {icon}
             </div>
-            <div className='metric-indo'>
+            <div className='metric-info'>
                 <h3>{title}</h3>
                 <p>{value}</p>
             </div>

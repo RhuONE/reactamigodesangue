@@ -53,6 +53,8 @@ const Dashboard = () => {
     <div className="dashboard-content">
       <ToastContainer /> {/** Container para exibir notificações */}
       <h1>Dashboard</h1>
+      <p>Bem-Vindo/a</p>
+      <h2>Administrador/a</h2>
       {loading ? (
         <div className='loader-container'>
           <ClipLoader color='#2c3e50' loading={loading} size={50} />

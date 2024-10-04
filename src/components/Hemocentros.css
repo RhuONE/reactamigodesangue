@@ -1,10 +1,6 @@
 /* Container do Componente Hemocentros */
 .hemocentros-container {
-    padding: 20px;
-    margin-top: 50px; /* Um pequeno espaço para separação do topo */
     max-width: 1200px; /* Limite de largura */
-    margin-left: auto; /* Centralizar horizontalmente */
-    margin-right: auto;
 }
 
 /* Título */
