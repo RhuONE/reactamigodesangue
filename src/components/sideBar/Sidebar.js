@@ -6,6 +6,15 @@ import './Sidebar.css';
 import logoExpand from '../../images/LogoAmgSangueText.png';
 import logo from '../../images/LogoAmgSangue.png';
 
+function handleLogout() {
+    // Remove o token do localStorage ou sessionStorage
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    
+    // Redireciona o usuário para a página de login ou outra página
+    window.location.href = '/login';
+}
+
 const Sidebar = () => {
 
     const location = useLocation(); //Hook para pegar a localização atual
@@ -56,7 +65,7 @@ const Sidebar = () => {
                     <li className={location.pathname === '/pendencias' ? 'active' : ''}>
                         <Link to='/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
                     </li>
-                    <li className={`logoutBtn`}>
+                    <li className={`logoutBtn`} onClick={handleLogout}>
                         <Link><BiLogOut /> <p>Sair</p></Link>
                     </li>
                 </ul>
