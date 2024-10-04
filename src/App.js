@@ -1,11 +1,11 @@
 import React from 'react';
-import Sidebar from './components/Sidebar';
-import Login from './components/Login';
-import Dashboard from './pages/Dashboard';
-import Usuarios from './components/Usuarios';
-import Hemocentros from './components/Hemocentros';
-import Campanhas from './components/Campanhas';
-import Pendencias from './components/Pendencias';
+import Sidebar from './components/sideBar/Sidebar';
+import Login from './pages/login/Login';
+import Dashboard from './pages/dashboard/Dashboard';
+import Usuarios from './pages/usuarios/Usuarios';
+import Hemocentros from './pages/hemocentros/Hemocentros';
+import Campanhas from './pages/campanhas/Campanhas';
+import Pendencias from './pages/pendencias/Pendencias';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 

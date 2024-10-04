@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
 
-import api from '../services/api';
+import api from '../../services/api';
 import './Usuarios.css';
 
 const Usuarios = () => {

@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 import './Sidebar.css';
-import logoExpand from '../images/LogoAmgSangueText.png';
-import logo from '../images/LogoAmgSangue.png';
+import logoExpand from '../../images/LogoAmgSangueText.png';
+import logo from '../../images/LogoAmgSangue.png';
 
 const Sidebar = () => {
 

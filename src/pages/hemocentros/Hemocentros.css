@@ -1,6 +1,6 @@
 /* Container do Componente Hemocentros */
 .hemocentros-container {
-    max-width: 1200px; /* Limite de largura */
+    width: 100%;
 }
 
 /* Título */

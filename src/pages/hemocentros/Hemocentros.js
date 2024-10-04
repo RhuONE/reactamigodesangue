@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
-import api from '../services/api'; // Certifique-se de que o arquivo da API esteja importado corretamente
+import api from '../../services/api'; // Certifique-se de que o arquivo da API esteja importado corretamente
 import './Hemocentros.css';
 
 const Hemocentros = () => {

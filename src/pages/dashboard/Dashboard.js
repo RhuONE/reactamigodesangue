@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
-import MetricCard from '../components/MetricCard';
-import DonationChart from '../components/DonationChart';
-import BloodTypeChart from '../components/BloodTypeChart';
-import UserGrowthChart from '../components/UserGrowthChart';
+import MetricCard from '../../components/MetricCard';
+import DonationChart from '../../components/DonationChart';
+import BloodTypeChart from '../../components/BloodTypeChart';
+import UserGrowthChart from '../../components/UserGrowthChart';
 import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
 import 'react-toastify/dist/ReactToastify.css';
 import { FaUser, FaHospital, FaHeartbeat, FaClipboard } from 'react-icons/fa';
-import api from '../services/api';
+import api from '../../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
