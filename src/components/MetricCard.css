@@ -1,14 +1,15 @@
 .metric-card {
+    flex: 1 1 200px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 200px;
-    margin: 15px;
-    text-align: center;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-flow: row;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -18,13 +19,18 @@
 }
 
 .metric-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
     font-size: 30px;
-    color: #18bc9c;
+    padding: 10px 10px;
+    color: #FFF;
+    background-color: #077780;
     margin-bottom: 10px;
 }
 
 .metric-info h3 {
-    margin: 10px 0;
     font-size: 16px;
     color: #2c3e50;
 }

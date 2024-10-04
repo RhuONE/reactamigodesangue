@@ -53,8 +53,6 @@ const Dashboard = () => {
     <div className="dashboard-content">
       <ToastContainer /> {/** Container para exibir notificações */}
       <h1>Dashboard</h1>
-      <p>Bem-Vindo/a</p>
-      <h2>Administrador/a</h2>
       {loading ? (
         <div className='loader-container'>
           <ClipLoader color='#2c3e50' loading={loading} size={50} />
@@ -69,9 +67,20 @@ const Dashboard = () => {
             <MetricCard title="Doações Realizadas" value={metrics.totalDoacoes} icon={<FaHeartbeat />} />
             <MetricCard title="Campanhas Ativas" value={metrics.campanhasAtivas} icon={<FaClipboard />} />
           </div>
-          <DonationChart />
-          <BloodTypeChart />
-          <UserGrowthChart />
+          <div className='dashboard-cards'>
+            <div className='dashboard-graphChart'>
+              <h3>Doações Realizadas</h3>
+              <DonationChart />
+            </div>
+            <div className='dashboard-graphChart'>
+            <h3>Distribuição Tipos Sanguineos</h3>
+              <BloodTypeChart />
+            </div>
+            <div className='dashboard-graphChart'>
+            <h3>Cadastros Realizados</h3>
+              <UserGrowthChart />
+            </div>
+          </div>
         </>
       )}
     </div>

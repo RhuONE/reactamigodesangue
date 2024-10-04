@@ -44,11 +44,18 @@ const UserGrowthChart = () => {
     labels: userGrowthData.map((item) => item.mes),
     datasets: [
       {
-        label: 'Número de Doadores Registrados',
+        label: 'Doadores',
         data: userGrowthData.map((item) => item.quantidade), // Exemplo de crescimento de doadores
         fill: false,
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        backgroundColor: 'rgba(75, 192, 192, 0.6  )',
         borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.4, // Suaviza a linha
+      },{
+        label: 'Hemocentros',
+        data: userGrowthData.map((item) => item.quantidade), // Exemplo de crescimento de doadores
+        fill: false,
+        backgroundColor: '#d00e0e66',
+        borderColor: '#d00e0e',
         tension: 0.4, // Suaviza a linha
       },
     ],
