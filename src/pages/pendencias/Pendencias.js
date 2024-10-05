@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { BiCurrentLocation, BiChevronDown } from "react-icons/bi";
+import imgBase from '../../images/hospital.jpg';
 import './Pendencias.css';
 
 const Pendencias = () => {
@@ -56,38 +58,40 @@ const Pendencias = () => {
 
   return (
     <div className="pendencias-container">
-      <h2>Pendências</h2>
+      <div className='pendencias-header'>
+        <h1>Pendências</h1> 
+        <p>{pendencias.length}</p>
+      </div>
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Telefone</th>
-              <th>Endereço</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
+          <div className='cards'>
             {pendencias.map((pendencia) => (
-              <tr key={pendencia.idHemocentro}>
-                <td>{pendencia.nomeHemocentro}</td>
-                <td>{pendencia.emailHemocentro}</td>
-                <td>{pendencia.telHemocentro}</td>
-                <td>{`${pendencia.logHemocentro}, ${pendencia.numLogHemocentro}, ${pendencia.bairroHemocentro}, ${pendencia.cidadeHemocentro}, ${pendencia.estadoHemocentro}`}</td>
-                <td>
-                  <button className="approve-button" onClick={() => handleApprove(pendencia.idHemocentro)}>
-                    Aprovar
-                  </button>
-                </td>
-              </tr>
+              <div className='card' key={pendencia.idHemocentro}>
+                <div className="baseInfo">
+                  <img id="hemoIcon" src={imgBase} />
+                  <div id="info">
+                    <h2>{pendencia.nomeHemocentro}</h2>
+                    <p>
+                      <BiCurrentLocation/>
+                      {pendencia.cidadeHemocentro}, {pendencia.estadoHemocentro}
+                    </p>
+                  </div>
+
+                  <div className='btns'>
+                    <button id="aceitarHemo" onClick={() => handleApprove(pendencia.idHemocentro)}>Aceitar</button>
+                    <button id="negarHemo">Negar</button>
+                  </div>
+                  <BiChevronDown/>
+                </div>
+                <div className='cardInfo'>
+
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+        </div>
       )}
     </div>
   );

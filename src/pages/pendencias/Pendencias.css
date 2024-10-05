@@ -1,42 +1,143 @@
 .pendencias-container {
-    background-color: #f5f5f5;
-    border-radius: 5px;
-}
-
-h2 {
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-    color: #2c3e50;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    border-radius: 5px;
+    padding: 40px;
     overflow: hidden;
 }
 
-thead {
-    background-color: #2c3e50;
-    color: white;
+.pendencias-header{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pendencias-header h2{
+    margin: 0;
+    color: #000;
+}
+.pendencias-header p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 20px;
+    height: 20px;
+    font-size: 1.4rem;
+    color: #FFF;
+    font-weight: 600;
+    border-radius: 50%;
+    background-color: #b20000;
 }
 
-th, td {
+.cards{
+    gap: 10px;
+    padding-inline: 40px;
+    display: flex;
+    flex-direction: column;
+}
+.card{
+    border-radius: 15px;
+    background-color: #FFF;
     padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
-
-th {
-    font-weight: bold;
-}
-
-tbody tr:hover {
-    background-color: #f9f9f9;
+.card:hover{
     cursor: pointer;
 }
+.card .baseInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.card .baseInfo #hemoIcon{
+    height: 124px;
+    width: 124px;
+    object-fit:cover;
+    border-radius: 20px;
+}
+.card .baseInfo #info{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 124px;
+    padding-left: 24px;
+}
+.card .baseInfo #info h2{
+    padding-bottom: 8px;
+    color: #000;
+    font-size: 1.5rem;
+    margin: 0;
+}
+.card .baseInfo #info p{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.card .btns{
+    display: flex;
+    gap: 10px;
+    margin-right: 12px;
+}
+.card .baseInfo svg {
+    width: 24px;
+    height: 24px;
+}
+.card .baseInfo button{
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 0;
+    color: #FFF;
+}
+.card .baseInfo button:hover{
+    cursor: pointer;
+}
+.card .baseInfo button#aceitarHemo{
+    background-color: #007a86;
+}
+.card .baseInfo button#negarHemo{
+    background-color: #b20000;
+}
+.card .cardInfo{
+    transition: .3s;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+.card .cardInfo.open{
+    opacity: 1;
+    height: auto;
+    padding-top: 20px;
+	
+}
+
+@-webkit-keyframes slide-in-top {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-top {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
 .approve-button {
     background-color: #18bc9c;
