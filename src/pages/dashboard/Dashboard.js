@@ -6,12 +6,13 @@ import BloodTypeChart from '../../components/BloodTypeChart';
 import UserGrowthChart from '../../components/UserGrowthChart';
 import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
 import { FaUser, FaHospital, FaHeartbeat, FaClipboard } from 'react-icons/fa';
 import api from '../../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
-
+  const navigate = useNavigate(); // Hook para redirecionar
     const [metrics, setMetric] = useState({
         totalUsuarios : 0,
         totalHemocentros: 0,
@@ -25,6 +26,14 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchMetrics = async () => {
+          const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
+
+      if (!token) {
+        // Se o token não estiver presente, redireciona para a tela de login
+        navigate('/login');
+        return;
+      }
+
             try {
                 const response = await api.get('/dashboard/metrics'); // Ou a rota das métricas real
                 setMetric({
