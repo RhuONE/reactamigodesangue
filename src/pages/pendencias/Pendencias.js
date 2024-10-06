@@ -17,7 +17,7 @@ const Pendencias = () => {
 
       if (!token) {
         navigate('/login');
-        return;
+         return;
       }
 
       try {
@@ -62,12 +62,33 @@ const Pendencias = () => {
         <h1>Pendências</h1> 
         <p>{pendencias.length}</p>
       </div>
-      {loading ? (
+      {/* {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
-      ) : (
+      ) : ( */}
           <div className='cards'>
+            <div className='card'>
+                <div className="baseInfo">
+                  <img id="hemoIcon" src={imgBase} />
+                  <div id="info">
+                    <h2>pendencia.nomeHemocentro</h2>
+                    <p>
+                      <BiCurrentLocation/>
+                      pendencia.cidadeHemocentro, pendencia.estadoHemocentro
+                    </p>
+                  </div>
+
+                  <div className='btns'>
+                    <button id="aceitarHemo">Aceitar</button>
+                    <button id="negarHemo">Negar</button>
+                  </div>
+                  <BiChevronDown/>
+                </div>
+                <div className='cardInfo'>
+
+                </div>
+              </div>
             {pendencias.map((pendencia) => (
               <div className='card' key={pendencia.idHemocentro}>
                 <div className="baseInfo">
@@ -92,7 +113,7 @@ const Pendencias = () => {
               </div>
             ))}
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };

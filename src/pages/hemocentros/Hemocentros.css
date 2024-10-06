@@ -1,26 +1,210 @@
 /* Container do Componente Hemocentros */
 .hemocentros-container {
     max-width: 100vw;
-    padding: 20px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
 }
 
 /* Título */
-.hemocentros-container h2 {
+.hemocentros-container .titulo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
     margin-bottom: 20px;
+    background-color: #FFF;
+    padding: 0 20px;
+    border-radius: 10px;
     font-size: 2rem;
-    color: #2c3e50;
+    color: #000;
 }
 
-/* Tabela de Hemocentros */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
+.hemocentros-content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px 30px;
+    padding-bottom: 0;
 }
-thead th{
+.hemocentros-content .subTitulo{
+    font-size: 1.5rem;
+}
+
+/*Hemocentros Com Mais Doações*/
+.hemocentros-metrics{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    gap: 10px;
+}
+.hemocentros-metrics .hemocentroCard-tier{
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.hemocentros-metrics .hemocentroCard-tier .posicaoRanking{
+    position: absolute;
+    left: -5px;
+    top: -5px;
     background-color: #007a86;
-    color: white;
+    color: #fff;
+    height: fit-content;
+    width: 34px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+.hemocentros-metrics .hemocentroCard-tier img{
+    width: 124px;
+    height: 124px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.hemocentros-metrics .hemocentroCard-tier .info{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+}
+.hemocentros-metrics .hemocentroCard-tier .info h2{
+    margin: 0;
+    font-size: 1.2rem;
+    color: #000;
+}
+.hemocentros-metrics .hemocentroCard-tier .info h3{
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    background-color: #EEE;
+    color: #000;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.hemocentros-metrics .hemocentroCard-tier .info h3 span{
+    margin-top: -4px;
+    font-size: 1.75rem;
+    font-weight: 600;
+    align-self: flex-end;
+}
+
+/*Barra de Pesquisa e Filtro*/
+.pesquisaFiltroHemo{
+    margin-top: 20px;
+    padding-inline: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.pesquisaFiltroHemo button{
+    flex: 0.5;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #FFF;
+    transition: .2s;
+    cursor: pointer;
+    font-weight: 500;
+    color: #888;
+    padding: 10px 0;
+}
+.pesquisaFiltroHemo button:hover{
+    filter: brightness(0.95);
+}
+.pesquisaFiltroHemo button.active{
+    background-color: #b4dee9;
+    color: #007a86;
+    font-weight: 700;
+}
+.pesquisaFiltroHemo .pesquisaCampo::before{
+    content: "";
+    display: block;
+    position: absolute;
+    left: -14px;
+    width: 2px;
+    height: 100%;
+    background-color: #888;
+}
+.pesquisaFiltroHemo .pesquisaCampo{
+    margin-left: 24px;
+    position: relative;
+    display: flex;
+    flex: 1;
+}
+.pesquisaFiltroHemo .pesquisaCampo input{
+    flex: 1;
+    height: 100%;
+    padding-left: 35px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+.pesquisaFiltroHemo .pesquisaCampo input:focus{
+    outline: 2px solid #007a86;
+}
+.pesquisaFiltroHemo .pesquisaCampo .lupaIcon{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+/* Tabela de Hemocentros */
+table.tableListaHemo {
+    width: 100%;
+    outline: none;
+    border: none;
+}
+thead.headerListaHemo{
+    background-color: transparent;
+}
+thead tr.headerLinhaListaHemo{
+    display: flex;
+}
+thead th.headerCelulaListaHemo{
+    background-color: transparent;
+    color: #000;
+}
+thead th.imgCampo{
+    width: 124px;
+}
+thead th.nomeCampo{
+    flex: 1.5;
+    border-left: 1px solid #ccc;
+}
+thead th.emailCampo, th.statusCampo{
+    flex: 0.7;
+    border-left: 1px solid #ccc;
+}
+th.statusCampo{
+    flex: 0.75;
+
+}
+thead th.opcaoCampo{
+    width: 154px;
+    border-left: 1px solid #ccc;
 }
 
 th, td {
@@ -33,45 +217,7 @@ th {
     font-weight: bold;
     font-size: 1.1rem;
 }
-tr:nth-child(even) {
-    background:lightgray;
-  }
 
-tr:hover {
-    background-color: #007a86; /* Destaque ao passar o mouse */
-    transition: background-color 0.3s;
-}
-
-
-/* Botões de Ação */
-button {
-    padding: 8px 12px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-.edit-button {
-    background-color: #18bc9c;
-    color: white;
-    margin-right: 5px;
-    transition: background-color 0.3s;
-}
-
-.edit-button:hover {
-    background-color: #139d7f;
-}
-
-.delete-button {
-    background-color: #e74c3c;
-    color: white;
-    transition: background-color 0.3s;
-}
-
-.delete-button:hover {
-    background-color: #c0392b;
-}
 
 /* Mensagem de Carregando */
 .loader {
@@ -106,56 +252,58 @@ button {
     }
 }
 
-
-.cardHemo{
-    background-color: #FFF;
+.cardsListagem{
+    display: flex;
+    flex-direction: column;
+    padding-inline: 10px;
+    gap: 10px;
+    flex: 1;
+    overflow-x: visible;
+    overflow-y: scroll;
     padding: 20px;
-    border-radius: 10px;
-    -webkit-box-shadow: 0px 2px 15px -3px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 2px 15px -3px rgba(0,0,0,0.75);
-    box-shadow: 0px 2px 15px -8px rgba(0,0,0,0.75);
 }
-.cardHemo .header{
-    display: flex;
-    position: sticky; /* Fixando no topo ao rolar a página */
-    top: 0;
-    z-index: 1; /* Mantém o header sobreposto a outros elementos */
-    background-color: #FFFFFF99;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-.cardHemo  .search-container {
-    display: flex;
+.deleteHemoBtn, .aceitarHemoBtn{
+    background-color: transparent;
     position: relative;
-    justify-content: center;
 }
-
-.cardHemo .search-box {
-    width: 300px;
-    padding: 5px;
-    padding-left: 27px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-    transition: all 0.3s ease;
+.deleteHemoBtn svg, .aceitarHemoBtn svg{
+    color: #ccc;
+    transition: .2s;
 }
-
-.cardHemo .search-box:focus {
-    border-color: #0a93a1;
-    outline: none;
-}
-
-.cardHemo .search-icon {
-    position: absolute;
-    left: 6px;
+.deleteHemoBtn::before{
+    content: "";
+    display: block;
+    width: 2px;
+    height: 58px;
+    background: #ccc;
+    left: 0;
     top: 50%;
-    width: 20px;
-    height: 20px;
-    translate: 0 -50%;
-    text-align: center;
+    transform: translateY(-50%);
+    position: absolute;
+}
+.deleteHemoBtn:hover svg{
+    color: #c0392b;
+}
+.aceitarHemoBtn:hover svg{
+    color: #007a86;
+}
+
+.emailCard, .statusCard{
+    flex: 0.5;
+    color: #888;
+}
+.statusCard{
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+.statusCard.ativo{
+    color: #18bc9c;
+}
+.statusCard.arquivado{
+    color: #c0392b;
+}
+.statusCard.pendente{
+    color: #da8f03;
 }
 
 
