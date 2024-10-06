@@ -14,11 +14,11 @@ const Hemocentros = () => {
     const fetchHemocentros = async () => {
       const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
 
-      // if (!token) {
-      //   // Se o token não estiver presente, redireciona para a tela de login
-      //   navigate('/login');
-      //   return;
-      // }
+       if (!token) {
+         // Se o token não estiver presente, redireciona para a tela de login
+         navigate('/login');
+         return;
+       }
 
       try {
         const response = await api.get('/hemocentros', {
@@ -49,11 +49,11 @@ const Hemocentros = () => {
   return (
     <div className="hemocentros-container">
       <h2>Hemocentros</h2>
-      {/* {loading ? (
+      {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
-      ) : ( */}
+      ) : (
       <div className='cardHemo'>
         <div class="header">
           <h3>Hemocentros Cadastrados</h3>
@@ -108,7 +108,7 @@ const Hemocentros = () => {
           </tbody>
         </table>
       </div>
-      {/* )} */}
+      )}
     </div>
   );
 };
