@@ -37,7 +37,7 @@ const navigate = useNavigate();
   };
 
   return (
-    <div className="login-container">
+    <div className="login-containerHemo">
       <div className="side-img">
             <img src={logo} />
             <img src={wave} id="wave"/>

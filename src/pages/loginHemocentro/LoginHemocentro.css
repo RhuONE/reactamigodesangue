@@ -1,11 +1,11 @@
-.main-content{
+.main-content:has(.login-containerHemo){
   padding: 0;
   margin: 0;
   display: flex;
   width: 100vw;
   height: 100%;
 }
-.login-container {
+.login-containerHemo {
   border-radius: 0;
   border: 0;
   margin: 0;
