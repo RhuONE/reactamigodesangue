@@ -365,7 +365,7 @@ form h3{
     padding-top: 24px;
 }
 
-button{
+.cadastro-hemocentro .content button{
     flex: 1;
     padding: 15px 0;
     font-size: 1em;
@@ -377,7 +377,7 @@ button{
     transition: ease-in 0.2s;
 }
 
-button:hover{
+.cadastro-hemocentro .content button:hover{
     background-color: #FFF;
     color: #52AAB7;
     outline: solid #52AAB7 2px;

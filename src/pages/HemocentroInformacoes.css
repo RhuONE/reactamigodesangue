@@ -20,7 +20,7 @@
     margin: 5px 0;
 }
 
-.edit-button {
+.informacoes-hemocentro-content .edit-button {
     background-color: #e74c3c;
     color: #fff;
     border: none;
@@ -30,6 +30,6 @@
     transition: background-color 0.3s;
 }
 
-.edit-button:hover {
+.informacoes-hemocentro-content .edit-button:hover {
     background-color: #c0392b;
 }

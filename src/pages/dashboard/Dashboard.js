@@ -74,7 +74,7 @@ const Dashboard = () => {
     }, [loading]);
   return (
     
-    <div className="dashboard-content">
+    <div className="ADM-dashboard-content">
       <ToastContainer /> {/** Container para exibir notificações */}
       <h1>Dashboard</h1>
       {loading ? (
@@ -85,7 +85,7 @@ const Dashboard = () => {
         <div className='error-message'>{error}</div>
       ) : (
         <>
-          <div className="dashboard-metrics">
+          <div className="ADM-dashboard-metrics">
             <MetricCard title="Total de Usuários" value={metrics.totalUsuarios} icon={<FaUser />} />
             <MetricCard title="Total de Hemocentros" value={metrics.totalHemocentros} icon={<FaHospital />} />
             <MetricCard title="Doações Realizadas" value={metrics.totalDoacoes} icon={<FaHeartbeat />} />
