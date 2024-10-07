@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
+import { AiOutlineSearch } from "react-icons/ai";
 
 import api from '../../services/api';
 import './Usuarios.css';
 
 const Usuarios = () => {
+  const [activeButton, setActiveButton] = useState('todos'); // Estado para controlar qual botão está ativo
+
+
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,30 +16,30 @@ const Usuarios = () => {
 
   useEffect(() => {
     const fetchUsuarios = async () => {
-        const token = localStorage.getItem('token'); // Assumindo que o token é armazeado no localStorage
+      const token = localStorage.getItem('token'); // Assumindo que o token é armazeado no localStorage
 
-        if(!token){
-            // Se o token não estiver presente, redireciona para a tela de login
-            navigate('/login');
-            return;
-        }
+      if (!token) {
+        // Se o token não estiver presente, redireciona para a tela de login
+        navigate('/login');
+        return;
+      }
 
-        try {
-            const response = await api.get('/usuarios', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setUsuarios(Array.isArray(response.data.data) ? response.data.data : []);
-            setError(null);
-            console.log(response.data);
-        } catch (error) {
-            setError('Erro ao carregar usuários. Tente novamente mais tarde.');
-            console.error('Erro ao buscar usuários', error);
-            
-        } finally {
-            setLoading(false);
-        }
+      try {
+        const response = await api.get('/usuarios', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUsuarios(Array.isArray(response.data.data) ? response.data.data : []);
+        setError(null);
+        console.log(response.data);
+      } catch (error) {
+        setError('Erro ao carregar usuários. Tente novamente mais tarde.');
+        console.error('Erro ao buscar usuários', error);
+
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchUsuarios();
@@ -43,36 +47,63 @@ const Usuarios = () => {
 
   return (
     <div className="usuarios-container">
-      <h2>Usuários</h2>
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Tipo</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios.map((usuario) => (
-              <tr key={usuario.idUsuario}>
-                <td>{usuario.nomeUsuario}</td>
-                <td>{usuario.emailUsuario}</td>
-                <td>{usuario.tipoUsuario}</td>
-                <td>
-                  <button className="edit-button">Editar</button>
-                  <button className="delete-button">Excluir</button>
-                </td>
+        <div className='usuarios-content'>
+          <div className='usuarios-cards'>
+            <div className='usuarios-card'>
+            </div>
+            <div className='usuarios-card'>
+            </div>
+            <div className='usuarios-card'>
+            </div>
+            <div className='usuarios-card'>
+            </div>
+          </div>
+
+          <div className='pesquisaFiltroHemo'>
+            <button className={activeButton ? 'active' : ''}>
+              Todos
+            </button>
+            <button>
+              Doadores
+            </button>
+            <div className='pesquisaCampo'>
+              <input type='text' placeholder='Pesquisar...'
+              />
+              <AiOutlineSearch className='lupaIcon' />
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Tipo</th>
+                <th>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {usuarios.map((usuario) => (
+                <tr key={usuario.idUsuario}>
+                  <td>{usuario.nomeUsuario}</td>
+                  <td>{usuario.emailUsuario}</td>
+                  <td>{usuario.tipoUsuario}</td>
+                  <td>
+                    <button className="edit-button">Editar</button>
+                    <button className="delete-button">Excluir</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
+
     </div>
   );
 };

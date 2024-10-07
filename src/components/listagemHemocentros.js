@@ -41,7 +41,10 @@ const HemocentrosList = ({ hemocentros }) => {
           {/* Renderizar cardInfo condicionalmente para o card aberto */}
           {openCardId === hemocentro.idHemocentro && (
             <div className='cardInfo' >
-              <p>Oi</p>
+              <p><strong>CNPJ:</strong> {hemocentro.cnpjHemocentro}</p>
+              <p><strong>Hospital:</strong> {hemocentro.hospitalHemocentro}</p>
+              <p><strong>CEP:</strong> {hemocentro.cepHemocentro}</p>
+              <p><strong>Rua:</strong> {hemocentro.logHemocentro}, {hemocentro.numLogHemocentro}</p>
             </div>
           )}
         </div>

@@ -68,7 +68,7 @@ const Pendencias = () => {
         <div className="error-message">{error}</div>
       ) : ( */}
           <div className='cards'>
-            <div className='card'>
+            {/* <div className='card'>
                 <div className="baseInfo">
                   <img id="hemoIcon" src={imgBase} />
                   <div id="info">
@@ -88,7 +88,7 @@ const Pendencias = () => {
                 <div className='cardInfo'>
 
                 </div>
-              </div>
+              </div> */}
             {pendencias.map((pendencia) => (
               <div className='card' key={pendencia.idHemocentro}>
                 <div className="baseInfo">

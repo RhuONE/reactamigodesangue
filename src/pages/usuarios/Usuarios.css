@@ -1,4 +1,79 @@
+.usuarios-container{
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+}
+.usuarios-content{
+  padding: 40px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.usuarios-content .usuarios-cards{
+  display: flex;
+  gap: 15px;
+  height: 200px;
+}
+.usuarios-content .usuarios-cards .usuarios-card{
+  flex: 1;
+  background-color: #FFF;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
 
+.usuarios-content table{
+  overflow: hidden;
+  border-radius: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.usuarios-content thead{
+  background-color: transparent;
+  padding-right: 8px;
+}
+.usuarios-content thead tr{
+  display: flex;
+  background-color: #b2d8e9;
+  border-top-right-radius: 10px;
+}
+.usuarios-content th{
+  flex: 1;
+  color: #222;
+  position: relative;
+}
+.usuarios-content th:not(:nth-child(1))::before{
+  content: "";
+  display: block;
+  position: absolute;
+  left: -1px;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background-color: #2c3e50;
+}
+.usuarios-content tr:has(td){
+  display: flex;
+  background-color: #FFF;
+  transition: .3s;
+}
+.usuarios-content tr:nth-child(even) {
+  background:#DDD;
+}
+.usuarios-content tr:has(td):hover{
+  background-color: #189bbc33;
+}
+.usuarios-content td {
+  flex: 1;
+  border: 1px solid #222;
+  border-top: none;
+}
+.usuarios-content tbody{
+  max-height: 100%;
+  overflow-y: auto;
+}
   .edit-button, .delete-button {
     margin-right: 10px;
     padding: 5px 10px;

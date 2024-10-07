@@ -82,7 +82,7 @@ const Dashboard = () => {
               <DonationChart />
             </div>
             <div className='dashboard-graphChart'>
-            <h3>Distribuição Tipos Sanguineos</h3>
+            <h3>Distribuição Tipos Sanguineos (Doador)</h3>
               <BloodTypeChart />
             </div>
             <div className='dashboard-graphChart'>
