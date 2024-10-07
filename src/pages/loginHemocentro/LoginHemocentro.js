@@ -15,7 +15,7 @@ const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
-
+    
     try {
       const response = await api.post('/login', {
         email,
@@ -29,6 +29,7 @@ const navigate = useNavigate();
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('tipoUsuario', response.data.tipoUsuario);
       // Redireciona para o dashboard do hemocentro após o login bem-sucedido
+      
       navigate('/hemocentro/dashboard');
     } catch (err) {
       setError(err.response ? err.response.data.message : 'Erro ao conectar-se com o servidor.');
@@ -53,12 +54,16 @@ const navigate = useNavigate();
             <label htmlFor="emailInput">Email</label>
           </div>
           <div className="inputDiv">
-            <input type="password" id="senhaInput" placeholder="" />
-            <label htmlFor="senhaInput"
+            <input
+              type="password"
+              id="senhaInput"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              required>Senha</label>
+              required
+            />
+            <label htmlFor="senhaInput">Senha</label>
           </div>
+
           <button type="submit">Entrar</button>
           <Link to="/cadastro/hemocentro" className="register-link">
             Não tem cadastro? Cadastre-se aqui
