@@ -1,0 +1,69 @@
+.inicio {
+    position: relative;
+    text-align: center;
+    background: url('../images/medicosangue.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh; /* Garante que a seção ocupe 100% da altura da tela */
+    width: 100vw; /* Faz com que ocupe a largura inteira */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0; /* Elimina qualquer margem padrão */
+}
+
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay escuro */
+  }
+  
+  .divdireita {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(46, 45, 45, 0.8);
+    padding: 50px;
+    border-radius: 15px;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .divdireita h1, .divdireita h2 {
+    color: #fff;
+  }
+  
+  .divdireita h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .divdireita h2 {
+    font-size: 2rem;
+  }
+  
+  .divdireita p {
+    color: #fff;
+    font-size: 1.3rem;
+    margin: 15px 0 25px;
+  }
+  
+  .divdireita button {
+    background-color: red;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .divdireita button:hover {
+    background-color: #c00505;
+  }
+  
