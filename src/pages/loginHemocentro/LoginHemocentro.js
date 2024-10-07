@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import api from '../../services/api';
 import './LoginHemocentro.css'
 import logo from '../../images/IconeAmigoSangueBranco.png';
-import wave from './wave.png';
+import wave from '../../images/wave.png';
 
 const LoginHemocentro = () => {
   const [email, setEmail] = useState('');

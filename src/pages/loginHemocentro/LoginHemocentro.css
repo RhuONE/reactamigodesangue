@@ -145,6 +145,7 @@ form h3{
 }
 
 .form-login button{
+  flex: 0;
     padding: 15px 0;
     font-size: 1em;
     font-weight: 700;

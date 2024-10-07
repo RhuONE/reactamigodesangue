@@ -1,42 +1,386 @@
+.main-content:has(.cadastro-hemocentro){
+  padding: 0;
+  margin: 0;
+  display: flex;
+  width: 100vw;
+  height: 100%;
+}
+
 .cadastro-hemocentro {
+  border-radius: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex: 1;
+  min-width: 100vw;
+  height: 100vh;
+  flex-direction: row;
+  background-color: #FFF;
+  }
+  .cadastro-hemocentro h2{
+    margin: 0;
+    text-align: left;
+    color: #000;
+  }
+  form{
+    flex: 1;
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 40px;
-    background: #f9f9f9;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .cadastro-hemocentro h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .cadastro-hemocentro form {
+}
+form h3{
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/*Progresso*/
+.progressBar{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    counter-reset: step;
+    margin-bottom: 24px;
+}
+
+.progressBar::before, .progress{
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 5px;
+    width: 100%;
+    background-color: #e0e0e0;
+}
+
+.progress{
+    background-color: #52AAB7;
+    width: 0%;
+    transition: 0.3s ease-in-out;
+}
+.progress.step1{
+  width: 50%;
+}
+.progress.step2{
+  width: 100%;
+}
+
+.progress-step{
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    font-weight: 600;
+}
+
+.progress-step::before{
+    counter-increment: step;
+    content: counter(step);
+}
+
+.progress-step::after{
+    content: attr(data-title);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    font-size: clamp(0.5rem, 10vw, 1rem);
+    color: #636161;
+}
+
+.progress-step.active::after{
+  color: #52AAB7;
+}
+.progress-step.active{
+    background-color: #52AAB7;
+    color: #FFF;
+}
+
+
+
+
+/*Etapas Formulario*/
+.form-step{
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    transform-origin: top;
+    animation: animateFormstep 0.5s;
+}
+
+@keyframes animateFormstep {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.form-step.active{
+    display: flex;
+    height: 90%;
+    justify-content: center;
+}
+
+.imgNameHemocentro{
+    flex-direction: row;
+    display: flex;
+}
+.form-step .imgInput{
     display: flex;
     flex-direction: column;
-  }
-  
-  .cadastro-hemocentro input {
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+    background-color: #dde6e7;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 10px;
+}
+.form-step .imgInput img{
+    width: clamp(124px, 10vw, 224px);
+    margin-bottom: 12px;
+}
+
+.form-step .imgInput input[type="file"]{
+    display: none;
+}
+.form-step .imgInput label{
+    padding: 10px 0;
     border-radius: 4px;
-  }
-  
-  .cadastro-hemocentro button {
-    padding: 10px;
-    font-size: 16px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
+    text-align: center;
+    color: #52AAB7;
+    background-color: #FFF;
+    font-weight: 500;
     cursor: pointer;
-  }
-  
-  .cadastro-hemocentro button:hover {
-    background: #218838;
-  }
-  
+    transition: 0.2s;
+}
+.form-step .imgInput label:hover{
+    background-color: #afb1b1;
+    color:#ffffff
+}
+
+.dadosDiv{
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    flex-direction: column;
+    padding: 0 0 0 20px;
+}
+
+.form-step .prevNextBtn{
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.form-step .btn{
+    flex: 0.6;
+    padding: 20px 0px;
+    border-radius: 4px;
+    background-color: #ee8e91;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.form-step .btn-next{
+    flex: 1;
+    background-color: #52AAB7;
+}
+.form-step .btn-prev:hover{
+    color: #ee8e91;
+    outline: solid #ee8e91 2px;
+    background-color: #FFF;
+}
+.form-step .btn-next:hover{
+    color: #52AAB7;
+    background-color: #fff;
+    outline: solid #52AAB7 2px;
+}
+
+
+.inputDiv{
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    cursor: text;
+}
+
+.inputDiv input{
+    padding: 10px;
+    padding-top: 24px;
+    border: none;
+    outline: none;
+    font-family: Poppins;
+    font-size: 1em;
+    transition: 0.3s;
+    background-color: transparent;
+    border-radius: 5px;
+}
+.inputDiv:has(textarea){
+    flex: 1;
+}
+.inputDiv textarea{
+    resize: none;
+    flex: 1;
+    padding: 0 10px;
+    margin-top: 24px;
+    border: none;
+    outline: none;
+    font-family: Poppins;
+    font-size: 1em;
+    transition: 0.3s;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.inputDiv label, .cidadeEstado label{
+    font-weight: 600;
+    transition: 0.2s;
+    width: fit-content;
+    padding: 0 5px;
+    color: #000;
+    cursor: text;
+}
+.inputDiv span{
+    position: absolute;
+    top: 0.3rem;
+    right: 10px;
+    color: #ED1C24;
+}
+.inputDiv label{
+    position: absolute;
+    top: 16px;
+    left: 10px;
+}
+.inputDiv:has(input:focus){
+    outline: solid #52AAB7 1px;
+}
+
+.inputDiv input:focus ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+.inputDiv input:not(:placeholder-shown):not(:focus) ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+
+.inputDiv:has(textarea:focus){
+    outline: solid #52AAB7 1px;
+}
+
+.inputDiv textarea:focus ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+.inputDiv textarea:not(:placeholder-shown):not(:focus) ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+
+
+.cidadeEstado{
+    display: flex;
+    flex-direction: row;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.cidadeEstado input{
+    border: none;
+    flex:1;
+}
+.cidadeEstado input:focus{
+    border: none;
+    outline: none;
+}
+
+.cidadeEstado:has(input:focus){
+    outline: solid #52AAB7 1px;
+}
+
+.cidadeEstado .line{
+    height: 70%;
+    width: 1px;
+    background-color: #000;
+    margin-right: 15px;
+}
+
+.cidadeEstado select{
+    font-size: 1em;
+    border: none;
+    width: 60px;
+    background-color: transparent;
+    margin-top: 12px;
+    margin-right: 10px;
+}
+.selectDiv{
+    position: relative;
+}
+.selectDiv label{
+    color: #52AAB7;
+    position: absolute;
+    top: -0.6rem;
+    left: -0.8rem;
+    font-size: 0.9rem;
+}
+
+.selectDiv.hemocentro{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}
+.selectDiv.hemocentro label{
+    font-weight: 600;
+    top: 0.3rem;
+    left: 0.8rem;
+    font-size: 0.9rem;
+}
+.selectDiv.hemocentro span{
+    position: absolute;
+    top: 0.3rem;
+    right: 10px;
+    color: #ED1C24;
+}
+#hemocentroSelect{
+    flex: 1;
+    font-size: 1em;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    padding-top: 24px;
+}
+
+button{
+    flex: 1;
+    padding: 15px 0;
+    font-size: 1em;
+    font-weight: 700;
+    border: 0;
+    background-color: #52AAB7;
+    color: #FFF;
+    border-radius: 5px;
+    transition: ease-in 0.2s;
+}
+
+button:hover{
+    background-color: #FFF;
+    color: #52AAB7;
+    outline: solid #52AAB7 2px;
+    cursor: pointer;
+}
+
