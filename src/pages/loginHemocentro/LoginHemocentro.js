@@ -57,6 +57,7 @@ const navigate = useNavigate();
             <input
               type="password"
               id="senhaInput"
+              placeholder=""
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
