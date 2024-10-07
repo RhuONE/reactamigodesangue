@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import './HemocentroCampanhas.css';
+import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
+
 
 const HemocentroCampanhas = () => {
     const [campanhas, setCampanhas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate(); // Hook para redirecionar
 
     useEffect(() => {
         const fetchCampanhas = async () => {
+        const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
+          console.log(token);
+          const tipoUsuario = localStorage.getItem('tipoUsuario');
+          console.log(tipoUsuario);
+          if (!token) {
+            // Se o token não estiver presente, redireciona para a tela de login
+            navigate('/login/hemocentro');
+            return;
+          }
+          if (tipoUsuario !== 'hemocentro') {
+            // Se o tipo de usuário não for hemocentro, redireciona para o login
+            navigate('/login/hemocentro');
+            return;
+          }
             try {
-                const token = localStorage.getItem('token');
+                
                 const response = await api.get('/hemocentro/campanhas', {
                     headers: {
                         Authorization: `Bearer ${token}`,

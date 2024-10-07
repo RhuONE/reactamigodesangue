@@ -5,6 +5,7 @@ import api from '../services/api';
 import './HemocentroDashboard.css';
 import BarChart from '../components/BarChart';
 import SidebarHemocentro from '../components/SidebarHemocentro';
+import { useNavigate, Link } from 'react-router-dom';
 
 const HemocentroDashboard = () => {
     const [metrics, setMetrics] = useState({
@@ -13,15 +14,29 @@ const HemocentroDashboard = () => {
     });
 
     const [estoques, setEstoques] = useState([]);
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAllData = async () => {
+            const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
+          console.log(token);
+          const tipoUsuario = localStorage.getItem('tipoUsuario');
+          console.log(tipoUsuario);
+          if (!token) {
+            // Se o token não estiver presente, redireciona para a tela de login
+            navigate('/login/hemocentro');
+            return;
+          }
+          if (tipoUsuario !== 'hemocentro') {
+            // Se o tipo de usuário não for hemocentro, redireciona para o login
+            navigate('/login/hemocentro');
+            return;
+          }
             setLoading(true);
             try {
-                const token = localStorage.getItem('token');
+                
     
                 // Fetch Metrics
                 const metricsResponse = await api.get('/hemocentro/metrics', {

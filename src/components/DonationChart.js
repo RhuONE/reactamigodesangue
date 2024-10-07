@@ -26,8 +26,13 @@ const DonationChart = () => {
 
     useEffect(() => {
         const fetchDonationData = async () => {
+          const token = localStorage.getItem('token');
             try {
-                const response = await api.get('/dashboard/doacoes'); //Rota de doacoes
+                const response = await api.get('/dashboard/doacoes', {
+                  headers: {
+                    Authorization : `Bearer ${token}`,
+                  },
+                }); //Rota de doacoes
                 setDonationData(response.data); // Exemplo [{month: 'Janeiro', count: 10}, ...]
             } catch (error){
                 console.error('Erro ao buscar dados de doações', error);

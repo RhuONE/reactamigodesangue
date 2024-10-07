@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import api from '../../services/api';
 
 const LoginHemocentro = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+const navigate = useNavigate();  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,12 +18,13 @@ const LoginHemocentro = () => {
         email,
         senha,
       });
-
-      const { token } = response.data;
-
+      if (response.data.tipoUsuario !== 'hemocentro') {
+        toast.error('Erro ao realizar login. Login impróprio.');
+        return;
+      }
       // Armazena o token no localStorage
-      localStorage.setItem('hemocentroToken', token);
-
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('tipoUsuario', response.data.tipoUsuario);
       // Redireciona para o dashboard do hemocentro após o login bem-sucedido
       navigate('/hemocentro/dashboard');
     } catch (err) {
