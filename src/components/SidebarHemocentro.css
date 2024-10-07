@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: Poppins;
+    margin: 0;
+    padding: 0;
+}
+/* Estiliza a barra de rolagem */
+*::-webkit-scrollbar {
+    width: 8px; /* Define a largura da barra de rolagem */
+}
+
+/* Estiliza a trilha da barra de rolagem */
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Estiliza o polegar da barra de rolagem */
+*::-webkit-scrollbar-thumb {
+    background: #a3a2a2; /* Cor do polegar (a parte que arrasta) */
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #797878; /* Cor do polegar ao passar o mouse */
+}
+
+
+/* Sidebar padrão (desktop) */
+.sidebar {
+    max-width: 250px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff; /* Cor de fundo escura para parecer moderna */
+    padding: 20px;
+    color: rgb(26, 26, 26); /* Texto branco para destacar no fundo escuro */
+    position: fixed; /* Fixa o sidebar para que ele não role junto com a página */
+    top: 0;
+    left: 0;
+    transition: 0.3s ease-in-out; /* Adiciona transição suave ao abrir/fechar */
+    z-index: 1000; /* Mantém o sidebar sobreposto a outros elementos */
+    -webkit-box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
+    box-shadow: -1px 0px 49px -20px rgba(0,0,0,0.75);
+}
+
+
+
+.sidebar.closed ul li a p{
+    display: none; /* Sidebar fechado fora da tela */
+}
+
+.sidebar.open img {
+    width: 70%;
+    height: 58px;
+    margin-bottom: 20px;
+}
+.sidebar.closed img{
+    width: 58px;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Faz a lista crescer para ocupar o espaço disponível */
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+    min-height: 57px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center; /*Alinhar ícone e texto */
+    transition: 0.3s; /*Transição suave para cor dos itens */
+    text-decoration: none;
+    color: #555555;
+}
+
+.sidebar ul li svg {
+    transition: transform 0.3s; /* Transição para ícones */
+}
+
+.sidebar ul li a {
+    color: rgb(0, 0, 0); /* Mantenha a cor branca para os links */
+    text-decoration: none; /* Remove o sublinhado*/
+    display: flex;
+    gap:10px;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px 20px;
+}
+.sidebar ul li:hover {
+    cursor: pointer;
+    background-color: #ebebeb; /* Cor de destaque ao passar o mouse */
+    transition: color 0.3s;
+    transform: scale(1.035);  /* Efeito de deslizamente ao passar o mouse */
+}
+.sidebar ul li.active{
+    background-color: #ececec;
+}
+.sidebar ul li.active::before{
+    position: absolute;
+    left: 4px;
+    content: "a";
+    color: transparent;
+    background-color: #0a93a1;
+    border-radius: 2px;
+    width: 4px;
+    height: 42px;
+}
+.sidebar ul li.active a {
+    font-weight: bold;
+}
+
+
+/* Sidebar escondido em telas menores */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%); /* Sidebar escondido por padrão tem telas pequenas */
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0; /* Ajuste para a main content ocupar a tela toda quando o sidebar estiver escondido */
+    }
+}
+
+.main-content {
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out; /* Transição suave ao abrir/fechar sidebar */
+}
+
+/* Quando o menu está aberto, empurrar o main-content */
+.main-content.sidebar-open {
+    margin-left: 270px; /* Espaço que o sidebar ocupa ao abrir */
+}
+
+li.logoutBtn{
+    position: absolute;
+    bottom: 15px;
+}
+
+.sidebar ul li.logoutBtn:hover{
+    background-color: #ed1700;
+}
+.sidebar ul li.logoutBtn:hover a{
+    color: #FFF;
+}

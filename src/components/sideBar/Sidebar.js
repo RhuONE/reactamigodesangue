@@ -41,8 +41,8 @@ const Sidebar = () => {
                     <li className={location.pathname === '/usuarios' ? 'active' : ''}>
                         <Link to='/usuarios'> <FaUser /> <p>Usuários</p></Link>
                     </li>
-                    <li className={location.pathname === '/hemocentros' ? 'active' : ''}>
-                        <Link to='/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
+                    <li className={location.pathname === '/adm/hemocentros' ? 'active' : ''}>
+                        <Link to='/adm/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
                     </li>
                     <li className={location.pathname === '/campanhas' ? 'active' : ''}>
                         <Link to='/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
