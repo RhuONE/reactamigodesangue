@@ -18,6 +18,7 @@ import HemocentroFuncionarios from './pages/HemocentroFuncionario';
 import HemocentroCampanhas from './pages/HemocentroCampanhas';
 import CadastroHemocentro from './pages/cadastroHemocentro/CadastroHemocentro';
 import LoginHemocentro from './pages/loginHemocentro/LoginHemocentro';
+import Home from './pages/home/Home';
 
 function Layout() {
   const location = useLocation();
@@ -27,11 +28,13 @@ function Layout() {
   return (
     <div className='App'>
       {/* Exibe a Sidebar específica para cada tipo de usuário */}
-      {location.pathname !== '/login' && location.pathname !== '/cadastro/hemocentro' && location.pathname !== '/login/hemocentro' && (
+      {location.pathname !== '/login' && location.pathname !== '/cadastro/hemocentro' && location.pathname !== '/login/hemocentro' && 
+      location.pathname !== '/' &&(
         isHemocentroRoute ? <SidebarHemocentro /> : <Sidebar />
       )}
       <div className='main-content'>
         <Routes>
+          <Route path='/' element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/usuarios" element={<Usuarios />} />

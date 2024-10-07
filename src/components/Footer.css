@@ -1,0 +1,38 @@
+.footer {
+    background-color: #292626;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    position: relative; /* Para manter no rodapé */
+  }
+  
+  .footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: #fff;
+  }
+  
+  .footer .social-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .footer .social-links li {
+    margin: 0 10px;
+  }
+  
+  .footer .social-links a {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .footer .social-links a:hover {
+    color: #0088f8;
+  }
+  
