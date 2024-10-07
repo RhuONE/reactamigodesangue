@@ -99,16 +99,9 @@
     background-color: #b20000;
 }
 .card .cardInfo{
+    color: #000;
     transition: .3s;
-    opacity: 0;
-    height: 0;
     overflow: hidden;
-}
-.card .cardInfo.open{
-    opacity: 1;
-    height: auto;
-    padding-top: 20px;
-	
 }
 
 @-webkit-keyframes slide-in-top {

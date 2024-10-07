@@ -20,6 +20,10 @@
     font-size: 2rem;
     color: #000;
 }
+.hemocentros-content .subTitulo{
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
 
 .hemocentros-content{
     flex: 1;
@@ -29,9 +33,7 @@
     padding: 20px 30px;
     padding-bottom: 0;
 }
-.hemocentros-content .subTitulo{
-    font-size: 1.5rem;
-}
+
 
 /*Hemocentros Com Mais Doações*/
 .hemocentros-metrics{
@@ -39,7 +41,7 @@
     display: flex;
     flex-direction: row;
     height: fit-content;
-    gap: 10px;
+    gap: 20px;
 }
 .hemocentros-metrics .hemocentroCard-tier{
     position: relative;
@@ -88,8 +90,8 @@
 .hemocentros-metrics .hemocentroCard-tier .info h3{
     align-self: flex-end;
     display: flex;
-    flex-direction: column;
-    background-color: #EEE;
+    flex-direction: column;    
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
     color: #000;
     font-size: 1rem;
     font-weight: 500;
@@ -111,13 +113,14 @@
     flex-direction: row;
     gap: 5px;
 }
-.pesquisaFiltroHemo button{
+.pesquisaFiltroHemo button, .pesquisaFiltroHemo .status{
     flex: 0.5;
     font-size: 1rem;
     border-radius: 10px;
     border: none;
     background-color: #FFF;
-    transition: .2s;
+    text-align: center;
+    transition: .3s;
     cursor: pointer;
     font-weight: 500;
     color: #888;
@@ -126,10 +129,50 @@
 .pesquisaFiltroHemo button:hover{
     filter: brightness(0.95);
 }
-.pesquisaFiltroHemo button.active{
+.pesquisaFiltroHemo button.active, .pesquisaFiltroHemo .status.active{
     background-color: #b4dee9;
     color: #007a86;
     font-weight: 700;
+}
+.pesquisaFiltroHemo .status{
+    position: relative;
+}
+.pesquisaFiltroHemo .status .icon{
+    position: absolute;
+    right: 6px;
+    top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+}
+.pesquisaFiltroHemo .status .dropDown{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    background-color: #FFF;
+    width: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+.pesquisaFiltroHemo .status .dropDown button{
+    border-radius: 0;
+}
+.pesquisaFiltroHemo .status button.filter-ativo{
+    background-color: #18bc9c55;
+    color: #18bc9c;
+}
+.pesquisaFiltroHemo .status button.filter-inativo{
+    background-color: #e74c3c33;
+    color: #e74c3c;
+}
+.pesquisaFiltroHemo .status button.filter-pendente{
+    background-color: #da8f0355;
+    color: #da8f03;
 }
 .pesquisaFiltroHemo .pesquisaCampo::before{
     content: "";
@@ -188,7 +231,7 @@ thead th.headerCelulaListaHemo{
     color: #000;
 }
 thead th.imgCampo{
-    width: 124px;
+    width: 148px;
 }
 thead th.nomeCampo{
     flex: 1.5;
@@ -295,6 +338,7 @@ th {
 .statusCard{
     font-weight: 800;
     font-size: 1.1rem;
+    text-transform: capitalize;
 }
 .statusCard.ativo{
     color: #18bc9c;

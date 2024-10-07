@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
-import MetricCard from '../../components/MetricCard';
 import api from '../../services/api'; // Certifique-se de que o arquivo da API esteja importado corretamente
 import './Hemocentros.css';
 import { AiOutlineSearch } from "react-icons/ai";
-import { BiCurrentLocation, BiChevronDown } from "react-icons/bi";
-import { FaTrash } from "react-icons/fa6";
-import { FaEdit, FaHospital } from "react-icons/fa";
+import { BiChevronDown, } from "react-icons/bi";
 import hospitalIcon from '../../images/hospital.jpg'
+import HemocentrosList from '../../components/listagemHemocentros';
 
 const Hemocentros = () => {
+  const [activeButton, setActiveButton] = useState('recentes'); // Estado para controlar qual botão está ativo
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+
+  const handleClick = (button) => {
+    setActiveButton(button);
+    setFiltro(button);
+  };
+
+  const handlePesquisaChange = (e) => {
+    setPesquisa(e.target.value); // Atualiza o estado com o valor do input
+  };
+
   const [hemocentros, setHemocentros] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,6 +61,29 @@ const Hemocentros = () => {
     fetchHemocentros();
   }, [navigate]);
 
+  const [hemocentrosFiltrados, setHemocentrosFiltrados] = useState(hemocentros);
+  const [pesquisa, setPesquisa] = useState(''); // Estado para armazenar o termo de pesquisa
+  const [filtro, setFiltro] = useState(null); // Condição que define o filtro
+
+  useEffect(() => {
+    // Filtra hemocentros por status e pesquisa
+    const hemocentrosFiltradosPorStatus = filtro === 'filter-ativo'
+      ? hemocentros.filter(h => h.statusHemocentro === 'ativo')
+      : filtro === 'filter-inativo'
+      ? hemocentros.filter(h => h.statusHemocentro === 'arquivado')
+      : filtro === 'filter-pendente'
+      ? hemocentros.filter(h => h.statusHemocentro === 'pendente')
+      : hemocentros; // Se não houver filtro, pega todos
+
+    // Aplica a pesquisa por nome na lista filtrada
+    const hemocentrosFiltradosPorNome = hemocentrosFiltradosPorStatus.filter(h =>
+      h.nomeHemocentro.toLowerCase().includes(pesquisa.toLowerCase())||
+      h.emailHemocentro.toLowerCase().includes(pesquisa.toLowerCase())
+    );
+
+    setHemocentrosFiltrados(hemocentrosFiltradosPorNome);
+  }, [filtro, pesquisa, hemocentros]);
+
   return (
     <div className="hemocentros-container">
       {loading ? (
@@ -64,44 +97,76 @@ const Hemocentros = () => {
           <div className="hemocentros-metrics">
             <div className='hemocentroCard-tier'>
               <h3 className='posicaoRanking'>1º</h3>
-              <img src={hospitalIcon}/>
+              <img src={hospitalIcon} />
               <div className='info'>
                 <h2>Gusmão e Zambrano</h2>
                 <h3>Doações <span>28</span></h3>
               </div>
             </div>
             <div className='hemocentroCard-tier'>
-            <h3 className='posicaoRanking'>2º</h3>
-              <img src={hospitalIcon}/>
+              <h3 className='posicaoRanking'>2º</h3>
+              <img src={hospitalIcon} />
               <div className='info'>
-                <h2>Gusmão e Zambrano</h2>
-                <h3>Doações <span>28</span></h3>
+                <h2>Carmona e Domingues</h2>
+                <h3>Doações <span>18</span></h3>
               </div>
             </div>
             <div className='hemocentroCard-tier'>
-            <h3 className='posicaoRanking'>3º</h3>
-            <img src={hospitalIcon}/>
+              <h3 className='posicaoRanking'>3º</h3>
+              <img src={hospitalIcon} />
               <div className='info'>
-                <h2>Gusmão e Zambrano</h2>
-                <h3>Doações <span>28</span></h3>
+                <h2>Rangel e Queirós</h2>
+                <h3>Doações <span>15</span></h3>
               </div>
             </div>
             <div className='hemocentroCard-tier'>
-            <h3 className='posicaoRanking'>4º</h3>
-            <img src={hospitalIcon}/>
+              <h3 className='posicaoRanking'>4º</h3>
+              <img src={hospitalIcon} />
               <div className='info'>
-                <h2>Gusmão e Zambrano</h2>
-                <h3>Doações <span>28</span></h3>
+                <h2>Hemocentro Generico</h2>
+                <h3>Doações <span>12</span></h3>
               </div>
             </div>
           </div>
           <div className='pesquisaFiltroHemo'>
-            <button className='active'>Recentes</button>
-            <button>Por Status</button>
-            <button>Por Região</button>
+            <button
+              className={activeButton === 'recentes' ? 'active' : ''}
+              onClick={() => handleClick('recentes')}
+            >
+              Recentes
+            </button>
+            <div
+              className={`status ${activeButton === 'filter-ativo' ? 'active' : ''} ${activeButton === 'filter-pendente' ? 'active' : ''} ${activeButton === 'filter-inativo' ? 'active' : ''}`}
+              onMouseEnter={() => setIsDropDownOpen(true)}
+              onMouseLeave={() => setIsDropDownOpen(false)}
+              aria-expanded={isDropDownOpen}
+              aria-haspopup="true"
+            >
+              Por Status
+              <BiChevronDown className='icon' />
+              {isDropDownOpen && (
+                <div className="dropDown">
+                  <button className={`ativo ${activeButton === 'filter-ativo' ? 'filter-ativo' : ''} `}
+              onClick={() => handleClick('filter-ativo')}>Ativos</button>
+                  <button className={`inativo ${activeButton === 'filter-inativo' ? 'filter-inativo' : ''}`}
+              onClick={() => handleClick('filter-inativo')}>Inativos</button>
+                  <button className={`pendente ${activeButton === 'filter-pendente' ? 'filter-pendente' : ''}`}
+              onClick={() => handleClick('filter-pendente')}>Pendentes</button>
+                </div>
+              )}
+            </div>
+            {/* <button
+              className={activeButton === 'regiao' ? 'active' : ''}
+              onClick={() => handleClick('regiao')}
+            >
+              Por Região
+            </button> */}
             <div className='pesquisaCampo'>
-              <input type='text' placeholder='Pesquisar...'/>
-              <AiOutlineSearch className='lupaIcon'/>
+              <input type='text' placeholder='Pesquisar...' 
+          value={pesquisa}
+          onChange={handlePesquisaChange} // Atualiza o estado ao digitar
+/>
+              <AiOutlineSearch className='lupaIcon' />
             </div>
           </div>
           <table className='tableListaHemo'>
@@ -115,33 +180,7 @@ const Hemocentros = () => {
               </tr>
             </thead>
           </table>
-          <div className='cardsListagem'>
-            {hemocentros.map((hemocentro) => (
-              <div className='card' key={hemocentro.idHemocentro}>
-                <div className="baseInfo">
-                  <img id="hemoIcon" src={hospitalIcon} />
-                  <div id="info">
-                    <h2>{hemocentro.nomeHemocentro}</h2>
-                    <p>
-                      <BiCurrentLocation />
-                      {hemocentro.cidadeHemocentro}, {hemocentro.estadoHemocentro}
-                    </p>
-                  </div>
-
-                  <p className='emailCard'>hemo@gmail.com</p>
-                  <p className={`statusCard ${hemocentro.statusHemocentro}`}>{hemocentro.statusHemocentro}</p>
-                  <div className='btns'>
-                    <button className='aceitarHemoBtn'><FaEdit /></button>
-                    <button className='deleteHemoBtn'><FaTrash /></button>
-                  </div>
-                  <BiChevronDown />
-                </div>
-                <div className='cardInfo'>
-
-                </div>
-              </div>
-            ))}
-          </div>
+          <HemocentrosList hemocentros={hemocentrosFiltrados} />
         </div>
       )}
     </div>
