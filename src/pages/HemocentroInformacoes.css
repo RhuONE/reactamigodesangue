@@ -1,0 +1,35 @@
+.informacoes-hemocentro-content {
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+.hemocentro-info-card {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.hemocentro-info-card h2 {
+    margin-bottom: 10px;
+}
+
+.hemocentro-info-card p {
+    margin: 5px 0;
+}
+
+.edit-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #c0392b;
+}

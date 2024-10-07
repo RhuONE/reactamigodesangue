@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
-import './Sidebar.css';
+import './SidebarHemocentro.css';
 import logoExpand from '../images/LogoAmgSangueText.png';
 import logo from '../images/LogoAmgSangue.png';
 
-const Sidebar = () => {
+const SidebarHemocentro = () => {
 
     const location = useLocation(); //Hook para pegar a localização atual
 
@@ -29,7 +29,7 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Sidebar */}
+            {/* SidebarHemocentro */}
             <div
                 className={`sidebar ${isOpen ? 'open' : 'closed'}`}
                 onMouseEnter={() => setIsOpen(true)}
@@ -41,20 +41,20 @@ const Sidebar = () => {
                     <img src={logo} alt='Logo Compacto' />
                 )}
                 <ul>
-                    <li className={location.pathname === '/dashboard' ? 'active' : ''}>
-                        <Link to='/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
+                    <li className={location.pathname === '/hemocentro/dashboard' ? 'active' : ''}>
+                        <Link to='/hemocentro/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
                     </li>
-                    <li className={location.pathname === '/usuarios' ? 'active' : ''}>
-                        <Link to='/usuarios'> <FaUser /> <p>Usuários</p></Link>
+                    <li className={location.pathname === '/hemocentro/informacoes' ? 'active' : ''}>
+                        <Link to='/hemocentro/informacoes'> <FaUser /> <p>Informações</p></Link>
                     </li>
-                    <li className={location.pathname === '/adm/hemocentros' ? 'active' : ''}>
-                        <Link to='/adm/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
+                    <li className={location.pathname === '/hemocentro/doacoes' ? 'active' : ''}>
+                        <Link to='/hemocentro/doacoes'> <FaHospital /> <p>Doações</p></Link>
                     </li>
-                    <li className={location.pathname === '/campanhas' ? 'active' : ''}>
-                        <Link to='/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
+                    <li className={location.pathname === '/hemocentro/funcionarios' ? 'active' : ''}>
+                        <Link to='/hemocentro/funcionarios'> <FaClipboardList /> <p>Funcionários</p></Link>
                     </li>
-                    <li className={location.pathname === '/pendencias' ? 'active' : ''}>
-                        <Link to='/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
+                    <li className={location.pathname === '/hemocentro/campanhas' ? 'active' : ''}>
+                        <Link to='/hemocentro/campanhas'><FaExclamationCircle /> <p>Campanhas</p></Link>
                     </li>
                     <li className={`logoutBtn`}>
                         <Link><BiLogOut /> <p>Sair</p></Link>
@@ -65,4 +65,6 @@ const Sidebar = () => {
     );
 };
 
-export default Sidebar;
+export default SidebarHemocentro;
+
+
