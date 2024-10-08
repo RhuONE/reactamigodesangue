@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import './HemocentroDoacoes.css';
-<<<<<<< Updated upstream
-=======
 import CadastrarDoacaoModal from '../components/CadastrarDoacaoModal';
 import { useNavigate, Link } from 'react-router-dom';
->>>>>>> Stashed changes
 
 const Doacoes = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [funcionarios, setFuncionarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-<<<<<<< Updated upstream
-=======
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
->>>>>>> Stashed changes
 
     useEffect(() => {
         const fetchDoacoes = async () => {

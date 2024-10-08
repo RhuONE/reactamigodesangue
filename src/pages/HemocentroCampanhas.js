@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import './HemocentroCampanhas.css';
-<<<<<<< Updated upstream
-=======
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
 import CadastrarCampanhaModal from '../components/CadastrarCampanhaModal';
->>>>>>> Stashed changes
 
 const HemocentroCampanhas = () => {
     const [campanhas, setCampanhas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-<<<<<<< Updated upstream
-=======
     const navigate = useNavigate(); // Hook para redirecionar
     const [showModal, setShowModal] = useState(false);
 
->>>>>>> Stashed changes
 
     useEffect(() => {
         const fetchCampanhas = async () => {

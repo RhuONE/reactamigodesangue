@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import './HemocentroFuncionario.css';
-<<<<<<< Updated upstream
-=======
 import CadastrarFuncionarioModal from '../components/CadastrarFuncionarioModal';
 import { useNavigate, Link } from 'react-router-dom';
 
->>>>>>> Stashed changes
 
 const HemocentroFuncionarios = () => {
     const [funcionarios, setFuncionarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-<<<<<<< Updated upstream
-=======
     const navigate = useNavigate();
     
     const [showModal, setShowModal] = useState(false);
 
->>>>>>> Stashed changes
 
     useEffect(() => {
 
