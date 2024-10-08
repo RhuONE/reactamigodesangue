@@ -1,0 +1,33 @@
+.sobre-section{
+    background-color: #c01313;
+    position: relative;
+}
+
+.sobre-section #wave{
+    width: 100%;
+    height: 242px;
+    top: -242px;
+    position: absolute;
+    object-fit: cover;
+}
+.sobre-section h1{
+    color: #FFF;
+    font-size:  2rem;
+    padding: 20px;
+    padding-bottom: 0;
+}
+.sobre-section .cardSection{
+    display: flex;
+    flex: row;
+    gap: 20px;
+    padding: 40px;
+}
+.sobre-section .cardSection h1{
+    color: #c01313;
+    font-size:  1.5rem;
+    padding: 0;
+}
+.sobre-section .cardSection .card{
+    flex: 1 1 400px;
+}
+  
