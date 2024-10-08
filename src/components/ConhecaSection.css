@@ -1,24 +1,66 @@
+
 .conheca-section {
     padding: 40px;
     background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    width: 100%; /* Garantir que ocupe toda a largura */
+    max-width: 100%; /* Garantir que ocupe toda a largura */
+    min-height: 95vh;
   }
-  
-  .conheca-section h1 {
+  .conheca-section .cardSection{
+    display: flex;
+    flex-direction: row;
+  }
+  .conheca-section .card2{
+    padding-bottom: 120px;
+  }
+  .conheca-section .text-column1{
+    display: flex;
+    flex-direction:column;
+    flex: 1;
+    justify-content: center;
+    align-items: start;
+    padding-right: 30px;
+  }
+  .conheca-section .text-column1 h1 {
     font-size: 2.5rem;
+    text-align: left;
     color: #c00000;
   }
-  
-  .conheca-section p {
-    font-size: 1.2rem;
+
+  .conheca-section .card2 .text-column1 h1 {
+    font-size: 4rem;
+    text-align: left;
     color: #333;
-    line-height: 1.6;
   }
   
+  .conheca-section .text-column1 p {
+    font-size: 1.2rem;
+    color: #333;
+    text-align: start;
+  }
+  
+  .conheca-section .card2 .text-column1 button{
+    padding: 5px 10px;
+    font-size: 1rem;
+    background-color: #077780;
+    color: #FFF;
+    border: none;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .conheca-section .card2 .text-column1 button:hover{
+    filter: brightness(0.9);
+  }
+
+  .conheca-section .image-column1{
+    flex: 1.5;
+  }
   .conheca-section img {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 100%;
     margin-top: 20px;
   }
   

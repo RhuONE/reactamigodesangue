@@ -1,61 +1,174 @@
-.login-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 40px;
-    background: #f9f9f9;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+.main-content:has(.login-containerHemo){
+  padding: 0;
+  margin: 0;
+  display: flex;
+  width: 100vw;
+  height: 100%;
+}
+.login-containerHemo {
+  border-radius: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex: 1;
+  min-width: 100vw;
+  height: 100vh;
+  flex-direction: row;
+  background-color: #FFF;
   }
-  
-  .login-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .login-container form {
+  .side-img{
+    flex:0.5;
+    margin-right: 120px;
+    position: relative;
     display: flex;
     flex-direction: column;
-  }
+    background-color: #ED1C24;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+.side-img img{
+    width: 80%;
+}
+.side-img #wave{
+    position: absolute;
+    right: clamp(-100%,10vw,-172px);
+    max-width: 172px;
+    height: 100%;
+    margin: 0;
+}
+.content{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    margin: 30px 120px;
+}
+.content h1{
+    font-size: 2.5em;
+}
+
+
   
-  .login-container input {
-    margin-bottom: 15px;
+
+  form{
+    flex: 1;
+    width: 100%;
+}
+form h3{
+    margin-top: 10px;
+    font-weight: 600;
+}
+/*Login Formulario*/
+.form-login{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    transform-origin: top;
+    animation: animateFormLogin 1s;
+}
+
+@keyframes animateFormLogin {
+    from{
+        opacity: 0;
+        top: 25%;
+    }
+    to{
+        opacity: 1;
+        top: 0px;
+    }
+}
+
+.form-login .error{
+    color: #ED1C24;
+}
+/*Input Form*/
+.inputDiv{
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    cursor: text;
+}
+
+.inputDiv input{
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .login-container .error {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .login-container button {
-    padding: 10px;
-    font-size: 16px;
-    background: #28a745;
-    color: white;
+    padding-top: 24px;
     border: none;
-    border-radius: 4px;
+    outline: none;
+    font-family: Poppins;
+    font-size: 1em;
+    transition: 0.3s;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.inputDiv label{
+    font-weight: 600;
+    transition: 0.2s;
+    width: fit-content;
+    padding: 0 5px;
+    color: #000;
+    cursor: text;
+}
+.inputDiv span{
+    position: absolute;
+    top: 0.3rem;
+    right: 10px;
+    color: #ED1C24;
+}
+.inputDiv label{
+    position: absolute;
+    top: 16px;
+    left: 10px;
+}
+.inputDiv:has(input:focus){
+    outline: solid #52AAB7 1px;
+}
+
+.inputDiv input:focus ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+.inputDiv input:not(:placeholder-shown):not(:focus) ~ label{
+    top: 0.3rem;
+    font-size: 0.9rem;
+    color: #52AAB7;
+}
+
+.form-login button{
+  flex: 0;
+    padding: 15px 0;
+    font-size: 1em;
+    font-weight: 700;
+    border: 0;
+    background-color: #52AAB7;
+    color: #FFF;
+    border-radius: 5px;
+    transition: ease-in 0.2s;
+}
+
+.form-login button:hover{
+    background-color: #FFF;
+    color: #52AAB7;
+    outline: solid #52AAB7 2px;
     cursor: pointer;
-  }
-  
-  .login-container button:hover {
-    background: #218838;
-  }
-  
-  .login-container .register-link {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #007bff;
+}
+.form-login a{
     text-decoration: none;
-  }
-  
-  .login-container .register-link:hover {
-    text-decoration: underline;
-  }
-  
+    color: black;
+    text-align: center;
+    transition: .3s;
+}
+.form-login a:hover{
+    color: #224e55;
+    transform: scale(1.125);
+}

@@ -28,12 +28,19 @@ const Hemocentros = () => {
   useEffect(() => {
     const fetchHemocentros = async () => {
       const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
-
-      if (!token) {
-        // Se o token não estiver presente, redireciona para a tela de login
-        navigate('/login');
-        return;
-      }
+          console.log(token);
+          const tipoUsuario = localStorage.getItem('tipoUsuario');
+          console.log(tipoUsuario);
+          if (!token) {
+            // Se o token não estiver presente, redireciona para a tela de login
+            navigate('/login');
+            return;
+          }
+          if (tipoUsuario !== 'administrador') {
+            // Se o tipo de usuário não for administrador, redireciona para o login
+            navigate('/login');
+            return;
+          }
 
       try {
         const response = await api.get('/hemocentros', {
@@ -70,14 +77,14 @@ const Hemocentros = () => {
     const hemocentrosFiltradosPorStatus = filtro === 'filter-ativo'
       ? hemocentros.filter(h => h.statusHemocentro === 'ativo')
       : filtro === 'filter-inativo'
-      ? hemocentros.filter(h => h.statusHemocentro === 'arquivado')
-      : filtro === 'filter-pendente'
-      ? hemocentros.filter(h => h.statusHemocentro === 'pendente')
-      : hemocentros; // Se não houver filtro, pega todos
+        ? hemocentros.filter(h => h.statusHemocentro === 'arquivado')
+        : filtro === 'filter-pendente'
+          ? hemocentros.filter(h => h.statusHemocentro === 'pendente')
+          : hemocentros; // Se não houver filtro, pega todos
 
     // Aplica a pesquisa por nome na lista filtrada
     const hemocentrosFiltradosPorNome = hemocentrosFiltradosPorStatus.filter(h =>
-      h.nomeHemocentro.toLowerCase().includes(pesquisa.toLowerCase())||
+      h.nomeHemocentro.toLowerCase().includes(pesquisa.toLowerCase()) ||
       h.emailHemocentro.toLowerCase().includes(pesquisa.toLowerCase())
     );
 
@@ -147,11 +154,11 @@ const Hemocentros = () => {
               {isDropDownOpen && (
                 <div className="dropDown">
                   <button className={`ativo ${activeButton === 'filter-ativo' ? 'filter-ativo' : ''} `}
-              onClick={() => handleClick('filter-ativo')}>Ativos</button>
+                    onClick={() => handleClick('filter-ativo')}>Ativos</button>
                   <button className={`inativo ${activeButton === 'filter-inativo' ? 'filter-inativo' : ''}`}
-              onClick={() => handleClick('filter-inativo')}>Inativos</button>
+                    onClick={() => handleClick('filter-inativo')}>Inativos</button>
                   <button className={`pendente ${activeButton === 'filter-pendente' ? 'filter-pendente' : ''}`}
-              onClick={() => handleClick('filter-pendente')}>Pendentes</button>
+                    onClick={() => handleClick('filter-pendente')}>Pendentes</button>
                 </div>
               )}
             </div>
@@ -162,10 +169,10 @@ const Hemocentros = () => {
               Por Região
             </button> */}
             <div className='pesquisaCampo'>
-              <input type='text' placeholder='Pesquisar...' 
-          value={pesquisa}
-          onChange={handlePesquisaChange} // Atualiza o estado ao digitar
-/>
+              <input type='text' placeholder='Pesquisar...'
+                value={pesquisa}
+                onChange={handlePesquisaChange} // Atualiza o estado ao digitar
+              />
               <AiOutlineSearch className='lupaIcon' />
             </div>
           </div>

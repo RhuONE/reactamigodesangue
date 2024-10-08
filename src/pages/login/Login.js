@@ -19,7 +19,12 @@ const Login = () => {
 
     try {
       const response = await api.post('/login', { email, senha });
+      if (response.data.tipoUsuario ===  'hemocentro') {
+        toast.error('Erro ao realizar login. Login impróprio.');
+        return;
+      }
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('tipoUsuario', response.data.tipoUsuario);
       toast.success('Login realizado com sucesso!');
       navigate('/dashboard'); // Redireciona para o dashboard
     } catch (error) {

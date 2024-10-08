@@ -29,8 +29,13 @@ const UserGrowthChart = () => {
 
     useEffect(() => {
         const fetchUserGrowthData = async () => {
+          const token = localStorage.getItem('token');
             try {
-                const response = await api.get('/dashboard/crescimento-usuario'); // Rota de crescimento de usuário
+                const response = await api.get('/dashboard/crescimento-usuario', {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }); // Rota de crescimento de usuário
                 setUserGrowthData(response.data); // Exemplo: [{ month: 'Janeiro', count: 100}, . . .]
             } catch (error) {
                 console.error('Erro ao buscar dados de crescimento de usuários:', error);

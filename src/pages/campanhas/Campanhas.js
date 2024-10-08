@@ -11,12 +11,20 @@ const Campanhas = () => {
 
   useEffect(() => {
     const fetchCampanhas = async () => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        navigate('/login');
-        return;
-      }
+      const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
+          console.log(token);
+          const tipoUsuario = localStorage.getItem('tipoUsuario');
+          console.log(tipoUsuario);
+          if (!token) {
+            // Se o token não estiver presente, redireciona para a tela de login
+            navigate('/login');
+            return;
+          }
+          if (tipoUsuario !== 'administrador') {
+            // Se o tipo de usuário não for administrador, redireciona para o login
+            navigate('/login');
+            return;
+          }
 
       try {
         const response = await api.get('/campanhas', {

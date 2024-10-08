@@ -11,8 +11,8 @@ const NavBar = () => {
       <ul>
         <li><a href="#section1">Home</a></li>
         <li><a href="#section2">Conheça</a></li>
-        <li><a href="#section4">Usuários</a></li>
-        <li><a href="#section5">Quem somos?</a></li>
+        <li><a href="#section3">Vantagens</a></li>
+        <li><a href="#section4">Quem somos?</a></li>
       </ul>
       <div className="botoes">
         <a href="/login/hemocentro"><button className="entrar">Entrar</button></a>

@@ -18,10 +18,12 @@ const BarChart = ({ estoques }) => {
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
             },
         ],
+        responsive: true,
+        maintainAspectRatio: false,
     };
 
     return (
-        <div style={{ width: '600px', margin: 'auto' }}>
+        <div style={{ width: '100%', height: '100%'}}>
             <Bar data={chartData} />
         </div>
     );

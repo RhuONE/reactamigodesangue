@@ -17,8 +17,13 @@ const BloodTypeChart = () => {
 
     useEffect(() => {
         const fetchBloodTypeData = async () => {
+            const token = localStorage.getItem('token');
             try {
-                const response = await api.get('/dashboard/tipos-sanguineos') //Rota tipos sanguineos
+                const response = await api.get('/dashboard/tipos-sanguineos', {
+                  headers : {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }) //Rota tipos sanguineos
                 setBloodTypeData(response.data); // Exemplo: [{ type: 'O+', count: 40 }, ...]
             } catch (error) {
                 console.error('Erro ao buscar dados dos tipos sanguíneos:', error);

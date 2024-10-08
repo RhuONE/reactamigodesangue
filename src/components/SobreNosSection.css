@@ -1,0 +1,36 @@
+.sobreNos-section{
+    background-color: #FFF;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 40px;
+    height: 95vh;
+    gap: 30px;
+}
+
+.sobreNos-section .image{
+    flex: 1;
+}
+.sobreNos-section .image img{
+    width: 100%;
+}
+.sobreNos-section .text{
+    flex: 1;
+}
+.sobreNos-section .text h1{
+    font-size: 3rem;
+}
+.sobreNos-section .text button{
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+.sobreNos-section .text button:hover{
+    background-color: #077780;
+    color: #FFF;
+}

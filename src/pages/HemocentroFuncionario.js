@@ -17,8 +17,24 @@ const HemocentroFuncionarios = () => {
     useEffect(() => {
 
         const fetchFuncionarios = async () => {
+
+            const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
+          console.log(token);
+          const tipoUsuario = localStorage.getItem('tipoUsuario');
+          console.log(tipoUsuario);
+          if (!token) {
+            // Se o token não estiver presente, redireciona para a tela de login
+            navigate('/login/hemocentro');
+            return;
+          }
+          if (tipoUsuario !== 'hemocentro') {
+            // Se o tipo de usuário não for hemocentro, redireciona para o login
+            navigate('/login/hemocentro');
+            return;
+          }
+
             try {
-                const token = localStorage.getItem('token');
+                
                 const response = await api.get('/hemocentro/funcionarios', {
                     headers: {
                         Authorization: `Bearer ${token}`,
