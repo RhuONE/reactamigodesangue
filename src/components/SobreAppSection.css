@@ -1,6 +1,9 @@
 .sobre-section{
     background-color: #c01313;
     position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .sobre-section #wave{
