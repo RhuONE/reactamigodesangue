@@ -56,6 +56,22 @@ const Pendencias = () => {
     }
   };
 
+  const handleDeny = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.put(`/hemocentros/arquivar/${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPendencias(pendencias.filter((pendencia) => pendencia.idHemocentro !== id));
+    } catch (error) {
+      console.error('Erro ao negar hemocentro', error);
+      setError('Erro ao negar o hemocentro. Tente novamente.');
+    }
+  };
+  
+
   return (
     <div className="pendencias-container">
       <div className='pendencias-header'>
@@ -103,7 +119,7 @@ const Pendencias = () => {
 
                   <div className='btns'>
                     <button id="aceitarHemo" onClick={() => handleApprove(pendencia.idHemocentro)}>Aceitar</button>
-                    <button id="negarHemo">Negar</button>
+                    <button id="negarHemo" onClick={() => handleDeny(pendencia.idHemocentro)}>Negar</button>
                   </div>
                   <BiChevronDown/>
                 </div>

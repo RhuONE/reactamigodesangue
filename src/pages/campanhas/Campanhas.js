@@ -61,10 +61,10 @@ const Campanhas = () => {
           <tbody>
             {campanhas.map((campanha) => (
               <tr key={campanha.idCampanha}>
-                <td>{campanha.nomeCampanha}</td>
+                <td>{campanha.tituloCampanha}</td>
                 <td>{campanha.descCampanha}</td>
-                <td>{new Date(campanha.dataInicio).toLocaleDateString()}</td>
-                <td>{new Date(campanha.dataFim).toLocaleDateString()}</td>
+                <td>{new Date(campanha.dataInicioCampanha).toLocaleDateString()}</td>
+                <td>{new Date(campanha.dataFimCampanha).toLocaleDateString()}</td>
                 <td>{campanha.statusCampanha}</td>
                 <td>
                   <button className="edit-button">Editar</button>

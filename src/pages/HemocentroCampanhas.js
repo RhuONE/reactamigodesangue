@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import './HemocentroCampanhas.css';
+<<<<<<< Updated upstream
+=======
+import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
+import CadastrarCampanhaModal from '../components/CadastrarCampanhaModal';
+>>>>>>> Stashed changes
 
 const HemocentroCampanhas = () => {
     const [campanhas, setCampanhas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+<<<<<<< Updated upstream
+=======
+    const navigate = useNavigate(); // Hook para redirecionar
+    const [showModal, setShowModal] = useState(false);
+
+>>>>>>> Stashed changes
 
     useEffect(() => {
         const fetchCampanhas = async () => {
@@ -28,6 +39,20 @@ const HemocentroCampanhas = () => {
         fetchCampanhas();
     }, []);
 
+    const handleAddCampanha = async (formData) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await api.post('/campanha', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setCampanhas([...campanhas, response.data.data]);
+        } catch (error) {
+            console.error('Erro ao cadastrar campanha:', error);
+        }
+    }
+
     return (
         <div className="campanhas-content">
             <h1>Campanhas do Hemocentro</h1>
@@ -49,6 +74,15 @@ const HemocentroCampanhas = () => {
                             </div>
                         ))
                     )}
+                    <button className="add-campanha-button" onClick={() => setShowModal(true)}>
+                      Adicionar Campanha
+                    </button>
+
+                    <CadastrarCampanhaModal
+                        isOpen={showModal}
+                        onClose={() => setShowModal(false)}
+                        onSave={handleAddCampanha}
+                    />
                 </div>
             )}
         </div>

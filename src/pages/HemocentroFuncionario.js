@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import './HemocentroFuncionario.css';
+<<<<<<< Updated upstream
+=======
+import CadastrarFuncionarioModal from '../components/CadastrarFuncionarioModal';
+import { useNavigate, Link } from 'react-router-dom';
+
+>>>>>>> Stashed changes
 
 const HemocentroFuncionarios = () => {
     const [funcionarios, setFuncionarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+<<<<<<< Updated upstream
+=======
+    const navigate = useNavigate();
+    
+    const [showModal, setShowModal] = useState(false);
+
+>>>>>>> Stashed changes
 
     useEffect(() => {
+
         const fetchFuncionarios = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -29,6 +43,24 @@ const HemocentroFuncionarios = () => {
         fetchFuncionarios();
     }, []);
 
+    const handleAddFuncionario = async (formData) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await api.post('/funcionario', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setFuncionarios([...funcionarios, response.data.data]); // Adiciona o novo funcionário à lista
+            setShowModal(false); // Fecha o modal após a criação
+        } catch (error) {
+            console.error('Erro ao cadastrar funcionário:', error.response);
+            if (error.response && error.response.data && error.response.data.errors) {
+                throw error; // Lança o erro para ser capturado pelo modal
+            }
+        }
+    }
+
     if (loading) {
         return (
             <div className="loader-container">
@@ -43,7 +75,12 @@ const HemocentroFuncionarios = () => {
 
     return (
         <div className="funcionarios-content">
-            <h1>Funcionários do Hemocentro</h1>
+            <div className="header-content">
+                <h1>Funcionários do Hemocentro</h1>
+                <button className="add-funcionario-btn" onClick={() => setShowModal(true)}>
+                    Adicionar Funcionário
+                </button>
+            </div>
             <table className="funcionarios-table">
                 <thead>
                     <tr>
@@ -66,8 +103,15 @@ const HemocentroFuncionarios = () => {
                     ))}
                 </tbody>
             </table>
+    
+            <CadastrarFuncionarioModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onSave={handleAddFuncionario}
+            />
         </div>
     );
+    
 };
 
 export default HemocentroFuncionarios;
