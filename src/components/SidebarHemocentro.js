@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 import './SidebarHemocentro.css';
@@ -9,6 +9,8 @@ import logo from '../images/LogoAmgSangue.png';
 const SidebarHemocentro = () => {
 
     const location = useLocation(); //Hook para pegar a localização atual
+    const navigate = useNavigate();  // Hook para navegar para outra página
+
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +28,14 @@ const SidebarHemocentro = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+
+    // Função de logout
+    const handleLogout = () => {
+        localStorage.removeItem('token');  // Remove o token
+        localStorage.removeItem('tipoUsuario');  // Remove outros itens se necessário
+        navigate('/login/hemocentro');  // Redireciona para a página de login
+    };
 
     return (
         <>
@@ -56,7 +66,7 @@ const SidebarHemocentro = () => {
                     <li className={location.pathname === '/hemocentro/campanhas' ? 'active' : ''}>
                         <Link to='/hemocentro/campanhas'><FaExclamationCircle /> <p>Campanhas</p></Link>
                     </li>
-                    <li className={`logoutBtn`}>
+                    <li className={`logoutBtn`} onClick={handleLogout}>
                         <Link><BiLogOut /> <p>Sair</p></Link>
                     </li>
                 </ul>

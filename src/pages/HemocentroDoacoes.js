@@ -38,7 +38,7 @@ const Doacoes = () => {
                     },
                 });
 
-                const responseFuncionarios = await api.get('/hemocentro/funcionarios', {
+                const responseFuncionarios = await api.get('/hemocentro/funcionariosAtivo', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
