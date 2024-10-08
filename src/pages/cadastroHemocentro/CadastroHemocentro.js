@@ -55,12 +55,13 @@ const CadastroHemocentro = () => {
 
 
 //API CEP
-  const [location, setLocation] = useState(null);
 const handleCepChange = async (e) => {
+  console.log(formData.latitudeHemocentro, formData.longitudeHemocentro)
   const { value } = e.target;
   const formattedValue = formatCEP(value);
   setFormData((prevData) => ({ ...prevData, cepHemocentro: formattedValue }));
   
+  if(formattedValue.length == 9){
     try {
       const response = await fetch(`https://viacep.com.br/ws/${formattedValue}/json/`);
       const data = await response.json();
@@ -88,15 +89,14 @@ const handleCepChange = async (e) => {
             longitudeHemocentro: lon,
           }));
         }
-        
       } else {
         alert('CEP não encontrado.');
       }
     } catch (error) {
       console.error('Erro ao buscar CEP:', error);
     }
-  
-  console.log(location);
+  }
+    
 };
 //FIM API CEP
 
