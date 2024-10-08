@@ -6,6 +6,7 @@ import './HemocentroDashboard.css';
 import BarChart from '../components/BarChart';
 import SidebarHemocentro from '../components/SidebarHemocentro';
 import { useNavigate, Link } from 'react-router-dom';
+import { FaClipboard, FaHeartbeat, FaUser } from 'react-icons/fa';
 
 const HemocentroDashboard = () => {
     const [metrics, setMetrics] = useState({
@@ -72,7 +73,6 @@ const HemocentroDashboard = () => {
         <div className='dashboard-container'>
             
             <div className="dashboard-content">
-                <h1>Dashboard do Hemocentro</h1>
                 {loading ? (
                     <div className="loader-container">
                         <ClipLoader color="#2c3e50" loading={loading} size={50} />
@@ -82,8 +82,8 @@ const HemocentroDashboard = () => {
                 ) : (
                     <>
                         <div className="dashboard-metrics">
-                            <MetricCard title="Total de Doações" value={metrics.totalDoacoes} />
-                            <MetricCard title="Campanhas Ativas" value={metrics.campanhasAtivas} />
+                            <MetricCard title="Total de Doações" value={metrics.totalDoacoes} icon={<FaHeartbeat/>}/>
+                            <MetricCard title="Campanhas Ativas" value={metrics.campanhasAtivas} icon={<FaClipboard/>}/>
                         </div>
                         <div className='estoque-container'>
                             <h2>Nível de Estoque</h2>
