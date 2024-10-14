@@ -7,7 +7,17 @@ import './Usuarios.css';
 
 const Usuarios = () => {
   const [activeButton, setActiveButton] = useState('todos'); // Estado para controlar qual botão está ativo
+  const [pesquisa, setPesquisa] = useState(''); // Estado para armazenar o termo de pesquisa
+  const [filtro, setFiltro] = useState(null); // Condição que define o filtro
 
+  const handleClick = (button) => {
+    setActiveButton(button);
+    setFiltro(button);
+  };
+  
+  const handlePesquisaChange = (e) => {
+    setPesquisa(e.target.value); // Atualiza o estado com o valor do input
+  };
 
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +62,22 @@ const Usuarios = () => {
     fetchUsuarios();
   }, [navigate]);
 
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState(usuarios);
+
+  useEffect(() => {
+    const usuariosFiltradosPorStatus = filtro === 'doadores'
+      ? usuariosFiltrados.filter(u => u.tipoUsuario === 'doador')
+          : usuarios; // Se não houver filtro, pega todos
+
+    // Aplica a pesquisa por nome na lista filtrada
+    const usuariosFiltradosPorNome = usuariosFiltradosPorStatus.filter(u =>
+      u.nomeUsuario.toLowerCase().includes(pesquisa.toLowerCase()) ||
+      u.emailUsuario.toLowerCase().includes(pesquisa.toLowerCase())
+    );
+
+    setUsuariosFiltrados(usuariosFiltradosPorNome);
+  }, [filtro, pesquisa, usuarios]);
+
   return (
     <div className="usuarios-container">
       {loading ? (
@@ -72,14 +98,16 @@ const Usuarios = () => {
           </div>
 
           <div className='pesquisaFiltroHemo'>
-            <button className={activeButton ? 'active' : ''}>
+            <button className={activeButton === 'todos' ? 'active' : ''} onClick={() => handleClick('todos')}>
               Todos
             </button>
-            <button>
-              Doadores
+            <button className={activeButton === 'doadores' ? 'active' : ''} onClick={() => handleClick('doadores')}>
+            Doadores
             </button>
             <div className='pesquisaCampo'>
               <input type='text' placeholder='Pesquisar...'
+                value={pesquisa}
+                onChange={handlePesquisaChange} // Atualiza o estado ao digitar
               />
               <AiOutlineSearch className='lupaIcon' />
             </div>
@@ -95,7 +123,7 @@ const Usuarios = () => {
               </tr>
             </thead>
             <tbody>
-              {usuarios.map((usuario) => (
+              {usuariosFiltrados.map((usuario) => (
                 <tr key={usuario.idUsuario}>
                   <td>{usuario.nomeUsuario}</td>
                   <td>{usuario.emailUsuario}</td>
