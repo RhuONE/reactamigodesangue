@@ -1,0 +1,64 @@
+.coleta-container, .coletasIniciadas-container {
+    padding: 20px;
+    margin-left: 15vh;
+    margin-right: 10vh;
+}
+
+.coleta-title, .coletasIniciadas-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.coleta-list, .coletasIniciadas-list {
+    list-style: none;
+    padding: 0;
+}
+
+.coleta-item, .coletasIniciadas-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #e9f5f9;
+    border-left: 5px solid #0a93a1;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.coleta-senha, .coletasIniciadas-senha {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.coleta-doador, .coletasIniciadas-doador {
+    font-size: 16px;
+    color: #555;
+}
+
+.coleta-acoes button, .coletasIniciadas-acoes button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.coleta-chamar-btn, .coletasIniciadas-btnCancelar {
+    background-color: #f44336;
+}
+
+.coleta-iniciar-btn, .coletasIniciadas-btnLaboratorio {
+    background-color: #0aa153;
+}
+
+.coleta-chamar-btn:hover, .coletasIniciadas-btnCancelar:hover {
+    background-color: #d32f2f;
+}
+
+.coleta-iniciar-btn:hover, .coletasIniciadas-btnLaboratorio:hover {
+    background-color: #087935;
+}

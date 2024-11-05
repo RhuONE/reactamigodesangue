@@ -1,0 +1,63 @@
+/* Estilo para o conteúdo do modal */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  /* Estilo para o overlay (fundo escurecido) */
+  .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Estilo do input dentro do modal */
+  .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Botões no modal */
+  .modal-content button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .modal-content button:first-of-type {
+    background-color: #0a93a1;
+    color: white;
+  }
+  
+  .modal-content button:first-of-type:hover {
+    background-color: #086f79;
+  }
+  
+  .modal-content button:last-of-type {
+    background-color: #ccc;
+    color: black;
+  }
+  
+  .modal-content button:last-of-type:hover {
+    background-color: #bbb;
+  }
+  

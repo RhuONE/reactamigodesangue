@@ -3,12 +3,15 @@ import api from '../services/api';
 import './HemocentroFuncionario.css';
 import CadastrarFuncionarioModal from '../components/CadastrarFuncionarioModal';
 import { useNavigate } from 'react-router-dom';
+import EditarFuncionarioModal from '../components/EditarFuncionarioModal';
 
 const HemocentroFuncionarios = () => {
     const [funcionarios, setFuncionarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [editModalData, setEditModalData] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
     const navigate = useNavigate();
 
     // Função para buscar os funcionários na API
@@ -56,6 +59,32 @@ const HemocentroFuncionarios = () => {
             }
         }
     };
+    // Função para atualizar os dados do funcionário
+    const handleUpdateFuncionario = async (formData) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await api.put(`/funcionario/${editModalData.idFuncionario}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            // Atualiza o funcionário na lista
+            setFuncionarios(funcionarios.map(func => 
+                func.idFuncionario === editModalData.idFuncionario 
+                ? response.data.data 
+                : func
+            ));
+            setShowEditModal(false); // Fecha o modal após salvar
+        } catch (error) {
+            console.error('Erro ao atualizar funcionário:', error.response);
+        }
+    };
+
+    //Função para abrir o modal de edição
+    const handleEditFuncionario = (funcionario) => {
+        setEditModalData(funcionario);
+        setShowEditModal(true);
+    }
 
     // Função para arquivar um funcionário
     const handleArchiveFuncionario = async (idFuncionario) => {
@@ -131,6 +160,12 @@ const HemocentroFuncionarios = () => {
                             <td>{funcionario.emailFuncionario}</td>
                             <td>{funcionario.statusFuncionario}</td>
                             <td>
+                                <button
+                                    className='edit-btn'
+                                    onClick={() => handleEditFuncionario(funcionario)}
+                                >
+                                    Editar
+                                </button>
                                 {funcionario.statusFuncionario === 'ativo' ? (
                                     <button
                                         className="archive-btn"
@@ -156,6 +191,13 @@ const HemocentroFuncionarios = () => {
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
                 onSave={handleAddFuncionario}
+            />
+
+            <EditarFuncionarioModal
+                isOpen={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                onSave={handleUpdateFuncionario}
+                funcionario={editModalData}
             />
         </div>
     );

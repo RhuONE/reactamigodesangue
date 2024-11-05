@@ -1,0 +1,74 @@
+.entrevista-container {
+    padding: 20px;
+    margin-left: 15vh;
+    margin-right: 10vh;
+}
+
+.entrevista-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Lista de senhas */
+.entrevista-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Itens da lista de senhas */
+.entrevista-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #e9f5f9; /* Fundo claro */
+    border-left: 5px solid #0a93a1; /* Cor de destaque na borda */
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilo dos números de senhas */
+.entrevista-numero {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilo do nome do doador */
+.entrevista-doador-nome {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Botão de chamar entrevista */
+.entrevista-chamar-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #0a93a1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.entrevista-chamar-btn:hover {
+    background-color: #086f79;
+}
+
+/* Botão de iniciar entrevista */
+.entrevista-iniciar-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #0aa153;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.entrevista-iniciar-btn:hover {
+    background-color: #087935;
+}

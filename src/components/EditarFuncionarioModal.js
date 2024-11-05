@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
-import './CadastrarFuncionarioModal.css';
+import React, { useState, useEffect } from 'react';
+import './EditarFuncionarioModal.css'; // Importar o CSS do modal
 
-const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
+const EditarFuncionarioModal = ({ isOpen, onClose, onSave, funcionario }) => {
     const [formData, setFormData] = useState({
         nomeFuncionario: '',
         cpfFuncionario: '',
-        descFuncionario: '',
         emailFuncionario: '',
-        senhaFuncionario: '',
-        numTelefone: '',
+        descFuncionario: '',
+        numTelefone: ''
     });
 
-    const [errorMessage, setErrorMessage] = useState(''); // Novo estado para capturar o erro
+    useEffect(() => {
+        // Preencher o modal com os dados do funcionário quando ele é passado
+        if (funcionario) {
+            setFormData({
+                nomeFuncionario: funcionario.nomeFuncionario,
+                cpfFuncionario: funcionario.cpfFuncionario,
+                emailFuncionario: funcionario.emailFuncionario,
+                descFuncionario: funcionario.descFuncionario,
+                numTelefone: funcionario.numTelefone,
+            });
+        }
+    }, [funcionario]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,28 +31,16 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        try {
-            setErrorMessage(''); // Limpa a mensagem de erro antes de tentar salvar
-            await onSave(formData); // Salva os dados usando a função onSave passada pelo pai
-        } catch (error) {
-            if (error.response && error.response.data && error.response.data.errors) {
-                // Captura a mensagem de erro da API e define no estado
-                const errorMessages = Object.values(error.response.data.errors).flat().join(', ');
-                setErrorMessage(errorMessages);
-            } else {
-                setErrorMessage('Ocorreu um erro ao cadastrar o funcionário.');
-            }
-        }
+    const handleSubmit = () => {
+        onSave(formData);
     };
-    
 
     if (!isOpen) return null;
 
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Cadastrar Novo Funcionário</h2>
+                <h2>Editar Funcionário</h2>
                 <form>
                     <div className="form-group">
                         <label>Nome</label>
@@ -63,15 +61,6 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Descrição</label>
-                        <input
-                            type="text"
-                            name="descFuncionario"
-                            value={formData.descFuncionario}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
                         <label>Email</label>
                         <input
                             type="email"
@@ -81,11 +70,11 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Senha</label>
+                        <label>Funcao</label>
                         <input
-                            type="senha"
-                            name="senhaFuncionario"
-                            value={formData.senhaFuncionario}
+                            type="desc"
+                            name="descFuncionario"
+                            value={formData.descFuncionario}
                             onChange={handleChange}
                         />
                     </div>
@@ -99,13 +88,11 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
                         />
                     </div>
 
-                    {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Exibe a mensagem de erro */}
-
                     <div className="modal-actions">
-                        <button type="button" onClick={handleSubmit}>
+                        <button type="button" className="save-btn" onClick={handleSubmit}>
                             Salvar
                         </button>
-                        <button type="button" onClick={onClose}>
+                        <button type="button" className="cancel-btn" onClick={onClose}>
                             Cancelar
                         </button>
                     </div>
@@ -115,4 +102,4 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
     );
 };
 
-export default CadastrarFuncionarioModal;
+export default EditarFuncionarioModal;

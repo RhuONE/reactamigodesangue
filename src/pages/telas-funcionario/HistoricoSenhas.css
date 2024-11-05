@@ -1,0 +1,104 @@
+/* Container principal da página */
+
+.historico-container {
+    max-height: 100%;
+    margin-left: 15vh;
+    margin-right: 10vh;
+    padding: 20px;
+  }
+  
+  /* Título da página */
+  .historico-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Filtros e barra de pesquisa */
+  .historico-filtros {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo do select e da barra de pesquisa */
+  .historico-select,
+  .historico-search {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Lista de senhas */
+  .historico-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  /* Itens da lista */
+  .historico-item {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #e9f5f9; /* Fundo claro */
+    border-left: 5px solid #0a93a1; /* Borda colorida */
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Estilo ao passar o mouse */
+  .historico-item:hover {
+    background-color: #cdeaf3;
+    cursor: pointer;
+  }
+  
+  /* Informações da senha */
+  .historico-info {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Spinner de carregamento */
+  .historico-spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Estilo do botão de chamar senha */
+  .historico-button {
+    padding: 10px 20px;
+    background-color: #0a93a1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .historico-button:hover {
+    background-color: #086f79;
+  }
+  
+  @media (max-width: 768px) {
+    .historico-filtros {
+      flex-direction: column;
+    }
+  }
+  

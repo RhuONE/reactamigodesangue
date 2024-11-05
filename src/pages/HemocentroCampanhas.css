@@ -1,8 +1,12 @@
+.main-content:has(.campanhas-content){
+    margin-left: 120px;
+}
 .campanhas-content {
     padding: 20px;
 }
 
 .campanhas-list {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 15px;
