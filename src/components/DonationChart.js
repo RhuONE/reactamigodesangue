@@ -43,11 +43,12 @@ const DonationChart = () => {
     }, []);
 
   const data = {
-    labels: donationData.map((item) => item.month),
+
+    labels: donationData.map((item) => item.mes),
     datasets: [
       {
         label: 'Doações Realizadas',
-        data: donationData.map((item) => item.count), // Exemplo de dados
+        data: donationData.map((item) => item.quantidade), // Exemplo de dados
         backgroundColor: 'rgba(24, 188, 156, 0.5)',
         borderColor: 'rgba(24, 188, 156, 1)',
         borderWidth: 1,

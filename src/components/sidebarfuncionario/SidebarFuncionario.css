@@ -1,0 +1,22 @@
+/* SidebarFuncionario.css */
+.sidebar-funcionario {
+    width: 250px;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .sidebar-funcionario ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar-funcionario ul li {
+    padding: 10px 20px;
+  }
+  
+  .sidebar-funcionario ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  

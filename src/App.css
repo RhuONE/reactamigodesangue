@@ -7,12 +7,14 @@ body{
 }
 
 .main-content {
+  
   flex-grow: 1;
   padding: 0;
-  margin-left: 98px;
+  justify-content: center;
+  align-items: center;
+  width: 99vw;
+  height: 97vh;
 }
-
-
 
 .App-logo {
   height: 40vmin;

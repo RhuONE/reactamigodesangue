@@ -1,0 +1,116 @@
+.triagensIniciadas-container {
+    margin-left: 15vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.triagensIniciadas-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.triagensIniciadas-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eaf4fc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.triagensIniciadas-senhaInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.triagensIniciadas-senhaNumero {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.triagensIniciadas-doadorNome {
+    margin-inline: 10px;
+    font-size: 16px;
+    color: #333;
+    
+}
+
+.triagensIniciadas-verificarCpf {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.triagensIniciadas-verificarCpf input {
+    padding: 4px ;
+    height: 4vh;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.triagensIniciadas-verificarCpf button {
+    background-color: #0a93a1;
+    color: #fff;
+    border: none;
+    height: 5vh;
+    width: 24vh;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.triagensIniciadas-verificarCpf button:hover {
+    background-color: #086f79;
+}
+
+.triagensIniciadas-acoes {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.triagensIniciadas-statusSenha {
+    font-size: 16px;
+    
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.triagensIniciadas-btnCancelar {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.triagensIniciadas-btnCancelar:hover {
+    background-color: #d32f2f;
+}
+
+.triagensIniciadas-btnTriagem {
+    background-color: #0aa153;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.triagensIniciadas-btnTriagem:hover {
+    background-color: #087935;
+}

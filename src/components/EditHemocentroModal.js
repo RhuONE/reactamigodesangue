@@ -178,7 +178,7 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
                                 <label>Senha</label>
                                 <input
                                     type="text"
-                                    name="sehaHemocentro"
+                                    name="senhaHemocentro"
                                     value={formData.senhaHemocentro}
                                     onChange={handleChange}
                                 />

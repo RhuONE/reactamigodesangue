@@ -1,0 +1,116 @@
+.atendimentosIniciados-container {
+    margin-left: 15vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.atendimentosIniciados-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.atendimentosIniciados-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eaf4fc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.atendimentosIniciados-senhaInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.atendimentosIniciados-senhaNumero {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.atendimentosIniciados-doadorNome {
+    margin-inline: 10px;
+    font-size: 16px;
+    color: #333;
+    
+}
+
+.atendimentosIniciados-verificarCpf {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.atendimentosIniciados-verificarCpf input {
+    padding: 4px ;
+    height: 4vh;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.atendimentosIniciados-verificarCpf button {
+    background-color: #0a93a1;
+    color: #fff;
+    border: none;
+    height: 5vh;
+    width: 30vh;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.atendimentosIniciados-verificarCpf button:hover {
+    background-color: #086f79;
+}
+
+.atendimentosIniciados-acoes {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.atendimentosIniciados-statusSenha {
+    font-size: 16px;
+    
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.atendimentosIniciados-btnCancelar {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.atendimentosIniciados-btnCancelar:hover {
+    background-color: #d32f2f;
+}
+
+.atendimentosIniciados-btnTriagem {
+    background-color: #0aa153;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.atendimentosIniciados-btnTriagem:hover {
+    background-color: #087935;
+}

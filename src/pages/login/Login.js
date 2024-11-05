@@ -26,7 +26,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('tipoUsuario', response.data.tipoUsuario);
       toast.success('Login realizado com sucesso!');
-      navigate('/dashboard'); // Redireciona para o dashboard
+      navigate('/adm/dashboard'); // Redireciona para o dashboard
     } catch (error) {
       toast.error('Erro ao realizar login. Verifique as credenciais.');
     } finally {

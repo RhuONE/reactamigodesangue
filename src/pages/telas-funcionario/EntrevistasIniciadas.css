@@ -1,0 +1,107 @@
+.entrevistasIniciadas-container {
+    margin-left: 15vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.entrevistasIniciadas-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.entrevistasIniciadas-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.entrevistasIniciadas-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eaf4fc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo da informação da senha */
+.entrevistasIniciadas-senhaInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.entrevistasIniciadas-numero {
+    font-weight: bold;
+    font-size: 18px;
+    color: #0a93a1;
+}
+
+.entrevistasIniciadas-doadorNome {
+    font-size: 16px;
+    color: #333;
+    margin-top: 5px;
+}
+
+/* Área de ações para o botão de relatório e encaminhar */
+.entrevistasIniciadas-acoes {
+    display: flex;
+    align-items: center;
+}
+
+/* Botão para cancelar a entrevista */
+.entrevistasIniciadas-btnCancelar {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.entrevistasIniciadas-btnCancelar:hover {
+    background-color: #d32f2f;
+}
+
+/* Botão para gerar relatório */
+.entrevistasIniciadas-btnRelatorio {
+    background-color: #1e88e5;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.entrevistasIniciadas-btnRelatorio:hover {
+    background-color: #1565c0;
+}
+
+/* Botão para encaminhar para coleta */
+.entrevistasIniciadas-btnEncaminhar {
+    background-color: #0aa153;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.entrevistasIniciadas-btnEncaminhar:hover {
+    background-color: #087935;
+}
+
+/* Adiciona feedback ao passar o mouse nos itens da lista */
+.entrevistasIniciadas-item:hover {
+    background-color: #d4e9f9;
+    cursor: pointer;
+}

@@ -1,0 +1,73 @@
+.relatorioColeta-modal {
+    max-width: 500px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.relatorioColeta-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.relatorioColeta-modal h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.relatorioColeta-modal label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.relatorioColeta-modal input, 
+.relatorioColeta-modal textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.relatorioColeta-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.salvar-btn {
+    background-color: #0aa153;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.salvar-btn:hover {
+    background-color: #087935;
+}
+
+.cancelar-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancelar-btn:hover {
+    background-color: #d32f2f;
+}

@@ -1,0 +1,54 @@
+/* Container da tela de pacientes aguardando */
+.pacientes-aguardando-container {
+    padding: 20px;
+    text-align: center;
+    margin-top: 15vh;
+}
+
+/* Título da senha atual */
+.pacientes-aguardando-titulo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilização do número da senha */
+.pacientes-aguardando-senha {
+    font-size: 64px;
+    font-weight: bold;
+    color: #0a93a1;
+    margin-bottom: 20px;
+}
+
+/* Tipo de doação */
+.pacientes-aguardando-tipo {
+    font-size: 24px;
+    color: #666;
+}
+
+/* Histórico de senhas */
+.pacientes-aguardando-historico {
+    margin-top: 30px;
+    text-align:center;
+}
+
+.pacientes-aguardando-historico-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.pacientes-aguardando-historico-item {
+    font-size: 20px;
+    color: #333;
+    margin: 5px 0;
+}
+
+.pacientes-aguardando-historico-senha {
+    font-weight: bold;
+    color: #0a93a1;
+}
+
+.pacientes-aguardando-historico-tipo {
+    color: #666;
+}

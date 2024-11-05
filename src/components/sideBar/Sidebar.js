@@ -35,20 +35,20 @@ const Sidebar = () => {
                     <img src={logo} alt='Logo Compacto' />
                 )}
                 <ul>
-                    <li className={location.pathname === '/dashboard' ? 'active' : ''}>
-                        <Link to='/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
+                    <li className={location.pathname === '/adm/dashboard' ? 'active' : ''}>
+                        <Link to='/adm/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
                     </li>
-                    <li className={location.pathname === '/usuarios' ? 'active' : ''}>
-                        <Link to='/usuarios'> <FaUser /> <p>Usuários</p></Link>
+                    <li className={location.pathname === '/adm/usuarios' ? 'active' : ''}>
+                        <Link to='/adm/usuarios'> <FaUser /> <p>Usuários</p></Link>
                     </li>
                     <li className={location.pathname === '/adm/hemocentros' ? 'active' : ''}>
                         <Link to='/adm/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
                     </li>
-                    <li className={location.pathname === '/campanhas' ? 'active' : ''}>
-                        <Link to='/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
+                    <li className={location.pathname === '/adm/campanhas' ? 'active' : ''}>
+                        <Link to='/adm/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
                     </li>
-                    <li className={location.pathname === '/pendencias' ? 'active' : ''}>
-                        <Link to='/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
+                    <li className={location.pathname === '/adm/pendencias' ? 'active' : ''}>
+                        <Link to='/adm/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
                     </li>
                     <li className={`logoutBtn`} onClick={handleLogout}>
                         <Link><BiLogOut /> <p>Sair</p></Link>

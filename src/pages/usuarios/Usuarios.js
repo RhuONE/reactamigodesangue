@@ -127,7 +127,7 @@ const Usuarios = () => {
                 <tr key={usuario.idUsuario}>
                   <td>{usuario.nomeUsuario}</td>
                   <td>{usuario.emailUsuario}</td>
-                  <td>{usuario.tipoUsuario}</td>
+                  <td>{usuario.descTipoSanguineo}</td>
                   <td>
                     <button className="edit-button">Editar</button>
                     <button className="delete-button">Excluir</button>

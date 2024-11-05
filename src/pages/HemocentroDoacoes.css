@@ -1,5 +1,6 @@
 .doacoes-content {
     margin: 20px;
+    margin-left: 100px;
 }
 
 .doacoes-table {
@@ -18,7 +19,7 @@
 }
 
 .doacoes-table th {
-    background-color: #f4f4f4;
+    background-color: #0ba5b3;
     font-weight: bold;
     color: #000;
 }
@@ -28,6 +29,47 @@
     margin-top: 20px;
 }
 
+button {
+    background-color: #007bff; /* Cor primária */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-actions button {
+    margin-right: 10px; /* Espaçamento entre os botões de ação */
+}
 
 .cardTabela{
     padding-top: 0px;
