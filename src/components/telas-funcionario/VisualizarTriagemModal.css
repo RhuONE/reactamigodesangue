@@ -1,0 +1,142 @@
+.visualizacaoRelatorio-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo de sobreposição */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.visualizacaoRelatorio-content {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 80%; /* Para evitar que o conteúdo se expanda além da altura da tela */
+}
+
+.visualizacaoRelatorio-header {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.visualizacaoRelatorio-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.visualizacaoRelatorio-status.aprovado p {
+    color: green;
+}
+
+.visualizacaoRelatorio-status.reprovado p {
+    color: red;
+}
+
+.visualizacaoRelatorio-aprovado-icon,
+.visualizacaoRelatorio-reprovado-icon {
+    font-size: 1.5em;
+}
+
+.relatorio-item {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.relatorio-item strong {
+    flex-basis: 40%; /* Para garantir que os títulos fiquem alinhados */
+}
+
+.alerta-icon {
+    margin-left: 5px;
+    color: orange;
+}
+
+.normal {
+    color: green;
+}
+
+.alterado {
+    color: red;
+    font-weight: bold;
+}
+
+.visualizacaoRelatorio-detalhes {
+    margin-top: 15px;
+}
+
+.visualizacaoRelatorio-detalhes p {
+    margin: 10px 0;
+    font-size: 1em;
+    line-height: 1.5;
+}
+.visualizacaoRelatorio-separador {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+
+.visualizacaoRelatorio-fechar-btn {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%; /* Para que o botão fique na largura total do container */
+    text-align: center;
+    font-size: 1em;
+}
+
+.visualizacaoRelatorio-fechar-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Adição de tooltip */
+.react-tooltip {
+    background-color: #333; /* Fundo escuro para contraste */
+    color: #fff; /* Texto branco */
+    font-size: 0.9em;
+    border-radius: 5px;
+    padding: 5px 10px;
+    max-width: 300px; /* Limita a largura do tooltip */
+    text-align: center;
+}
+
+.react-tooltip::after {
+    border-top-color: #333; /* Para a seta do tooltip */
+}
+
+.visualizacaoRelatorio-download-btn {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+}
+
+.visualizacaoRelatorio-download-btn:hover {
+    background-color: #218838;
+}

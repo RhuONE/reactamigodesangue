@@ -11,31 +11,78 @@
     z-index: 1000;
 }
 
+.lado-a-lado {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px; /* Adiciona um espaço uniforme entre as seções */
+}
+
 .relatorioTriagem-content {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    width: 400px;
+    width: 80vh;
     max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adiciona espaçamento entre os grupos de seção */
 }
+
 
 .relatorioTriagem-content h2 {
     margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
 }
 
 .relatorioTriagem-content label {
     display: block;
-    margin-top: 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
 }
 
 .relatorioTriagem-content input,
 .relatorioTriagem-content textarea,
 .relatorioTriagem-content select {
     width: 100%;
-    margin-top: 5px;
     padding: 8px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.relatorioTriagem-content input:invalid,
+.relatorioTriagem-content textarea:invalid,
+.relatorioTriagem-content select:invalid {
+    border-color: #d9534f; /* Cor de borda para campos com erro */
+}
+
+.relatorioTriagem-content input.error,
+.relatorioTriagem-content textarea.error,
+.relatorioTriagem-content select.error {
+    border-color: #d9534f;
+    background-color: #f8f0f1; /* Fundo mais claro para campos com erro */
+}
+
+.relatorioTriagem-content input:focus,
+.relatorioTriagem-content textarea:focus,
+.relatorioTriagem-content select:focus {
+    border-color: #0a93a1;
+    outline: none;
+}
+
+.relatorioTriagem-content input:hover,
+.relatorioTriagem-content textarea:hover,
+.relatorioTriagem-content select:hover {
+    border-color: #888;
 }
 
 .relatorioTriagem-actions {
@@ -49,13 +96,114 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .relatorioTriagem-actions button:first-child {
-    background-color: #007bff;
+    background-color: #0a93a1;
     color: white;
+}
+
+.relatorioTriagem-actions button:first-child:hover {
+    background-color: #086e78;
+    transform: scale(1.02);
 }
 
 .relatorioTriagem-actions button:last-child {
     background-color: #ccc;
+    color: #333;
+}
+
+.relatorioTriagem-actions button:last-child:hover {
+    background-color: #bbb;
+    transform: scale(1.02);
+}
+
+.relatorioTriagem-section-group {
+    flex-basis: 48%; /* Define a largura de cada seção */
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espaçamento interno entre os campos */
+}
+
+.relatorioTriagem-subtitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+
+.cancelar-btn {
+    background-color: #ccc;
+    color: #333;
+}
+
+.reset-btn {
+    background-color: #f1f1f1;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-left: 10px; /* Espaçamento entre os botões */
+}
+
+.reset-btn:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.02);
+}
+
+
+.error-message-2 {
+    color: #d9534f; /* Um tom de vermelho mais sutil */
+    background-color: #f8d7da; /* Fundo mais suave */
+    border: 1px solid #f5c2c7;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #0a93a1; /* Cor da borda ao focar */
+    box-shadow: 0 0 5px rgba(10, 147, 161, 0.5); /* Efeito de sombra */
+    outline: none; /* Remove o outline padrão */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Transição suave */
+}
+
+input.error:focus,
+textarea.error:focus,
+select.error:focus {
+    border-color: #d9534f; /* Cor de erro */
+    background-color: #f8f0f1; /* Fundo mais claro para erro */
+}
+
+
+.feedback-message {
+    background-color: #dff0d8; /* Fundo verde claro para mensagens de sucesso */
+    color: #3c763d; /* Texto verde escuro */
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    border: 1px solid #d6e9c6;
+    font-size: 14px;
+    text-align: center;
+}
+
+.feedback-message.error {
+    background-color: #f8d7da; /* Fundo vermelho claro para mensagens de erro */
+    color: #721c24; /* Texto vermelho escuro */
+    border-color: #f5c6cb;
 }

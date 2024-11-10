@@ -3,7 +3,9 @@ import api from '../../services/api';
 import CadastroModal from '../../components/telas-funcionario/CadastroModal';
 import ExibirEditarModal from '../../components/telas-funcionario/ExibirEditarModal';
 import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
+import { AnimatePresence } from 'framer-motion';
 import './AtendimentosIniciados.css';
+import InputMask from 'react-input-mask';
 
 const AtendimentosIniciados = () => {
     const [doacoes, setDoacoes] = useState([]);
@@ -19,6 +21,8 @@ const AtendimentosIniciados = () => {
     const [usuariosMap, setUsuariosMap] = useState({});
     const [filterType, setFilterType] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [searchTerm, setSearchTerm] = useState(''); // Novo estado para o termo de pesquisa
+   
 
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
@@ -97,7 +101,9 @@ const AtendimentosIniciados = () => {
     };
 
     const handleCpfChange = (doacaoId, value) => {
-        setCpfMap({ ...cpfMap, [doacaoId]: value });
+        //Remove a pontuação ao salvar no estado, deixando apenas os números
+        const cpfApenasNumeros = value.replace(/\D/g, '');
+        setCpfMap({ ...cpfMap, [doacaoId]: cpfApenasNumeros });
     };
 
     const relacionarDoadorDoacao = (formData) => {
@@ -122,6 +128,9 @@ const AtendimentosIniciados = () => {
             });
         }
     };
+
+    
+    
 
     const handleConfirmModal = (mensagem, acao) => {
         setConfirmMessage(mensagem);
@@ -156,46 +165,39 @@ const AtendimentosIniciados = () => {
             }
         );
     };
+    
 
     const onCadastrarUsuario = (formData) => {
-        const payload = {
-            nomeUsuario: formData.nome,
-            dataNascUsuario: formData.dataNasc,
-            generoUsuario: formData.genero,
-            emailUsuario: formData.email,
-            senhaUsuario: formData.senha,
-            cpfUsuario: formData.cpf,
-            logUsuario: formData.logradouro,
-            numLogUsuario: formData.numero,
-            compUsuario: formData.complemento || '', 
-            bairroUsuario: formData.bairro,
-            cidadeUsuario: formData.cidade,
-            estadoUsuario: formData.estado,
-            cepUsuario: formData.cep,
-            rgUsuario: formData.rg, 
-            numTelefone: formData.telefone
-        };
+        // Verifique se formData é uma instância de FormData
+        if (formData instanceof FormData) {
+            console.log('FormData está sendo recebido com arquivos e campos:', Array.from(formData.entries()));
+            
 
-        api.post('/usuario', payload, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then(response => {
-            const novoUsuario = response.data.data.doador;
-            if (novoUsuario && novoUsuario.idUsuario) {
-                relacionarDoadorDoacao({
-                    ...formData,
-                    idUsuario: novoUsuario.idUsuario 
-                });
-            } else {
-                console.error('Erro ao obter o ID do usuário recém-criado.');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao cadastrar o usuário:', error);
-        });
-    };
+            
+            api.post('/usuario', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data' // Necessário para envio de FormData
+                },
+            })
+            .then(response => {
+                const novoUsuario = response.data.data.doador;
+                if (novoUsuario && novoUsuario.idUsuario) {
+                    // Adapte a lógica de relacionamento, se necessário
+                    relacionarDoadorDoacao({
+                        idUsuario: novoUsuario.idUsuario
+                    });
+                } else {
+                    console.error('Erro ao obter o ID do usuário recém-criado.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao cadastrar o usuário:', error);
+            });
+        } else {
+            console.error('O parâmetro fornecido não é uma instância de FormData.');
+        }
+    }
 
     const onEditarUsuario = (formData) => {
         api.put(`/usuario/${usuarioEncontrado.idUsuario}`, formData, {
@@ -205,13 +207,14 @@ const AtendimentosIniciados = () => {
         })
         .then(response => {
             const usuarioEditado = response.data.usuario;
-            relacionarDoadorDoacao(usuarioEditado);
+    
         })
         .catch(error => {
             console.error('Erro ao editar o usuário:', error.response ? error.response.data : error);
         });
     };
 
+    // Filtra as doações com base nos filtros de tipo, status e termo de pesquisa
     const filteredDoacoes = doacoes
         .filter(doacao => {
             if (filterType === 'all') return true;
@@ -222,27 +225,48 @@ const AtendimentosIniciados = () => {
         .filter(doacao => {
             if (filterStatus === 'all') return true;
             return doacao.statusDoacao === filterStatus;
+        })
+        .filter(doacao => {
+            if (!searchTerm) return true;
+            return (
+                doacao.senha.descSenha.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (usuariosMap[doacao.idUsuario] &&
+                 usuariosMap[doacao.idUsuario].toLowerCase().includes(searchTerm.toLowerCase()))
+            );
         });
 
     return (
         <div className="atendimentosIniciados-container">
             <h1 className="atendimentosIniciados-title">Atendimentos Iniciados</h1>
 
-            <div className="filtros">
-                <label>Filtrar por Tipo:</label>
-                <select onChange={(e) => setFilterType(e.target.value)} value={filterType}>
-                    <option value="all">Todos</option>
-                    <option value="agendada">Agendadas</option>
-                    <option value="nao-agendada">Não Agendadas</option>
-                </select>
-
-                <label>Filtrar por Status:</label>
-                <select onChange={(e) => setFilterStatus(e.target.value)} value={filterStatus}>
-                    <option value="all">Todos</option>
-                    <option value="atendimento-iniciado">Atendimento Iniciado</option>
-                    <option value="encaminhada-triagem">Encaminhada para Triagem</option>
-                    <option value="chamada-coleta">Chamada para Coleta</option>
-                </select>
+            <div className="atendimentosIniciados-filtros">
+                <div className='atendimentosIniciados-filtro-tipo'>
+                    <label>Filtrar por Tipo:</label>
+                    <select onChange={(e) => setFilterType(e.target.value)} value={filterType}>
+                        <option value="all">Todos</option>
+                        <option value="agendada">Agendadas</option>
+                        <option value="nao-agendada">Não Agendadas</option>
+                    </select>
+                </div>
+                <div className='atendimentosIniciados-filtro-status'>
+                    <label>Filtrar por Status:</label>
+                    <select onChange={(e) => setFilterStatus(e.target.value)} value={filterStatus}>
+                        <option value="all">Todos</option>
+                        <option value="atendimento-iniciado">Atendimento Iniciado</option>
+                        <option value="encaminhada-triagem">Encaminhada para Triagem</option>
+                        <option value="chamada-coleta">Chamada para Coleta</option>
+                    </select>
+                </div>
+                <div className="atendimentosIniciados-pesquisa">
+                    <label>Pesquisa Rápida:</label>
+                    <input
+                        type="text"
+                        placeholder="Pesquisar por senha ou nome do doador..."
+                        
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
             </div>
 
             <ul className="atendimentosIniciados-list">
@@ -256,8 +280,8 @@ const AtendimentosIniciados = () => {
                                 </span>
                             ) : (
                                 <div className="atendimentosIniciados-verificarCpf">
-                                    <input
-                                        type="text"
+                                    <InputMask
+                                        mask='999.999.999-99'
                                         placeholder="Digite o CPF"
                                         className="atendimentosIniciados-inputCpf"
                                         value={cpfMap[doacao.idDoacao] || ''} 
@@ -268,7 +292,7 @@ const AtendimentosIniciados = () => {
                                         onClick={() => verificarCpf(doacao.idDoacao)}
                                         disabled={isVerificandoCpfMap[doacao.idDoacao] || !cpfMap[doacao.idDoacao]}
                                     >
-                                        Verificar CPF
+                                        {isVerificandoCpfMap[doacao.idDoacao] ? "Carregando..." : "Verificar CPF"}
                                     </button>
                                 </div>
                             )}
@@ -310,14 +334,17 @@ const AtendimentosIniciados = () => {
                 usuarioEncontrado={usuarioEncontrado}
                 onEditarUsuario={onEditarUsuario}
                 onConfirmarRelacionamento={relacionarDoadorDoacao}
-            />
-
-            <ConfirmacaoModal
-                isOpen={isConfirmModalOpen}
-                onRequestClose={() => setIsConfirmModalOpen(false)}
-                onConfirm={confirmAction}
-                mensagem={confirmMessage}
-            />
+            />  
+            <AnimatePresence>
+                {isConfirmModalOpen && (
+                <ConfirmacaoModal
+                        isOpen={isConfirmModalOpen}
+                        onRequestClose={() => setIsConfirmModalOpen(false)}
+                        onConfirm={confirmAction}
+                        mensagem={confirmMessage}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

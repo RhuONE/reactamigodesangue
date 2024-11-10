@@ -38,6 +38,56 @@
     border: 1px solid #ccc;
 }
 
+.exibirEditarModal-spinner-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.exibirEditalModal-sucess-message {
+    color: #28a745;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.exibirEditalModal-error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+
+.exibirEditarModal-input-select {
+    width: 102%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.direita {
+    display: flex;
+    justify-content: end;
+}
+
+.espaco-para-baixo {
+    margin-bottom: 20px;
+}
+
+.exibirEditarModal-btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
 .exibirEditarModal-btn {
     padding: 10px 20px;
     background-color: #0a93a1;
@@ -49,8 +99,31 @@
     margin-top: 10px;
 }
 
-.exibirEditarModal-btn:hover {
-    background-color: #086f79;
+.exibirEditarModal-btn-voltar {
+    padding: 10px 20px;
+    background-color: #0a93a1;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 10px;
+}
+
+.exibirEditarModal-btn-proximo {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+   
+}
+
+
+.exibirEditarModal-btn-proximo:hover {
+   color: #086f79;
 }
 
 .exibirEditarModal-btn-editar {
@@ -67,4 +140,112 @@
 
 .exibirEditarModal-btn-editar:hover {
     background-color: #086f79;
+}
+
+.exibirEditarModal-btn-relacionar {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+   
+}
+
+
+.exibirEditarModal-btn-relacionar:hover {
+    color: #15cc0f;
+}
+
+.exibirEditarModal-steps {
+    display: flex;
+    justify-content: space-evenly;
+}
+.exibirEditarModal-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.exibirEditarModal-step-icon {
+    margin-right: 5px;
+    font-size: 20px; /* Ajuste o tamanho conforme necessário */
+}
+
+.exibirEditarModal-step.active .exibirEditarModal-step-icon {
+    color: #0a93a1; /* Cor do ícone ativo */
+}
+
+
+.telefone-section {
+    margin-top: 20px;
+    width: 102%;
+}
+
+.telefone-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.telefone-item-delete{
+    margin-left: 10px;
+    
+    background-color: #ffffff;
+    color: #c20b0b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.telefone-item-delete:hover{  
+    color: #800a0a;
+}    
+
+.telefone-item-adicionar{
+    margin-left: 10px;
+    
+    background-color: #ffffff;
+    color: #15cc0f;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.telefone-item-adicionar:hover{  
+    color: #0e6e0a;
+}    
+
+.adicionar-telefone {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.foto-preview {
+   
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+
+
+.exibirEditarModal-upload-foto-button { 
+    background-color: #ffffff;
+    color: #0a93a1;
+    cursor: pointer;
+}
+
+.exibirEditarModal-foto-container {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.centralizado {
+    display: flex;
+    justify-content: center;
 }
