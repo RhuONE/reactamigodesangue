@@ -32,12 +32,12 @@ const SidebarTriagem = () => {
                     <li className={location.pathname === '/triagem/chamar-senhas' ? 'active' : ''}>
                         <Link to='/triagem/chamar-senhas'> <FaUserCheck /> <p>Chamadas</p></Link>
                     </li>
-                    <li className={location.pathname === '/triagem/formulario-triagem' ? 'active' : ''}>
+                    {/* <li className={location.pathname === '/triagem/formulario-triagem' ? 'active' : ''}>
                         <Link to='/triagem/formulario-triagem'> <FaHeartbeat /> <p>Triagem</p></Link>
                     </li>
                     <li className={location.pathname === '/triagem/historico-triagem' ? 'active' : ''}>
                         <Link to='/triagem/historico-triagem'> <FaClipboardList /> <p>Histórico</p></Link>
-                    </li>
+                    </li> */}
                     <li className={location.pathname === '/triagem/triagens-iniciadas' ? 'active' : ''}>
                         <Link to='/triagem/triagens-iniciadas'> <FaClipboardList /> <p>Triagens Iniciadas</p></Link>
                     </li>

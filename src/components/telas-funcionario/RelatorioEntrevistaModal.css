@@ -2,9 +2,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,63 +12,169 @@
 }
 
 .entrevista-modal {
-    width: 90%;
-    max-width: 600px;
-    background: #fff;
-    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
+    padding: 20px;
+    width: 600px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
-    max-height: 80vh;
+    max-height: 90%;
 }
 
 .entrevista-modal h2 {
+    margin-bottom: 20px;
     text-align: center;
-    margin-bottom: 15px;
-    color: #333;
+    font-size: 24px;
 }
 
 .checkbox-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.checkbox-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
-.entrevista-modal textarea,
-.entrevista-modal select {
+.checkbox-column label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.checkbox-column input {
+    margin-right: 10px;
+}
+
+.observacoes-section {
+    margin-top: 20px;
+}
+
+.observacoes-section textarea {
     width: 100%;
-    padding: 10px;
+    height: 80px;
+    resize: vertical;
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.select-section {
+    margin-top: 15px;
+}
+
+.select-section select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 .entrevista-modal-actions {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
+}
+
+.entrevista-modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 .btn-salvar {
-    background-color: #0aa153;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: #28a745;
+    color: #fff;
 }
 
 .btn-cancelar {
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-reset {
+    background-color: #007bff;
+    color: #fff;
 }
 
 .btn-salvar:hover {
-    background-color: #087935;
+    background-color: #218838;
 }
 
 .btn-cancelar:hover {
-    background-color: #d32f2f;
+    background-color: #c82333;
+}
+
+.btn-reset:hover {
+    background-color: #0056b3;
+}
+
+.feedback-message {
+    margin-top: 15px;
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+.toggle-switch input {
+    display: none;
+}
+
+.toggle-switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px; /* Espaçamento maior entre as linhas */
+    font-size: 14px;
+    padding: 5px 0; /* Espaçamento vertical */
+}
+
+
+
+.slider {
+    position: relative;
+    width: 34px; /* Ajuste de largura */
+    height: 20px; /* Ajuste de altura */
+    background-color: #ccc;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.slider:before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+input:checked + .slider {
+    background-color: #28a745;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px); /* Ajuste para centralizar o círculo no estado ligado */
+}
+
+.toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Organiza em duas colunas */
+    column-gap: 20px; /* Espaçamento entre colunas */
 }

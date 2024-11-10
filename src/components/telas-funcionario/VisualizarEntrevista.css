@@ -1,0 +1,80 @@
+.visualizacaoEntrevista-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.visualizacaoEntrevista-content {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 80%;
+}
+
+.visualizacaoEntrevista-header {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.visualizacaoEntrevista-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.visualizacaoEntrevista-status.aprovado p {
+    color: green;
+}
+
+.visualizacaoEntrevista-status.reprovado p {
+    color: red;
+}
+
+.visualizacaoEntrevista-aprovado-icon,
+.visualizacaoEntrevista-reprovado-icon {
+    font-size: 1.5em;
+    margin-left: 5px;
+}
+
+.relatorio-item {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.relatorio-item strong {
+    flex-basis: 50%;
+}
+
+.visualizacaoEntrevista-fechar-btn {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+}
+
+.visualizacaoEntrevista-fechar-btn:hover {
+    background-color: #0056b3;
+}

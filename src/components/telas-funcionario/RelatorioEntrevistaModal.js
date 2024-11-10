@@ -13,11 +13,11 @@ const RelatorioEntrevistaModal = ({ isOpen, onRequestClose, onSubmitRelatorio })
     const [usoAlcoolicoRecentemente, setUsoAlcoolicoRecentemente] = useState(false);
     const [usoDrogas, setUsoDrogas] = useState(false);
     const [observacoesEntrevista, setObservacoesEntrevista] = useState('');
-    const [aptoParaDoacao, setAptoParaDoacao] = useState('Não');
     const [votoAutoExclusao, setVotoAutoExclusao] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState('');
 
-    const handleSalvarRelatorio = () => {
-        const relatorio = {
+    const handleSalvarRelatorio = async () => {
+        const dados = {
             historicoDoencaInfecciosa,
             usoMedicamentosRecente,
             cirurgiasRecentes,
@@ -29,10 +29,34 @@ const RelatorioEntrevistaModal = ({ isOpen, onRequestClose, onSubmitRelatorio })
             usoAlcoolicoRecentemente,
             usoDrogas,
             observacoesEntrevista,
-            aptoParaDoacao: aptoParaDoacao === 'Sim',
-            votoAutoExclusao,
+            votoAutoExclusao
         };
-        onSubmitRelatorio(relatorio);
+
+        try {
+            // Simula a chamada de API para envio dos dados
+            const response = await onSubmitRelatorio(dados);
+            setFeedbackMessage(response.message || 'Relatório salvo com sucesso!');
+            setTimeout(() => setFeedbackMessage(''), 3000);
+            onRequestClose();
+        } catch (error) {
+            console.error('Erro ao salvar relatório:', error);
+            setFeedbackMessage('Erro ao salvar o relatório. Tente novamente.');
+        }
+    };
+
+    const handleResetForm = () => {
+        setHistoricoDoencaInfecciosa(false);
+        setUsoMedicamentosRecente(false);
+        setCirurgiasRecentes(false);
+        setTatuagemOuPiercingRecente(false);
+        setRelacoesSexuaisDeRisco(false);
+        setViagemRecentePaisRisco(false);
+        setHistoricoCancer(false);
+        setGravidezOuAmamentacao(false);
+        setUsoAlcoolicoRecentemente(false);
+        setUsoDrogas(false);
+        setObservacoesEntrevista('');
+        setVotoAutoExclusao(false);
     };
 
     if (!isOpen) return null;
@@ -41,112 +65,122 @@ const RelatorioEntrevistaModal = ({ isOpen, onRequestClose, onSubmitRelatorio })
         <div className="entrevista-modal-overlay">
             <div className="entrevista-modal">
                 <h2>Relatório de Entrevista</h2>
-                
-                <div className="checkbox-group">
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={historicoDoencaInfecciosa}
-                            onChange={(e) => setHistoricoDoencaInfecciosa(e.target.checked)}
-                        />
-                        Histórico de Doença Infecciosa
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={usoMedicamentosRecente}
-                            onChange={(e) => setUsoMedicamentosRecente(e.target.checked)}
-                        />
-                        Uso de Medicamentos Recente
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={cirurgiasRecentes}
-                            onChange={(e) => setCirurgiasRecentes(e.target.checked)}
-                        />
-                        Cirurgias Recentes
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={tatuagemOuPiercingRecente}
-                            onChange={(e) => setTatuagemOuPiercingRecente(e.target.checked)}
-                        />
-                        Tatuagem ou Piercing Recente
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={relacoesSexuaisDeRisco}
-                            onChange={(e) => setRelacoesSexuaisDeRisco(e.target.checked)}
-                        />
-                        Relações Sexuais de Risco
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={viagemRecentePaisRisco}
-                            onChange={(e) => setViagemRecentePaisRisco(e.target.checked)}
-                        />
-                        Viagem Recente a Países de Risco
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={historicoCancer}
-                            onChange={(e) => setHistoricoCancer(e.target.checked)}
-                        />
-                        Histórico de Câncer
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={gravidezOuAmamentacao}
-                            onChange={(e) => setGravidezOuAmamentacao(e.target.checked)}
-                        />
-                        Gravidez ou Amamentação
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={usoAlcoolicoRecentemente}
-                            onChange={(e) => setUsoAlcoolicoRecentemente(e.target.checked)}
-                        />
-                        Uso Alcoólico Recentemente
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={usoDrogas}
-                            onChange={(e) => setUsoDrogas(e.target.checked)}
-                        />
-                        Uso de Drogas
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={votoAutoExclusao}
-                            onChange={(e) => setVotoAutoExclusao(e.target.checked)}
-                        />
-                        Voto de Autoexclusão
-                    </label>
+
+                {/* Campos do formulário de entrevista */}
+                <div className="toggle-group">
+                    <div className="toggle-column">
+                        <label className="toggle-switch">
+                            Histórico de Doença Infecciosa
+                            <input
+                                type="checkbox"
+                                checked={historicoDoencaInfecciosa}
+                                onChange={(e) => setHistoricoDoencaInfecciosa(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Uso de Medicamentos Recente
+                            <input
+                                type="checkbox"
+                                checked={usoMedicamentosRecente}
+                                onChange={(e) => setUsoMedicamentosRecente(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Cirurgias Recentes
+                            <input
+                                type="checkbox"
+                                checked={cirurgiasRecentes}
+                                onChange={(e) => setCirurgiasRecentes(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Tatuagem ou Piercing Recente
+                            <input
+                                type="checkbox"
+                                checked={tatuagemOuPiercingRecente}
+                                onChange={(e) => setTatuagemOuPiercingRecente(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Relações Sexuais de Risco
+                            <input
+                                type="checkbox"
+                                checked={relacoesSexuaisDeRisco}
+                                onChange={(e) => setRelacoesSexuaisDeRisco(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                    </div>
+                    <div className="toggle-column">
+                        <label className="toggle-switch">
+                            Viagem Recente a Países de Risco
+                            <input
+                                type="checkbox"
+                                checked={viagemRecentePaisRisco}
+                                onChange={(e) => setViagemRecentePaisRisco(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Histórico de Câncer
+                            <input
+                                type="checkbox"
+                                checked={historicoCancer}
+                                onChange={(e) => setHistoricoCancer(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Gravidez ou Amamentação
+                            <input
+                                type="checkbox"
+                                checked={gravidezOuAmamentacao}
+                                onChange={(e) => setGravidezOuAmamentacao(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Uso Alcoólico Recentemente
+                            <input
+                                type="checkbox"
+                                checked={usoAlcoolicoRecentemente}
+                                onChange={(e) => setUsoAlcoolicoRecentemente(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Uso de Drogas
+                            <input
+                                type="checkbox"
+                                checked={usoDrogas}
+                                onChange={(e) => setUsoDrogas(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <label className="toggle-switch">
+                            Voto de Autoexclusão
+                            <input
+                                type="checkbox"
+                                checked={votoAutoExclusao}
+                                onChange={(e) => setVotoAutoExclusao(e.target.checked)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                    </div>
                 </div>
 
-                <label>Observações da Entrevista:</label>
-                <textarea
-                    value={observacoesEntrevista}
-                    onChange={(e) => setObservacoesEntrevista(e.target.value)}
-                />
-
-                <label>Apto para Doação:</label>
-                <select
-                    value={aptoParaDoacao}
-                    onChange={(e) => setAptoParaDoacao(e.target.value)}
-                >
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
+                <div className="observacoes-section">
+                    <label>Observações da Entrevista:</label>
+                    <textarea
+                        value={observacoesEntrevista}
+                        onChange={(e) => setObservacoesEntrevista(e.target.value)}
+                        placeholder="Descreva observações relevantes"
+                    />
+                </div>
 
                 <div className="entrevista-modal-actions">
                     <button className="btn-salvar" onClick={handleSalvarRelatorio}>
@@ -155,7 +189,16 @@ const RelatorioEntrevistaModal = ({ isOpen, onRequestClose, onSubmitRelatorio })
                     <button className="btn-cancelar" onClick={onRequestClose}>
                         Cancelar
                     </button>
+                    <button className="btn-reset" onClick={handleResetForm}>
+                        Limpar Campos
+                    </button>
                 </div>
+
+                {feedbackMessage && (
+                    <div className="feedback-message">
+                        {feedbackMessage}
+                    </div>
+                )}
             </div>
         </div>
     );

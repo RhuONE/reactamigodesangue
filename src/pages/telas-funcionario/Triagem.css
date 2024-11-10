@@ -14,6 +14,14 @@
     margin-bottom: 20px;
 }
 
+/* SUb Título da página */
+.triagem-subtitle {
+   
+    font-size: 20px;
+    color: #3d3d3d;
+    margin-bottom: 20px;
+}
+
 /* Lista de senhas */
 .triagem-senha-list {
     list-style: none;
@@ -38,6 +46,16 @@
     font-size: 18px;
     font-weight: bold;
     color: #333;
+}
+
+.triagem-doador-nome {
+    font-size: 18px;
+   
+    color: #333;
+}
+
+.triagem-mostrar-mais-icone:hover {
+    color: #0a93a1;
 }
 
 /* Botão de chamar senha */

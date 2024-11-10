@@ -35,46 +35,46 @@
 }
 
 .triagensIniciadas-doadorNome {
-    margin-inline: 10px;
-    font-size: 16px;
+    font-size: 18px;
+    margin-left: 20px;
     color: #333;
-    
 }
 
-.triagensIniciadas-verificarCpf {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: 10px;
-}
-
-.triagensIniciadas-verificarCpf input {
-    padding: 4px ;
-    height: 4vh;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-.triagensIniciadas-verificarCpf button {
+.triagensIniciadas-btnRelatorio {
     background-color: #0a93a1;
     color: #fff;
     border: none;
-    height: 5vh;
-    width: 24vh;
-    padding: 4px 12px;
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-inline: 5px;
 }
 
-.triagensIniciadas-verificarCpf button:hover {
+.triagensIniciadas-btnRelatorio:hover {
     background-color: #086f79;
 }
+
+.triagensIniciadas-btnAtestado {
+    background-color: #d4a642; /* Tom avermelhado */
+    color: #ffffff; /* Texto em tom mais escuro */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-inline: 5px;
+}
+
+.triagensIniciadas-btnAtestado:hover {
+    background-color: #a78438;
+}
+
 
 .triagensIniciadas-acoes {
     display: flex;
     flex-direction: row;
+    
     align-items: flex-end;
 }
 
@@ -100,7 +100,7 @@
     background-color: #d32f2f;
 }
 
-.triagensIniciadas-btnTriagem {
+.triagensIniciadas-btnEntrevista {
     background-color: #0aa153;
     color: #fff;
     border: none;
@@ -111,6 +111,6 @@
     margin-inline: 5px;
 }
 
-.triagensIniciadas-btnTriagem:hover {
+.triagensIniciadas-btnEntrevista:hover {
     background-color: #087935;
 }

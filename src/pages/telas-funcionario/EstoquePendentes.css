@@ -1,0 +1,112 @@
+/* Container principal da tela */
+.estoquePendentes-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal da página */
+.estoquePendentes-container h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Lista de doações pendentes */
+.estoquePendentes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Item de cada doação na lista */
+.estoquePendentes-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #e3f2fd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #90caf9;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.estoquePendentes-item div {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Botão de confirmação */
+.estoquePendentes-btnConfirmar {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.estoquePendentes-btnConfirmar:hover {
+    background-color: #388e3c;
+}
+
+/* Estilos para o modal de confirmação */
+.confirmation-modal {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.confirmation-modal h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.confirmation-modal p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Botões de confirmação dentro do modal */
+.confirmation-modal .modal-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+
+.confirmation-modal .modal-btn-confirm {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.confirmation-modal .modal-btn-confirm:hover {
+    background-color: #388e3c;
+}
+
+.confirmation-modal .modal-btn-cancel {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.confirmation-modal .modal-btn-cancel:hover {
+    background-color: #d32f2f;
+}

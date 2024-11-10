@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import './Recepcao.css';
-import ConfirmationModal from '../../components/telas-funcionario/ConfirmationModal';
+import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
+import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 const Recepcao = () => {
@@ -19,7 +20,7 @@ const Recepcao = () => {
         if (!token || funcao !== 'recepcao') {
             navigate('/login/funcionario');
         }
-    }, [navigate]);
+    }, [navigate, token]);
 
     const fetchSenhas = () => {
         api.get('/senhas', {
@@ -37,19 +38,21 @@ const Recepcao = () => {
         }, 5000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [token, idHemocentro]);
 
     const chamarSenha = (idSenha) => {
-        api.post(`/chamar-senha/${idSenha}`)
-            .then(response => {
-                setFeedbackChamado(prev => ({ ...prev, [idSenha]: true }));
-                setTimeout(() => {
-                    setFeedbackChamado(prev => ({ ...prev, [idSenha]: false }));
-                }, 2000);
+        api.post(`/chamar-senha/${idSenha}`, null, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(response => {
+            setFeedbackChamado(prev => ({ ...prev, [idSenha]: true }));
+            setTimeout(() => {
+                setFeedbackChamado(prev => ({ ...prev, [idSenha]: false }));
+            }, 2000);
 
-                fetchSenhas();
-            })
-            .catch(error => console.error('Erro ao chamar senha:', error));
+            fetchSenhas();
+        })
+        .catch(error => console.error('Erro ao chamar senha:', error));
     };
 
     const abrirModalConfirmacao = (idSenha) => {
@@ -78,6 +81,7 @@ const Recepcao = () => {
     return (
         <div className="recepcao-container">
             <h1 className="recepcao-title">Recepção - Senhas Geradas</h1>
+            <h2 className='recepcao-subtitle'>Chame o doador ou inicie o atendimento</h2>
             <ul className="recepcao-senha-list">
                 {senhas.map(senha => (
                     <li key={senha.idSenha} className="recepcao-senha-item">
@@ -101,12 +105,16 @@ const Recepcao = () => {
             </ul>
 
             {/* Modal de Confirmação */}
-            <ConfirmationModal
-                isOpen={isModalOpen}
-                onRequestClose={() => setIsModalOpen(false)}
-                onConfirm={confirmarIniciarAtendimento}
-                message="Você tem certeza que deseja iniciar o atendimento?"
-            />
+            <AnimatePresence>
+                {isModalOpen && (
+                    <ConfirmacaoModal
+                        isOpen={isModalOpen}
+                        onRequestClose={() => setIsModalOpen(false)}
+                        onConfirm={confirmarIniciarAtendimento}
+                        mensagem="Você tem certeza que deseja iniciar o atendimento?"
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };
