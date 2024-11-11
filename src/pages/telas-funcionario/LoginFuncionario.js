@@ -41,7 +41,7 @@ const LoginFuncionario = () => {
             } else if (funcao === 'laboratorio') {
                 navigate('/laboratorio/exames-pendentes')
             } else if (funcao === 'estoque') {
-                navigate('/estoque/estoque-sangue')
+                navigate('/estoquista/pendentes')
             } else {
                 navigate('/dashboard');
             }
