@@ -53,11 +53,9 @@ const ExamesPendentes = () => {
         .then(response => {
             fetchDoacoesPendentes();
             fecharModalExame();
-            alert('Exame registrado com sucesso!');
         })
         .catch(error => {
             console.error('Erro ao registrar exame:', error);
-            alert('Erro ao registrar o exame');
         });
     };
 
@@ -70,9 +68,7 @@ const ExamesPendentes = () => {
                         <span className="examesPendentes-senha">
                             {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
                         </span>
-                        <span className="examesPendentes-doador">
-                            Doador: {doacao.usuario ? doacao.usuario.nomeUsuario : "Nome do doador não disponível"}
-                        </span>
+                       
                         <button
                             className="examesPendentes-btnIniciar"
                             onClick={() => abrirModalExame(doacao)}

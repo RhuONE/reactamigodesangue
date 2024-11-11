@@ -47,6 +47,12 @@ import SidebarColeta from './components/sidebarcoleta/SidebarColeta';
 import ColetasIniciadas from './pages/telas-funcionario/ColetasIniciadas';
 import ExamesPendentes from './pages/telas-funcionario/ExamesPendentes';
 import EstoqueSangue from './pages/telas-funcionario/EstoqueSangue';
+import HistoricoExames from './pages/telas-funcionario/HistoricoExames';
+
+
+import SidebarLaboratorio from './components/sidebarlaboratorio/SidebarLaboratorio';
+import SidebarEstoquista from './components/sidebarestoquista/SidebarEstoquista';
+import EstoquePendentes from './pages/telas-funcionario/EstoquePendentes';
 
 
 function Layout() {
@@ -58,7 +64,8 @@ function Layout() {
   const isTriagemRoute = location.pathname.startsWith('/triagem');
   const isEntrevistaRoute = location.pathname.startsWith('/entrevista');
   const isColetaRoute = location.pathname.startsWith('/coleta');
-  const isEstoqueSangue = location.pathname.startsWith('/estoque');
+  const isLaboratorioRoute = location.pathname.startsWith('/laboratorio');
+  const isEstoquistaRoute = location.pathname.startsWith('/estoquista');
 
   return (
     <div className='App'>
@@ -79,6 +86,10 @@ function Layout() {
            <SidebarEntrevista />
           ) : isColetaRoute ? (
            <SidebarColeta />
+          ) : isLaboratorioRoute ? (
+           <SidebarLaboratorio />
+          ) : isEstoquistaRoute ? (
+           <SidebarEstoquista /> 
           ) : null 
         )}
       <div className='main-content'>
@@ -131,9 +142,12 @@ function Layout() {
 
         {/** Rotas telas para laboratorio */}
         <Route path='laboratorio/exames-pendentes' element={<ExamesPendentes />} />
+        <Route path='laboratorio/historico-exames' element={<HistoricoExames />} />
 
         {/** Rotas para o estoquista */}
-        <Route path='estoque/estoque-sangue' element={<EstoqueSangue />} />
+        <Route path='/estoquista/pendentes' element={<EstoquePendentes />} />
+        <Route path='/estoquista/estoque-sangue' element={<EstoqueSangue />} />
+        
 
         </Routes>
       </div>
