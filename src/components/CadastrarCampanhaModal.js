@@ -7,22 +7,32 @@ const CadastrarCampanhaModal = ({ isOpen, onClose, onSave }) => {
         descCampanha: '',
         dataInicioCampanha: '',
         dataFimCampanha: '',
+        fotoCampanha: null, 
     });
 
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: name === 'fotoCampanha' ? files[0] : value,
         }));
     };
 
     const handleSubmit = async () => {
+        const data = new FormData();
+        data.append('tituloCampanha', formData.tituloCampanha);
+        data.append('descCampanha', formData.descCampanha);
+        data.append('dataInicioCampanha', formData.dataInicioCampanha);
+        data.append('dataFimCampanha', formData.dataFimCampanha);
+        if (formData.fotoCampanha) {
+            data.append('fotoCampanha', formData.fotoCampanha);
+        }
+    
         try {
             setErrorMessage('');
-            await onSave(formData);
+            await onSave(data);
         } catch (error) {
             if (error.response && error.response.data && error.response.data.errors) {
                 const errorMessages = Object.values(error.response.data.errors).flat().join(', ');
@@ -32,6 +42,7 @@ const CadastrarCampanhaModal = ({ isOpen, onClose, onSave }) => {
             }
         }
     };
+    
 
     if (!isOpen) return null;
 
@@ -48,6 +59,15 @@ const CadastrarCampanhaModal = ({ isOpen, onClose, onSave }) => {
                             value={formData.tituloCampanha}
                             onChange={handleChange}
                         />
+                    <div className='form-group'>
+                        <label>Banner</label>
+                        <input
+                            type='file'
+                            name='fotoCampanha'
+                            onChange={handleChange}
+                            accept="image/*" //Aceita apenas imagens
+                        />
+                    </div>
                     </div>
                     <div className="form-group">
                         <label>Descrição</label>

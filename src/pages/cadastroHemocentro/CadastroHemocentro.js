@@ -7,6 +7,8 @@ import logo from '../../images/cadastroHemocentro.png';
 import wave from '../../images/wave.png';
 import imgIcon from '../../images/imgIcon.png';
 
+
+
 const CadastroHemocentro = () => {
   const [formData, setFormData] = useState({
     nomeHemocentro: '',
@@ -24,8 +26,11 @@ const CadastroHemocentro = () => {
     cnpjHemocentro: '',
     hospitalVinculadoHemocentro: '',
     latitudeHemocentro: '',
-    longitudeHemocentro: ''
+    longitudeHemocentro: '',
+    fotoHemocentro: null,
   });
+
+  const [fotoPreview, setFotoPreview] = useState(imgIcon);
 
   const navigate = useNavigate();
 
@@ -51,6 +56,24 @@ const CadastroHemocentro = () => {
       });
     }
   };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({
+        ...formData,
+        fotoHemocentro: file  // Salva o arquivo no estado
+    });
+
+    // Atualiza o preview da imagem
+    if (file) {
+        const previewUrl = URL.createObjectURL(file);
+        setFotoPreview(previewUrl);
+    } else {
+        setFotoPreview(imgIcon); // Volta para o ícone padrão se não houver arquivo
+    }
+};
+
+
 //FIM FORMATACAO
 
 
@@ -351,12 +374,20 @@ const [error, setError] = useState({
       isValid = false;
     }
     
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach(key => {
+        formDataToSend.append(key, formData[key]);
+    });
     
+    // Adicionar a foto ao FormData
+    if (formData.fotoHemocentro) {
+        formDataToSend.append('fotoHemocentro', formData.fotoHemocentro);
+    }
     
 
     if(isValid){
       try {
-        const response = await api.post('/hemocentro', formData);
+        const response = await api.post('/hemocentro', formDataToSend);
         console.log('Cadastro realizado com sucesso:', response.data);
         alert('Hemocentro cadastrado com sucesso!');
         navigate('/login/hemocentro');
@@ -387,12 +418,12 @@ const [error, setError] = useState({
                 <div className={`form-step ${formStep == 0 ? 'active' : ''}`}>
                     <div className="imgNameHemocentro">
                         <div className="imgInput">
-                            <img src={imgIcon}/>
+                            <img style={{objectFit : 'cover', width: '200px', height: '200px'}} src={fotoPreview}/>
                             <label htmlFor="fotoHemocentro">
                                 Escolher arquivo
                             </label>
                             <input id="fotoHemocentro" name="fotoHemocentro" type="file" 
-                            accept=".jpg, .jpeg, .png"/>
+                            accept=".jpg, .jpeg, .png" onChange={handleFileChange}/>
                         </div>
     
                         <div className="dadosDiv">

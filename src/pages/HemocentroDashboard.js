@@ -4,7 +4,6 @@ import MetricCard from '../components/MetricCard';
 import api from '../services/api';
 import './HemocentroDashboard.css';
 import BarChart from '../components/BarChart';
-import SidebarHemocentro from '../components/SidebarHemocentro';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaClipboard, FaHeartbeat, FaUser } from 'react-icons/fa';
 

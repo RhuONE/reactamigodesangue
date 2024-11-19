@@ -30,6 +30,19 @@
     margin-bottom: 20px;
 }
 
+.cadastroModal-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.cadastroModal-foto-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 .cadastroModal-input {
     width: 100%;
     padding: 10px;
@@ -159,4 +172,29 @@
 .direita {
     display: flex;
     justify-content: end;
+}
+
+.webcam-preview {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.btn-capture,
+.btn-cancel,
+.btn-open-webcam {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #0a93a1;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-capture:hover,
+.btn-cancel:hover,
+.btn-open-webcam:hover {
+    background-color: #086f79;
 }

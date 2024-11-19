@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import './PacientesAguardando.css';
 
+
+
 const PacientesAguardando = () => {
     const [senhaAtual, setSenhaAtual] = useState(null);
     const [tipoSenha, setTipoSenha] = useState('');
@@ -12,20 +14,22 @@ const PacientesAguardando = () => {
     const fetchSenhaAtual = () => {
         api.get('/senhas/ultima-chamada', {
             params: {
-                "idHemocentro": localStorage.getItem('idHemocentro'),
+                idHemocentro: localStorage.getItem('idHemocentro'),
             },
         })
             .then(response => {
                 const { senhaAtual, historicoSenhas } = response.data;
-                setSenhaAtual(senhaAtual.numeroSenha);
-                setTipoSenha(senhaAtual.tipoSenha);
-                setStatusSenha(senhaAtual.statusSenha);
+                setSenhaAtual(senhaAtual.senha.descSenha);
+                setTipoSenha(senhaAtual.senha.tipoSenha);
+                setStatusSenha(senhaAtual.statusDoacao);
                 setHistoricoSenhas(historicoSenhas); // Atualiza o estado com o histórico de senhas
             })
             .catch(error => {
                 console.error('Erro ao buscar a senha atual:', error);
             });
     };
+    
+    
 
     
 

@@ -30,7 +30,7 @@ const HistoricoExames = () => {
     const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
 
     //Recupera credenciais de aceesso
-    const token = localStorage.gtItem('token');
+    const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
     //Função de recuperar doacoes

@@ -26,6 +26,7 @@ ChartJS.register(
 const UserGrowthChart = () => {
 
     const [userGrowthData, setUserGrowthData] = useState([]);
+    const [hemocentroGrowthData, setHemocentroGrowthData] = useState([]);
 
     useEffect(() => {
         const fetchUserGrowthData = async () => {
@@ -42,6 +43,21 @@ const UserGrowthChart = () => {
             }
         };
 
+        const fetchHemocentroGrowthData = async () => {
+          const token = localStorage.getItem('token');
+            try {
+                const response = await api.get('/dashboard/crescimento-hemocentro', {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }); // Rota de crescimento de usuário
+                setHemocentroGrowthData(response.data); // Exemplo: [{ month: 'Janeiro', count: 100}, . . .]
+            } catch (error) {
+                console.error('Erro ao buscar dados de crescimento de hemocentros:', error);
+            }
+        };
+
+        fetchHemocentroGrowthData();
         fetchUserGrowthData();
     }, []);
 
@@ -57,7 +73,7 @@ const UserGrowthChart = () => {
         tension: 0.4, // Suaviza a linha
       },{
         label: 'Hemocentros',
-        data: userGrowthData.map((item) => item.quantidade), // Exemplo de crescimento de doadores
+        data: hemocentroGrowthData.map((item) => item.quantidade), // Exemplo de crescimento de doadores
         fill: false,
         backgroundColor: '#d00e0e66',
         borderColor: '#d00e0e',

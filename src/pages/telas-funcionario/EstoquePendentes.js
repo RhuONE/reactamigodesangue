@@ -1,147 +1,193 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import QrScanner from 'react-qr-scanner';
+import jsQR from 'jsqr';
+import './EstoquePendentes.css';
 import api from '../../services/api';
-
-import { useNavigate } from 'react-router-dom'
-
-
-import { AnimatePresence } from 'framer-motion';
 import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
 
 const EstoquePendentes = () => {
-    const [doacoes, setDoacoes] = useState([]);
-    const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
-    const navigate = useNavigate();
-
+    const [qrCodeData, setQrCodeData] = useState('');
+    const [useCamera, setUseCamera] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [idDoacao, setIdDoacao] = useState('');
+    const [exameData, setExameData] = useState(null);
     const [isConfirmarRegistrarModalOpen, setIsConfirmarRegistrarModalOpen] = useState(false);
-    const abrirConfirmarRegistro = (idDoacao) => {
-        setDoacaoSelecionada(idDoacao);
-        setIsConfirmarRegistrarModalOpen(true);
-    }
     const [isConfirmarDescarteModalOpen, setIsConfirmarDescarteModalOpen] = useState(false);
-    const abrirConfirmarDescarte = (idDoacao) => {
-        setDoacaoSelecionada(idDoacao);
-        setIsConfirmarDescarteModalOpen(true);
-    }
 
     const token = localStorage.getItem('token');
-    const idHemocentro = localStorage.getItem('idHemocentro');
 
-    useEffect(() => {
-        const funcao = localStorage.getItem('funcao');
-        if (!token || funcao !== 'estoque') {
-            navigate('/login/funcionario');
+    const resetarTela = () => {
+        setQrCodeData('');
+        setSelectedImage(null);
+        setUseCamera(true);
+        setIdDoacao('');
+        setExameData(null);
+        setIsConfirmarRegistrarModalOpen(false);
+        setIsConfirmarDescarteModalOpen(false);
+    };
+
+    const verificarExame = async () => {
+        if (!qrCodeData) {
+            alert('QR Code não processado. Verifique a imagem ou tente novamente.');
+            return;
         }
-    }, [navigate]);
 
-    
-    const fetchDoacoesPendentes = () => {
-        api.get('/doacoes/estoquista-pendente', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { idHemocentro },
-        })
-        .then(response => setDoacoes(response.data))
-        .catch(error => console.error('Erro ao buscar doações pendentes:', error));
+        try {
+            const parsedData = JSON.parse(qrCodeData);
+            const codigoDoacao = parsedData.CodigoDoacao;
+            setIdDoacao(codigoDoacao);
+
+            const response = await api.get(`/exames/${codigoDoacao}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.data.exameLaboratorio) {
+                setExameData(response.data.exameLaboratorio);
+            } else {
+                alert('Exame não encontrado para esta doação.');
+                resetarTela();
+            }
+        } catch (error) {
+            console.error('Erro ao verificar o exame:', error);
+            alert('Erro ao verificar o QR Code.');
+        }
     };
 
-    useEffect(() => {
-        fetchDoacoesPendentes();
-    }, []);
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    const registrarNoEstoque = (doacaoId) => {
-        api.post(`/doacoes/${doacaoId}/adicionar-estoque`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(() => {
-            fetchDoacoesPendentes(); // Atualiza a lista após adicionar ao estoque
-            setIsConfirmarRegistrarModalOpen(false); // Fecha o modal
-        })
-        .catch(error => {
-            console.error('Erro ao adicionar ao estoque:', error);
-        });
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Exibe a imagem carregada
+            setSelectedImage(e.target.result);
+
+            // Processa o QR Code
+            const img = new Image();
+            img.src = e.target.result;
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+
+                if (qrCode) {
+                    setQrCodeData(qrCode.data);
+                } else {
+                    alert('Não foi possível ler o QR Code. Tente novamente.');
+                }
+            };
+        };
+        reader.readAsDataURL(file);
     };
 
-    const descartar = (doacaoId) => {
-        api.post(`/doacoes/${doacaoId}/descartar`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(() => {
-            fetchDoacoesPendentes(); // Atualiza a lista após descartar
-            setIsConfirmarDescarteModalOpen(false); // Fecha o modal
-        })
-        .catch(error => {
-            console.error('Erro ao descartar doação:', error);
-        });
+    const registrarNoEstoque = async () => {
+        try {
+            await api.post(`/doacoes/${idDoacao}/adicionar-estoque`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            alert('Doação registrada no estoque com sucesso!');
+            resetarTela();
+        } catch (error) {
+            console.error('Erro ao registrar no estoque:', error);
+            alert('Erro ao registrar a doação no estoque.');
+        }
     };
-    
+
+    const descartar = async () => {
+        try {
+            await api.post(`/doacoes/${idDoacao}/descartar`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            alert('Doação descartada com sucesso!');
+            resetarTela();
+        } catch (error) {
+            console.error('Erro ao descartar a doação:', error);
+            alert('Erro ao descartar a doação.');
+        }
+    };
 
     return (
-        <div className="examesPendentes-container">
-            <h1 className="examesPendentes-title">Exames Pendentes no Laboratório</h1>
-            <ul className="examesPendentes-list">
-                {doacoes.map(doacao => {
-                    const backgroundColor =
-                        doacao.statusDoacao === 'encaminhada-descarte'
-                            ?  '#f7dfe1' //  Vermelhor claro para inpto
-                            :  '#e6ffec' // Verde claro pra apto
-                    return (
-                        <li key={doacao.idDoacao} className="examesPendentes-item" style={{ backgroundColor }}>
-                            <span className="examesPendentes-senha">
-                                {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                            </span>
-                            <span  style={{color : '#969595', fontSize : '20px'}}>
-                                {doacao.statusDoacao === 'encaminhada-descarte' ? 'Descartar' :  'Registrar' }
-                            </span>
+        <div className="estoquePendentes-container">
+            <h1 className="estoquePendentes-title">Verificar Doações</h1>
 
-                            <div className='triagensIniciadas-acoes'>
-                                <>
-                                    {doacao.statusDoacao === 'encaminhada-descarte' ? (
-
-                                        <button
-                                            className="triagensIniciadas-btnCancelar"
-                                            onClick={() => abrirConfirmarDescarte(doacao)}
-                                        >
-                                            Descartar
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="triagensIniciadas-btnEntrevista"
-                                            onClick={() => abrirConfirmarRegistro(doacao)}
-                                        >
-                                            Adicionar ao estoque
-                                        </button>
-                                    )}
-                                </>
-                            </div>
-
-                        </li>
+            {useCamera ? (
+                <div className="estoquePendentes-scan">
+                    <QrScanner
+                        delay={300}
+                        style={{ width: '100%', height: '100%' }}
+                        onError={(err) => console.error('Erro ao usar a câmera:', err)}
+                        onScan={(data) => data && setQrCodeData(data.text)}
+                    />
+                    <button className='examesPendentes-btnOption' onClick={() => setUseCamera(false)}>Usar arquivo</button>
+                </div>
+            ) : (
+                <div className="estoquePendentes-upload">
+                    <label className="custom-file-upload">
+                        Escolher arquivo
+                        <input type="file" accept="image/*" onChange={handleFileUpload} />
+                    </label>
+                    {selectedImage && (
+                        <div className="estoquePendentes-image-container">
+                            <img
+                                src={selectedImage}
+                                alt="QR Code Selecionado"
+                                className="estoquePendentes-image"
+                            />
+                        </div>
                     )}
-                )}
-            </ul>
+                    {qrCodeData && (
+                        <button className="estoquePendentes-btnVerify" onClick={verificarExame}>
+                            Verificar QR Code
+                        </button>
+                    )}
+                    <button className="examesPendentes-btnBack" onClick={() => setUseCamera(true)}>
+                        Voltar para a câmera
+                    </button>
+                </div>
+            )}
 
-            {/** Modais de confirmação */}
-            <AnimatePresence>
-                {isConfirmarRegistrarModalOpen && (
-                    <ConfirmacaoModal
-                        isOpen={isConfirmarRegistrarModalOpen}
-                        onRequestClose={() => setIsConfirmarRegistrarModalOpen(false)}
-                        onConfirm={() => registrarNoEstoque(doacaoSelecionada.idDoacao)}
-                        mensagem="Registar a doação?"
-                    />
-                )}
-            </AnimatePresence>
+            {exameData && (
+                <div className="estoquePendentes-result">
+                    <h2>Resultado do Exame</h2>
+                    <p>
+                        {exameData.aptoParaDoacao === "1"
+                            ? 'Doação Apta para Estoque.'
+                            : 'Doação Inapta. Encaminhar para descarte.'}
+                    </p>
+                    {exameData.aptoParaDoacao === "1" ? (
+                        <button onClick={() => setIsConfirmarRegistrarModalOpen(true)}>Registrar no Estoque</button>
+                    ) : (
+                        <button onClick={() => setIsConfirmarDescarteModalOpen(true)}>Descartar</button>
+                    )}
+                </div>
+            )}
 
-            <AnimatePresence>
-                {isConfirmarDescarteModalOpen && (
-                    <ConfirmacaoModal
-                        isOpen={isConfirmarDescarteModalOpen} 
-                        onRequestClose={() => setIsConfirmarDescarteModalOpen(false)}
-                        onConfirm={() => descartar(doacaoSelecionada.idDoacao)}
-                        mensagem=" Descartar a coleta?"
-                    />
-                )}
-            </AnimatePresence>
+            {isConfirmarRegistrarModalOpen && (
+                <ConfirmacaoModal
+                    isOpen={isConfirmarRegistrarModalOpen}
+                    onRequestClose={() => setIsConfirmarRegistrarModalOpen(false)}
+                    onConfirm={registrarNoEstoque}
+                    mensagem="Registrar a doação no estoque?"
+                />
+            )}
 
-
+            {isConfirmarDescarteModalOpen && (
+                <ConfirmacaoModal
+                    isOpen={isConfirmarDescarteModalOpen}
+                    onRequestClose={() => setIsConfirmarDescarteModalOpen(false)}
+                    onConfirm={descartar}
+                    mensagem="Descartar a doação?"
+                />
+            )}
         </div>
     );
 };

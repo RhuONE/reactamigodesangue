@@ -157,16 +157,68 @@ const ColetasIniciadas = () => {
 
     const gerarAtestado = (doacao) => {
         const doc = new jsPDF();
+    
+        const dataCompleta = doacao.coleta.dataHoraColeta;
+    
+        // Criar um objeto Date a partir da string
+        const data = new Date(dataCompleta);
+    
+        // Extrair a parte da data (YYYY-MM-DD)
+        const somenteData = data.toISOString().split('T')[0];
+    
+        // Extrair a parte da hora (HH:mm:ss)
+        const somenteHora = data.toTimeString().split(' ')[0];
+    
+        // Título
+        doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.text('Atestado de  Doação', 105, 20, { align: 'center' });
+        doc.text("DECLARAÇÃO DE DOAÇÃO DE SANGUE", 105, 20, { align: "center" });
+    
+        // Texto principal
+        doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
-        doc.text(`Doador: ${doacao.usuario.nomeUsuario}`, 20, 40);
-        doc.text(`Doação concluída com sucesso: coletado ${doacao.coleta.quantidadeMl}`, 20, 50);
-        // doc.text('Observações:', 20, 60);
-        // doc.text(doacao.entrevista.observacoes || 'Nenhuma observação', 20, 70);
-        doc.save(`atestado_${doacao.usuario.nomeUsuario}.pdf`);
+        const texto = `
+    Declaramos para os devidos fins e com agradecimentos que o(a) Sr(a) 
+    ${doacao.usuario.nomeUsuario}, inscrito(a) no CPF sob o nº ${doacao.usuario.cpfUsuario}, 
+    doou sangue voluntariamente ao(a) ${doacao.hemocentro.nomeHemocentro}, às ${somenteHora} 
+    do dia ${somenteData}.
+        `;
+    
+        // Ajuste de alinhamento e largura
+        doc.text(texto, 20, 40, {
+            maxWidth: 170,
+            align: "justify",
+        });
+    
+        // Informações adicionais
+        doc.setFontSize(12);
+        doc.text("CID Z52.0", 20, 90);
+        doc.text(
+            `${doacao.hemocentro.cidadeHemocentro} - ${doacao.hemocentro.estadoHemocentro}, ${somenteData}, ${somenteHora}`,
+            20,
+            100
+        );
+    
+        // Assinatura
+        doc.setFontSize(12);
+        doc.text("(assinatura)", 20, 130);
+    
+        // Nome e endereço da instituição
+        doc.text(
+            `Nome da instituição: ${doacao.hemocentro.nomeHemocentro}`,
+            20,
+            150
+        );
+        doc.text(
+            `Endereço: ${doacao.hemocentro.logHemocentro} ${doacao.hemocentro.numLogHemocentro}`,
+            20,
+            160
+        );
+    
+        // Salvar PDF
+        doc.save(`declaracao_doacao_${doacao.usuario.nomeUsuario}.pdf`);
     };
-
+    
 
     return (
         <div className="entrevistasIniciadas-container">
@@ -255,6 +307,7 @@ const ColetasIniciadas = () => {
                 isOpen={isRelatorioModalOpen}
                 onRequestClose={closeRelatorioModal}
                 onSubmitRelatorio={handleSubmitRelatorio}
+                doacaoSelecionada={doacaoSelecionada}
             />
 
              {/** Modal de detalhes do doador */}

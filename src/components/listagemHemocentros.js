@@ -18,7 +18,7 @@ const HemocentrosList = ({ hemocentros }) => {
       {hemocentros.map((hemocentro) => (
         <div className='card' key={hemocentro.idHemocentro}>
           <div className="baseInfo" onClick={() => toggleCardInfo(hemocentro.idHemocentro)}>
-            <img id="hemoIcon" src={hospitalIcon} alt="Ícone do Hemocentro" />
+            <img id="hemoIcon"  src={`http://localhost:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} alt="Ícone do Hemocentro" />
             <div id="info">
               <h2>{hemocentro.nomeHemocentro}</h2>
               <p>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './CadastrarFuncionarioModal.css';
+import InputMask from 'react-input-mask';
 
 const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
     const [formData, setFormData] = useState({
@@ -55,7 +56,8 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
                     </div>
                     <div className="form-group">
                         <label>CPF</label>
-                        <input
+                        <InputMask
+                            mask={'999.999.999-99'}
                             type="text"
                             name="cpfFuncionario"
                             value={formData.cpfFuncionario}
@@ -63,13 +65,17 @@ const CadastrarFuncionarioModal = ({ isOpen, onClose, onSave }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Descrição</label>
-                        <input
-                            type="text"
-                            name="descFuncionario"
-                            value={formData.descFuncionario}
-                            onChange={handleChange}
-                        />
+                        <label>Funcao</label>
+                        <select name="descFuncionario" value={formData.descFuncionario} onChange={handleChange}>
+                            <option value="" disabled>Selecione a área de atuação...</option>
+                            <option value="totem">Totem</option>
+                            <option value="recepcao">Recepção</option>
+                            <option value="triagem">Triagem</option>
+                            <option value="entrevista">Entrevista</option>
+                            <option value="coleta">Coleta</option>
+                            <option value="laboratorio">Laboratório</option>
+                            <option value="estoque">Estoque</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Email</label>

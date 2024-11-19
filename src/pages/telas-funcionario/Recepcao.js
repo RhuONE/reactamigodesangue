@@ -5,6 +5,8 @@ import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModa
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
+import { ClipLoader } from 'react-spinners';
+
 const Recepcao = () => {
     const [senhas, setSenhas] = useState([]);
     const [feedbackChamado, setFeedbackChamado] = useState({});
@@ -15,6 +17,15 @@ const Recepcao = () => {
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
+
+    const [loadingActions, setLoadingActions] = useState({});
+    const [loadingIniciar, setLoadingIniciar] = useState({});
+    const [isModalLoading, setIsModalLoading] = useState(false);
+
+
+
     useEffect(() => {
         const funcao = localStorage.getItem('funcao');
         if (!token || funcao !== 'recepcao') {
@@ -22,13 +33,27 @@ const Recepcao = () => {
         }
     }, [navigate, token]);
 
-    const fetchSenhas = () => {
-        api.get('/senhas', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { idHemocentro },
-        })
-        .then(response => setSenhas(response.data))
-        .catch(error => console.error('Erro ao buscar senhas:', error));
+    const fetchSenhas = async () => {
+
+        if (isFirstLoad) {
+            setIsFetching(true); // Ativa o estado de carregamento
+        }
+        try {
+            const response = await api.get('/senhas', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { idHemocentro },
+            });
+    
+            setSenhas(response.data);
+            setIsFirstLoad(false); // Após a primeira busca, desativa o carregamento inicial
+        } catch (error) {
+            console.error('Erro ao buscar senhas:', error);
+        } finally {
+             // O carregamento para de ser exibido apenas na primeira execução
+            if (isFirstLoad) {
+                setIsFetching(false);
+            }
+        }
     };
 
     useEffect(() => {
@@ -40,70 +65,106 @@ const Recepcao = () => {
         return () => clearInterval(interval);
     }, [token, idHemocentro]);
 
-    const chamarSenha = (idSenha) => {
-        api.post(`/chamar-senha/${idSenha}`, null, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(response => {
-            setFeedbackChamado(prev => ({ ...prev, [idSenha]: true }));
-            setTimeout(() => {
-                setFeedbackChamado(prev => ({ ...prev, [idSenha]: false }));
-            }, 2000);
+    const chamarSenha = async (idSenha) => {
 
+        setLoadingActions((prev) => ({ ...prev, [idSenha]: true }));
+
+        try {
+            // Realiza a requisição para chamar a senha
+            const response = await api.post(`/chamar-senha/${idSenha}`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+    
+            // Feedback visual para a senha chamada
+            setFeedbackChamado((prev) => ({ ...prev, [idSenha]: true }));
+            setTimeout(() => {
+                setFeedbackChamado((prev) => ({ ...prev, [idSenha]: false }));
+            }, 2000);
+    
+            // Atualiza a lista de senhas
             fetchSenhas();
-        })
-        .catch(error => console.error('Erro ao chamar senha:', error));
+        } catch (error) {
+            console.error('Erro ao chamar senha:', error);
+        } finally {
+            // Reseta o estado de carregamento
+            setLoadingActions((prev) => ({ ...prev, [idSenha]: false }));
+        }
     };
 
-    const abrirModalConfirmacao = (idSenha) => {
-        setSenhaSelecionada(idSenha);
+    const abrirModalConfirmacao = (senha) => {
+        setSenhaSelecionada(senha);
         setIsModalOpen(true);
     };
 
-    const confirmarIniciarAtendimento = () => {
+    const confirmarIniciarAtendimento = async () => {
         if (senhaSelecionada) {
-            api.put(`/senhas/iniciar-atendimento/${senhaSelecionada}`, null, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then(response => {
-                setSenhas(senhas.filter(s => s.idSenha !== senhaSelecionada));
+            setLoadingIniciar((prev) => ({ ...prev, [senhaSelecionada.idSenha]: true }));
+            setIsModalLoading(true); // Ativa o carregamento no modal
+
+            try {
+                const response = await api.put(`/senhas/iniciar-atendimento/${senhaSelecionada.idSenha}`, null, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+    
+                setSenhas((prevSenhas) => prevSenhas.filter((s) => s.idSenha !== senhaSelecionada.idSenha));
                 setIsModalOpen(false);
                 setSenhaSelecionada(null);
                 navigate('/recepcao/atendimentos-iniciados');
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Erro ao iniciar atendimento:', error);
                 setIsModalOpen(false);
-            });
+            } finally {
+                setLoadingIniciar((prev) => ({ ...prev, [senhaSelecionada.idSenha]: false }));
+                setIsModalLoading(true); // Ativa o carregamento no modal
+
+            }
         }
     };
+    
 
     return (
         <div className="recepcao-container">
             <h1 className="recepcao-title">Recepção - Senhas Geradas</h1>
             <h2 className='recepcao-subtitle'>Chame o doador ou inicie o atendimento</h2>
-            <ul className="recepcao-senha-list">
-                {senhas.map(senha => (
-                    <li key={senha.idSenha} className="recepcao-senha-item">
-                        <span className="recepcao-senha-numero">{senha.descSenha} ({senha.tipoSenha})</span>
-                        <div>
-                            <button
-                                className={`recepcao-chamar-btn ${feedbackChamado[senha.idSenha] ? 'chamado' : ''}`}
-                                onClick={() => chamarSenha(senha.idSenha)}
-                            >
-                                Chamar
-                            </button>
-                            <button
-                                className="recepcao-iniciar-btn"
-                                onClick={() => abrirModalConfirmacao(senha.idSenha)}
-                            >
-                                Iniciar Atendimento
-                            </button>
+          
+            {isFirstLoad && isFetching ?  (
+                <div className='loading-container'>
+                    <ClipLoader size={40} color='#0a93a1' />
+                    <p>Carregando senhas...</p>
+                </div>
+            ) : (
+                <ul className="recepcao-senha-list">
+                    {senhas.map(senha => (
+                        <li key={senha.idSenha} className="recepcao-senha-item">
+                            <span className="recepcao-senha-numero">{senha.descSenha} ({senha.tipoSenha})</span>
+                            <div>
+                                <button
+                                    className={`recepcao-chamar-btn ${feedbackChamado[senha.idSenha] ? 'chamado' : ''}`}
+                                    onClick={() => chamarSenha(senha.idSenha)}
+                                    disabled={loadingActions[senha.idSenha]}
+                                >
+                                    {loadingActions[senha.idSenha] ? <ClipLoader size={16} color='#fff' /> : 'Chamar'}
+                                </button>
+                                <button
+                                    className="recepcao-iniciar-btn"
+                                    onClick={() => abrirModalConfirmacao(senha)}
+                                    disabled={loadingIniciar[senha.idSenha]}
+                                >
+                                    {loadingIniciar[senha.idSenha] ? <ClipLoader size={16} color='#fff' /> : 'Iniciar atendimento'}
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                     {!isFirstLoad && isFetching && (
+                        <div className="update-indicator">
+                            Atualizando dados...
                         </div>
-                    </li>
-                ))}
-            </ul>
+                    )}
 
+                </ul>
+            )}
+
+           
             {/* Modal de Confirmação */}
             <AnimatePresence>
                 {isModalOpen && (
@@ -111,7 +172,8 @@ const Recepcao = () => {
                         isOpen={isModalOpen}
                         onRequestClose={() => setIsModalOpen(false)}
                         onConfirm={confirmarIniciarAtendimento}
-                        mensagem="Você tem certeza que deseja iniciar o atendimento?"
+                        isLoading={isModalLoading}
+                        mensagem={`Você tem certeza que deseja iniciar o atendimento para a senha ${senhaSelecionada?.descSenha}?`}
                     />
                 )}
             </AnimatePresence>
@@ -120,3 +182,7 @@ const Recepcao = () => {
 };
 
 export default Recepcao;
+
+
+
+

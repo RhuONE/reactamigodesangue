@@ -4,6 +4,7 @@ import './HemocentroFuncionario.css';
 import CadastrarFuncionarioModal from '../components/CadastrarFuncionarioModal';
 import { useNavigate } from 'react-router-dom';
 import EditarFuncionarioModal from '../components/EditarFuncionarioModal';
+import InputMask from 'react-input-mask';
 
 const HemocentroFuncionarios = () => {
     const [funcionarios, setFuncionarios] = useState([]);
@@ -143,30 +144,40 @@ const HemocentroFuncionarios = () => {
             <table className="funcionarios-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>CPF</th>
+                        <th>Função</th>
                         <th>Email</th>
-                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {funcionarios.map((funcionario) => (
                         <tr key={funcionario.idFuncionario}>
-                            <td>{funcionario.idFuncionario}</td>
+                            
                             <td>{funcionario.nomeFuncionario}</td>
-                            <td>{funcionario.cpfFuncionario}</td>
+                            <td>
+                                <InputMask
+                                    style={{width: 200, border: 0, backgroundColor: 'transparent'}}
+                                    disabled
+                                    mask={'999.999.999-99'}
+                                    value={funcionario.cpfFuncionario}
+                                />
+                            </td>
+
+                            <td>{funcionario.descFuncionario}</td>
+
                             <td>{funcionario.emailFuncionario}</td>
-                            <td>{funcionario.statusFuncionario}</td>
+
+
                             <td>
                                 <button
-                                    className='edit-btn'
+                                    className='triagensIniciadas-btnRelatorio'
                                     onClick={() => handleEditFuncionario(funcionario)}
                                 >
                                     Editar
                                 </button>
-                                {funcionario.statusFuncionario === 'ativo' ? (
+                                {/* {funcionario.statusFuncionario === 'ativo' ? (
                                     <button
                                         className="archive-btn"
                                         onClick={() => handleArchiveFuncionario(funcionario.idFuncionario)}
@@ -180,7 +191,7 @@ const HemocentroFuncionarios = () => {
                                     >
                                         Ativar
                                     </button>
-                                )}
+                                )} */}
                             </td>
                         </tr>
                     ))}

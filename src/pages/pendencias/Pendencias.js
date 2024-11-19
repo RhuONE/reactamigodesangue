@@ -116,7 +116,7 @@ const Pendencias = () => {
             {pendencias.map((pendencia) => (
               <div className='card' key={pendencia.idHemocentro}>
                 <div className="baseInfo">
-                  <img id="hemoIcon" src={imgBase} />
+                  <img id="hemoIcon" src={`http://localhost:8000/storage/${pendencia.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} />
                   <div id="info">
                     <h2>{pendencia.nomeHemocentro}</h2>
                     <p>

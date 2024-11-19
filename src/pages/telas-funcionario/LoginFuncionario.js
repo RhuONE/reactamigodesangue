@@ -3,14 +3,20 @@ import api from '../../services/api'; // Importa a configuração da API
 import './LoginFuncionario.css'; // Importa o arquivo CSS para estilização
 import { useNavigate } from 'react-router-dom';
 
+import { ClipLoader } from 'react-spinners'; // Importando o spinner
+
+
 const LoginFuncionario = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         // Envia as credenciais para a API de autenticação
         try {
@@ -48,6 +54,8 @@ const LoginFuncionario = () => {
         } catch (error) {
             // Exibe mensagem de erro se as credenciais estiverem incorretas
             setErrorMessage('Email ou senha incorretos. Tente novamente.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -63,6 +71,7 @@ const LoginFuncionario = () => {
                         onChange={(e) => setEmail(e.target.value)} 
                         required 
                         placeholder="Digite seu email" 
+                        disabled={isLoading} // Desativa enquanto está carregando
                     />
                 </div>
                 <div className="form-group">
@@ -73,10 +82,17 @@ const LoginFuncionario = () => {
                         onChange={(e) => setSenha(e.target.value)} 
                         required 
                         placeholder="Digite sua senha" 
+                        disabled={isLoading} // Desativa enquanto está carregando
                     />
                 </div>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
-                <button type="submit" className="login-btn">Entrar</button>
+                <button type="submit" className="login-btn">
+                    {isLoading ? (
+                        <ClipLoader size={16} color='#fff' />
+                    ) : (
+                        'Entrar'
+                    )}
+                </button>
             </form>
         </div>
     );

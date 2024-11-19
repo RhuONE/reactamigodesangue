@@ -1,14 +1,13 @@
 import React from 'react';
 import './VisualizarEntrevista.css';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const VisualizarExame = ({ isOpen, onRequestClose, doacaoSelecionada }) => {
-    if (!isOpen || !doacaoSelecionada || !doacaoSelecionada.exame_laboratorio) return null;
+const VisualizarExame = ({ isOpen, onRequestClose, exameData }) => {
+    if (!isOpen || !exameData) return null; // Checa se o modal está aberto e se há dados do exame
 
-    const exame = doacaoSelecionada.exame_laboratorio;
+    const exame = exameData; // Usa diretamente `exameData`
 
     const aptidaoIcon = exame.aptoParaDoacao === "1" ? (
         <FaCheckCircle className="visualizacaoRelatorio-aprovado-icon" />
