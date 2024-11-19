@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './RelatorioTriagemModal.css';
 import { AiOutlineSave, AiOutlineClose } from 'react-icons/ai';
 import { FaExclamationCircle } from 'react-icons/fa';
-import { use } from 'framer-motion/m';
 import api from '../../services/api';
 
 const RelatorioTriagemModal = ({ isOpen, onRequestClose, onSubmitRelatorio, doacaoSelecionada }) => {
