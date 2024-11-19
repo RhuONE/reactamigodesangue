@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './EditarFuncionarioModal.css'; // Importar o CSS do modal
 
+import InputMask from 'react-input-mask';
+
 const EditarFuncionarioModal = ({ isOpen, onClose, onSave, funcionario }) => {
     const [formData, setFormData] = useState({
         nomeFuncionario: '',
@@ -53,7 +55,9 @@ const EditarFuncionarioModal = ({ isOpen, onClose, onSave, funcionario }) => {
                     </div>
                     <div className="form-group">
                         <label>CPF</label>
-                        <input
+                        <InputMask
+                            mask={'999.999.999-99'}
+                            disabled
                             type="text"
                             name="cpfFuncionario"
                             value={formData.cpfFuncionario}
@@ -71,12 +75,16 @@ const EditarFuncionarioModal = ({ isOpen, onClose, onSave, funcionario }) => {
                     </div>
                     <div className="form-group">
                         <label>Funcao</label>
-                        <input
-                            type="desc"
-                            name="descFuncionario"
-                            value={formData.descFuncionario}
-                            onChange={handleChange}
-                        />
+                        <select name="descFuncionario" value={formData.descFuncionario} onChange={handleChange}>
+                            <option value="" disabled>Selecione a área de atuação...</option>
+                            <option value="totem">Totem</option>
+                            <option value="recepcao">Recepção</option>
+                            <option value="triagem">Triagem</option>
+                            <option value="entrevista">Entrevista</option>
+                            <option value="coleta">Coleta</option>
+                            <option value="laboratorio">Laboratório</option>
+                            <option value="estoque">Estoque</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Telefone</label>

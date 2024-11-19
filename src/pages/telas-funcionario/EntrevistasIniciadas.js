@@ -264,12 +264,12 @@ const EntrevistasIniciadas = () => {
                                             ) : (
                                                 // botões se inpto
                                                 <>
-                                                      <button
+                                                      {/* <button
                                                         className="triagensIniciadas-btnAtestado"
                                                         onClick={() =>gerarAtestado(doacao)}
                                                     >
                                                         Gerar atestado
-                                                    </button>              
+                                                    </button>               */}
 
                                                     <button
                                                         className='triagensIniciadas-btnRelatorio'

@@ -1,6 +1,8 @@
 .pendencias-container {
     padding: 40px;
     overflow: hidden;
+    margin-left: 100px;
+
 }
 
 .pendencias-header{

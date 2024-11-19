@@ -1,43 +1,160 @@
 /* ExamesPendentes.css */
 .examesPendentes-container {
     padding: 20px;
-    margin-left: 15vh;
+    margin-left: 20vh; /* Ajuste maior para compensar a sidebar */
     margin-right: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    align-items: center; /* Alinhamento inicial para evitar cortes */
 }
 
 .examesPendentes-title {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
+    text-align: left; /* Alinhamento para a esquerda */
 }
 
-.examesPendentes-list {
-    list-style: none;
-    padding: 0;
+.examesPendentes-options {
+    display: flex;
+    justify-content: flex-start; /* Alinhamento inicial */
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-.examesPendentes-item {
-    margin-bottom: 10px;
+.examesPendentes-btnOption {
+    background-color: #0a93a1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.examesPendentes-btnOption:hover {
+    background-color: #08797f;
+}
+
+.examesPendentes-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Esconde o input padrão */
+.examesPendentes-upload input[type="file"] {
+    display: none;
+}
+
+/* Estilo para o botão estilizado */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #0a93a1;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover do botão */
+.custom-file-upload:hover {
+    background-color: #087d87;
+}
+
+/* Texto ao lado do botão */
+.upload-text {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.examesPendentes-scan {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alinhamento inicial */
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.examesPendentes-camera {
+    width: 300px; /* Tamanho ajustado */
+    height: 300px;
+    border: 2px solid #0a93a1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px; /* Espaço para os botões abaixo */
+}
+
+.examesPendentes-qrData {
+    margin-top: 20px;
     padding: 10px;
     background-color: #e9f5f9;
     border-left: 5px solid #0a93a1;
     border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.examesPendentes-senha {
     font-size: 18px;
-    font-weight: bold;
     color: #333;
+    max-width: 500px;
+    word-wrap: break-word;
+    text-align: left;
 }
 
-.examesPendentes-btnIniciar {
+.examesPendentes-btnBack {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.examesPendentes-btnBack:hover {
+    background-color: #c0392b;
+}
+
+.examesPendentes-image-preview {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 300px; /* Limite de tamanho */
+    max-height: 300px; /* Limite de tamanho */
+    overflow: hidden;
+    border: 2px solid #0a93a1;
+    border-radius: 8px;
+}
+
+.examesPendentes-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Garante que a imagem se encaixe no espaço */
+}
+
+.examesPendentes-btnVerify {
     background-color: #0aa153;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.examesPendentes-btnVerify:hover {
+    background-color: #087f43;
 }

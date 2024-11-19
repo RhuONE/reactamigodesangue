@@ -230,12 +230,12 @@ const TriagensIniciadas = () => {
                                                     // Botão de visualização do relatório se inapto ou triagem não encontrada
                                                     <>  
 
-                                                        <button
+                                                        {/* <button
                                                             className="triagensIniciadas-btnAtestado"
                                                             onClick={() => gerarAtestado(doacao)}
                                                         >
                                                             Gerar Atestado
-                                                        </button>
+                                                        </button> */}
 
                                                         <button
                                                             className="triagensIniciadas-btnRelatorio"

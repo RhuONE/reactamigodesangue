@@ -62,8 +62,7 @@ const Campanhas = () => {
               <th>Descrição</th>
               <th>Data de Início</th>
               <th>Data de Término</th>
-              <th>Status</th>
-              <th>Ações</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -73,11 +72,8 @@ const Campanhas = () => {
                 <td>{campanha.descCampanha}</td>
                 <td>{new Date(campanha.dataInicioCampanha).toLocaleDateString()}</td>
                 <td>{new Date(campanha.dataFimCampanha).toLocaleDateString()}</td>
-                <td>{campanha.statusCampanha}</td>
-                <td>
-                  <button className="edit-button">Editar</button>
-                  <button className="delete-button">Excluir</button>
-                </td>
+                
+                
               </tr>
             ))}
           </tbody>

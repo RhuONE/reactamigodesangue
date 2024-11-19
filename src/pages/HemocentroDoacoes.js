@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import './HemocentroDoacoes.css';
-import CadastrarDoacaoModal from '../components/CadastrarDoacaoModal';
+
 import { useNavigate, Link } from 'react-router-dom';
 
 const Doacoes = () => {
@@ -9,7 +9,7 @@ const Doacoes = () => {
     const [funcionarios, setFuncionarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+ 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,20 +59,6 @@ const Doacoes = () => {
         fetchDoacoes();
     }, []);
 
-    const handleAddDoacao = async (formData) => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await api.post('/doacao', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setDoacoes([...doacoes, response.data.data]);
-        } catch (error) {
-            console.error('Erro ao registrar doação:', error);
-        }
-    };
-
     return (
         <div className="doacoes-content">
             <h1>Lista de Doações</h1>
@@ -84,38 +70,26 @@ const Doacoes = () => {
                 <table className="doacoes-table">
                     <thead>
                         <tr>
-                            <th>ID Doação</th>
+                           
                             <th>Quantidade (ml)</th>
                             <th>Tipo Sanguíneo</th>
-                            <th>Tipo Doação</th>
-                            <th>Observação</th>
-                            <th>Status</th>
+                            
                             <th>Data da Doação</th>
                         </tr>
                     </thead>
                     <tbody>
                         {doacoes.map((doacao) => (
                             <tr key={doacao.idDoacao}>
-                                <td>{doacao.idDoacao}</td>
-                                <td>{doacao.quantidadeMLDoacao}</td>
-                                <td>{doacao.tipoSanguineoDoacao}</td>
-                                <td>{doacao.tipoDoacao}</td>
-                                <td>{doacao.observacaoDoacao}</td>
-                                <td>{doacao.statusDoacao}</td>
+                                
+                                <td>{doacao.coleta.quantidadeMl}</td>
+                                <td>{doacao.exame_laboratorio.tipoSanguineo}</td>
+                        
                                 <td>{new Date(doacao.created_at).toLocaleDateString()}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             )}
-            <button onClick={() => setShowModal(true)}>Registrar Doação</button>
-
-            <CadastrarDoacaoModal
-                isOpen={showModal}
-                onClose={() => setShowModal(false)}
-                onSave={handleAddDoacao}
-                funcionarios={funcionarios}
-            />
         </div>
     );
 };

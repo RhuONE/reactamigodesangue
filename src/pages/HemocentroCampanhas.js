@@ -13,6 +13,17 @@ const HemocentroCampanhas = () => {
     const navigate = useNavigate(); // Hook para redirecionar
     const [showModal, setShowModal] = useState(false);
 
+    const [fotoPreview, setFotoPreview] = useState(null);
+
+    // // useEffect(() => {
+    // //     if (campanha?.fotoCampanha) {
+    // //         const baseUrl = 'http://localhost:8000/storage/';
+    // //         setFotoPreview(`${baseUrl}${campanha.fotoCampanha}`)
+    // //     } else {
+    // //         setFotoPreview(null);
+    // //     }
+    // // })
+
     useEffect(() => {
         const fetchCampanhas = async () => {
             const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
@@ -79,6 +90,7 @@ const HemocentroCampanhas = () => {
         try {
             const response = await api.post('/campanha', formData, {
                 headers: { Authorization: `Bearer ${token}` },
+                //'Content-Type': 'multipart/form-data'
             });
             setCampanhas([...campanhas, response.data.data]);
         } catch (error) {
@@ -114,7 +126,10 @@ const HemocentroCampanhas = () => {
                             ) : (
                                 campanhas.map((campanha) => (
                                     <div className="item" key={campanha.idCampanha}>
-                                        <img src="img/hospital.jpg" alt="" />
+                                        <img 
+                                            src={`http://localhost:8000/storage/${campanha.fotoCampanha || 'uploads/campanhas/banner-para-campanha-de-doacao.avif'}`} 
+                                            alt="banner da campanha" 
+                                        />
                                         <div className="info">
                                             <p className="tituloCamp">
                                                 {campanha.tituloCampanha}
@@ -131,7 +146,7 @@ const HemocentroCampanhas = () => {
                                                 <strong>Descrição: </strong>
                                                 {campanha.descCampanha}
                                             </p>
-                                            <div className="action-buttons">
+                                            {/* <div className="action-buttons">
                                                 {campanha.status !== 'ativo' ? (
                                                     <button
                                                         className="ativar-btn"
@@ -147,7 +162,7 @@ const HemocentroCampanhas = () => {
                                                         Arquivar <FaArchive />
                                                     </button>
                                                 )}
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 ))

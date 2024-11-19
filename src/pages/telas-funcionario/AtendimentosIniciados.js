@@ -11,6 +11,7 @@ const AtendimentosIniciados = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [cpfMap, setCpfMap] = useState({});
     const [isVerificandoCpfMap, setIsVerificandoCpfMap] = useState({});
+    const [cpfValidandoMap, setCpfValidandoMap] = useState({});
     const [usuarioEncontrado, setUsuarioEncontrado] = useState(null);
     const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
     const [isCadastroModalOpen, setIsCadastroModalOpen] = useState(false);
@@ -22,7 +23,13 @@ const AtendimentosIniciados = () => {
     const [filterType, setFilterType] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState(''); // Novo estado para o termo de pesquisa
-   
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const [confirmarVerificarCpf, setConfirmarVerificarCpf] = useState(false);
+    const abrirConfirmarVerificarCpf = (idDoacao) => {
+        setDoacaoSelecionada(idDoacao);
+        setConfirmarVerificarCpf(true);
+    }
 
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
@@ -71,9 +78,55 @@ const AtendimentosIniciados = () => {
         fetchDoacoes();
     }, []);
 
+    const validarCpf = (cpf) => {
+        // Remove caracteres não numéricos
+        const cpfNumeros = cpf.replace(/\D/g, '');
+    
+        // Verifica se o CPF tem 11 dígitos e não é uma sequência repetida
+        if (cpfNumeros.length !== 11 || /^(\d)\1+$/.test(cpfNumeros)) {
+            return false;
+        }
+    
+        // Cálculo do primeiro dígito verificador
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpfNumeros.charAt(i)) * (10 - i);
+        }
+        let resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpfNumeros.charAt(9))) {
+            return false;
+        }
+    
+        // Cálculo do segundo dígito verificador
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpfNumeros.charAt(i)) * (11 - i);
+        }
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpfNumeros.charAt(10))) {
+            return false;
+        }
+    
+        return true;
+    };
+    
+
     const verificarCpf = (doacaoId) => {
-        setIsVerificandoCpfMap({ ...isVerificandoCpfMap, [doacaoId]: true });
+
         const cpf = cpfMap[doacaoId];
+
+        // Valida o CPF antes de prosseguir
+        if (!validarCpf(cpf)) {
+
+            setErrorMessage("O CPF informado é inválido. Verifique os dígitos.")
+            return;
+        }
+
+
+        setIsVerificandoCpfMap({ ...isVerificandoCpfMap, [doacaoId]: true });
+        
         api.get(`/usuarios/buscarPorCpf/${cpf}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -90,7 +143,7 @@ const AtendimentosIniciados = () => {
             if (error.response && error.response.status === 404 && error.response.data.existe === false) {
                 setUsuarioEncontrado(null);
                 setDoacaoSelecionada(doacaoId);
-                setIsCadastroModalOpen(true);
+                setConfirmarVerificarCpf(true);
             } else {
                 console.error('Erro ao verificar o CPF:', error);
             }
@@ -100,11 +153,31 @@ const AtendimentosIniciados = () => {
         });
     };
 
+    const [errorMessageMap, setErrorMessageMap] = useState({});
+
+
     const handleCpfChange = (doacaoId, value) => {
-        //Remove a pontuação ao salvar no estado, deixando apenas os números
         const cpfApenasNumeros = value.replace(/\D/g, '');
         setCpfMap({ ...cpfMap, [doacaoId]: cpfApenasNumeros });
+    
+        // Validação ao digitar
+        if (cpfApenasNumeros.length < 11) {
+            // CPF incompleto
+            setCpfValidandoMap({ ...cpfValidandoMap, [doacaoId]: true });
+            setErrorMessageMap({ ...errorMessageMap, [doacaoId]: '' });
+
+        } else {
+            // CPF completo
+            const isValid = validarCpf(cpfApenasNumeros);
+            setCpfValidandoMap({ ...cpfValidandoMap, [doacaoId]: !isValid });
+            setErrorMessageMap({
+                ...errorMessageMap,
+                [doacaoId]: isValid ? '' : 'CPF inválido! Verifique os dígitos.',
+            });
+        }
     };
+
+    
 
     const relacionarDoadorDoacao = (formData) => {
         if (doacaoSelecionada) {
@@ -129,7 +202,7 @@ const AtendimentosIniciados = () => {
         }
     };
 
-    
+   
     
 
     const handleConfirmModal = (mensagem, acao) => {
@@ -290,10 +363,17 @@ const AtendimentosIniciados = () => {
                                     <button
                                         className="atendimentosIniciados-btnVerificar"
                                         onClick={() => verificarCpf(doacao.idDoacao)}
-                                        disabled={isVerificandoCpfMap[doacao.idDoacao] || !cpfMap[doacao.idDoacao]}
+                                        disabled={
+                                            isVerificandoCpfMap[doacao.idDoacao] 
+                                            || !cpfMap[doacao.idDoacao] 
+                                            || cpfValidandoMap[doacao.idDoacao]}
                                     >
                                         {isVerificandoCpfMap[doacao.idDoacao] ? "Carregando..." : "Verificar CPF"}
                                     </button>
+                                    {errorMessageMap[doacao.idDoacao] && (
+                                        <span className="error-message">{errorMessageMap[doacao.idDoacao]}</span>
+                                    )}
+
                                 </div>
                             )}
                         </div>
@@ -321,6 +401,21 @@ const AtendimentosIniciados = () => {
                     </li>
                 ))}
             </ul>
+
+            {/* Modal de Confirmação */}
+            <AnimatePresence>
+                {confirmarVerificarCpf && (
+                    <ConfirmacaoModal
+                        isOpen={confirmarVerificarCpf}
+                        onRequestClose={() => setConfirmarVerificarCpf(false)}
+                        onConfirm={() => {
+                            setConfirmarVerificarCpf(false);
+                            setIsCadastroModalOpen(true); // Abre o modal de cadastro
+                        }}
+                        mensagem="CPF não encontrado, deseja cadastrar o doador?"
+                    />
+                )}
+            </AnimatePresence>
 
             <CadastroModal
                 isOpen={isCadastroModalOpen}

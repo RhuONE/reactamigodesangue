@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import './HemocentroInformacoes.css';
 import EditHemocentroModal from '../components/EditHemocentroModal';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const HemocentroInformacoes = () => {
     const [hemocentro, setHemocentro] = useState({
@@ -17,49 +17,51 @@ const HemocentroInformacoes = () => {
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
+    // Função fetchHemocentroInfo extraída para reutilização
+    const fetchHemocentroInfo = async () => {
+        const token = localStorage.getItem('token');
+        const tipoUsuario = localStorage.getItem('tipoUsuario');
+
+        if (!token || tipoUsuario !== 'hemocentro') {
+            navigate('/login/hemocentro');
+            return;
+        }
+
+        try {
+            const response = await api.get('/hemocentro/perfil', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setHemocentro(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar informações do hemocentro:', error);
+        }
+    };
+
+    // Chame a função no useEffect para carregar os dados na primeira renderização
     useEffect(() => {
-        const fetchHemocentroInfo = async () => {
-
-            const token = localStorage.getItem('token'); // Assumindo que o token é armazenado no localStorage
-          console.log(token);
-          const tipoUsuario = localStorage.getItem('tipoUsuario');
-          console.log(tipoUsuario);
-          if (!token) {
-            // Se o token não estiver presente, redireciona para a tela de login
-            navigate('/login/hemocentro');
-            return;
-          }
-          if (tipoUsuario !== 'hemocentro') {
-            // Se o tipo de usuário não for hemocentro, redireciona para o login
-            navigate('/login/hemocentro');
-            return;
-          }
-
-            try {
-                
-                const response = await api.get('/hemocentro/perfil', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setHemocentro(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar informações do hemocentro:', error);
-            }
-        };
-
         fetchHemocentroInfo();
     }, []);
 
     const handleSaveChanges = async (updatedData) => {
         try {
             const token = localStorage.getItem('token');
-            await api.put('/hemocentro/update', updatedData, {
+    
+            const formData = new FormData();
+            Object.keys(updatedData).forEach(key => {
+                formData.append(key, updatedData[key] ?? '');
+            });
+    
+            await api.post('/hemocentro/update', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setHemocentro(updatedData);
+            
+            // Atualizar as informações após salvar as mudanças
+            await fetchHemocentroInfo();
+
             setShowModal(false);
         } catch (error) {
             console.error('Erro ao salvar alterações do hemocentro:', error);
@@ -71,6 +73,11 @@ const HemocentroInformacoes = () => {
             <h1>Informações do Hemocentro</h1>
             <div className="hemocentro-info-card">
                 <h2>{hemocentro.nomeHemocentro}</h2>
+                <img 
+                    style={{width: 200}}
+                    src={`http://localhost:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`}
+                    alt="Banner do hemocentro"
+                />
                 <p><strong>Endereço:</strong> {hemocentro.logHemocentro}, {hemocentro.numLogHemocentro}</p>
                 <p><strong>Cidade:</strong> {hemocentro.cidadeHemocentro}, {hemocentro.estadoHemocentro}</p>
                 <p><strong>CEP:</strong> {hemocentro.cepHemocentro}</p>

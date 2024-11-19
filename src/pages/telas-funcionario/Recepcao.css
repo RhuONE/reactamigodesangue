@@ -93,3 +93,28 @@
     background-color: #087935;
 }
 
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+.loading-container p {
+    margin-top: 10px;
+    color: #333;
+    font-size: 16px;
+}
+
+.update-indicator {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #0a93a1;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

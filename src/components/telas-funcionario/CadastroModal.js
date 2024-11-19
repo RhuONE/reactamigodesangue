@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
 import { FaUser, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 import { AiOutlineCheck, AiOutlineLoading, AiFillDelete } from 'react-icons/ai';
 import { BsChevronLeft, BsChevronRight, BsPlusCircle, BsDownload } from 'react-icons/bs';
 import InputMask from 'react-input-mask';
+import Webcam from 'react-webcam';
 import axios from 'axios';
 import './CadastroModal.css';
 
@@ -35,12 +36,36 @@ const CadastroModal = ({ isOpen, onRequestClose, onCadastrarUsuario }) => {
 
     const [fotoUsuario, setFotoUsuario] = useState(null);
     const [fotoPreview, setFotoPreview] = useState(null);
+    const [showWebcam, setShowWebcam] = useState(false); // Estado para alternar a webcam
+    const webcamRef = useRef(null);
+
 
     const handleFotoChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setFotoUsuario(file);
             setFotoPreview(URL.createObjectURL(file));
+        }
+    };
+
+    // Função para converter base64 para Blob
+    const dataURItoBlob = (dataURI) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    };
+
+    const captureFoto = () => {
+        if (webcamRef.current) {
+            const imageSrc = webcamRef.current.getScreenshot();
+            setFotoPreview(imageSrc);
+            setFotoUsuario(dataURItoBlob(imageSrc)); // Converte a imagem para Blob e registra para envio
+            setShowWebcam(false); // Fecha a webcam
         }
     };
 
@@ -226,20 +251,37 @@ const CadastroModal = ({ isOpen, onRequestClose, onCadastrarUsuario }) => {
                 <div className="cadastroModal-etapa">
                     <h2 className="cadastroModal-header">Dados Pessoais</h2>
                     <div className='cadastroModal-foto-container'>
-                        <img src={fotoPreview || 'http://localhost:8000/storage/uploads/usuarios/perfil-padrao.jpg'} alt="Foto do usuário" className="foto-preview" />
-                        <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={handleFotoChange} 
-                            className="input-foto" 
-                            id="fileInput" 
-                            style={{ display: 'none' }}
-                        />
-                        <BsDownload 
-                            onClick={() => document.getElementById('fileInput').click()} 
-                            className="cadastroModal-upload-foto-button"
-                            size={28}
-                        />
+                        {showWebcam ? (
+                            <>
+                                <Webcam 
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat='image/jpeg'
+                                    className='webcam-preview'
+                                />
+                                 <button onClick={captureFoto} className="btn-capture">Capturar</button>
+                                 <button onClick={() => setShowWebcam(false)} className="atendimentosIniciados-btnCancelar">Cancelar</button>
+                            </>
+                        ) : (
+                            <>
+                                <img src={fotoPreview || 'http://localhost:8000/storage/uploads/usuarios/perfil-padrao.jpg'} alt="Foto do usuário" className="foto-preview" />
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={handleFotoChange} 
+                                    className="input-foto" 
+                                    id="fileInput" 
+                                    style={{ display: 'none' }}
+                                />
+                                <BsDownload 
+                                    onClick={() => document.getElementById('fileInput').click()} 
+                                    className="cadastroModal-upload-foto-button"
+                                    size={28}
+                                />
+                                <button onClick={() => setShowWebcam(true)} className="btn-open-webcam">Tirar Foto</button>
+    
+                            </>
+                        )}
                     </div>
                     <input
                         className="cadastroModal-input"

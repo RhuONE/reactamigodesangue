@@ -10,6 +10,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin-left: 100px;
+
 }
 .usuarios-content .usuarios-cards{
   display: flex;
@@ -110,5 +112,90 @@
   .error-message {
     color: red;
     text-align: center;
+  }
+  
+  .filtros-container {
+    display: flex;
+    justify-content: space-between; /* Mantém os itens separados */
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .filtro-item {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+    flex: 1; /* Faz com que os itens ocupem espaço proporcional */
+  }
+  
+  .filtro-item label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .tipo-sanguineo-dropdown,
+  .pesquisaCampo input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Faz com que o campo ocupe toda a largura */
+  }
+  
+  .pesquisaCampo {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .pesquisaCampo input {
+    padding-right: 2rem; /* Dá espaço para o ícone da lupa */
+  }
+  
+  .lupaIcon {
+    position: absolute;
+    right: 10px;
+    color: #666;
+  }
+
+  
+  .usuarios-acoes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .usuarios-acoes p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .notificacao-button {
+    background-color: #0a93a1;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .notificacao-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .notificacao-button:hover:not(:disabled) {
+    background-color: #087f8a;
   }
   

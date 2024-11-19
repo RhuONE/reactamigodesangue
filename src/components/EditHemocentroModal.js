@@ -16,6 +16,7 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
         senhaHemocentro: '',
         cnpjHemocentro: '',
         hospitalVinculadoHemocentro: '',
+        fotoHemocentro: null,
     });
 
     const [currentStep, setCurrentStep] = useState(1);
@@ -37,6 +38,7 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
                 senhaHemocentro: '',
                 cnpjHemocentro: hemocentro.cnpjHemocentro || '',
                 hospitalVinculadoHemocentro: hemocentro.hospitalVinculadoHemocentro || '',
+                fotoHemocentro: hemocentro.fotoHemocentro || null, // Inclua a imagem aqui
             });
         }
     }, [hemocentro]);
@@ -48,6 +50,14 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
             [name]: value,
         }));
     };
+
+    const handleImageChange = (e) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            fotoHemocentro: e.target.files[0], // Atualiza com o arquivo da foto
+        }));
+    };
+
 
     const handleNext = () => {
         setCurrentStep((prev) => prev + 1);
@@ -78,6 +88,15 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
                                     name="nomeHemocentro"
                                     value={formData.nomeHemocentro}
                                     onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Imagem</label>
+                                <input
+                                    type="file"
+                                    name="fotoHemocentro"
+                                    accept='image/*'
+                                    onChange={handleImageChange}
                                 />
                             </div>
                             <div className="form-group">
@@ -205,7 +224,7 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
                                 <button type="button" onClick={handleBack}>
                                     Voltar
                                 </button>
-                                <button type="button" onClick={handleSubmit}>
+                                <button style={{backgroundColor: '#0aa153'}} type="button" onClick={handleSubmit}>
                                     Salvar
                                 </button>
                                 <button type="button" onClick={onClose}>
@@ -221,3 +240,6 @@ const EditHemocentroModal = ({ hemocentro, isOpen, onClose, onSave }) => {
 };
 
 export default EditHemocentroModal;
+
+
+

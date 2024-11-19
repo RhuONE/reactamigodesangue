@@ -100,7 +100,7 @@ function Layout() {
           <Route path="/adm/usuarios" element={<Usuarios />} />
           <Route path="/adm/hemocentros" element={<Hemocentros />} />
           <Route path='/adm/campanhas' element={<Campanhas />} />
-          <Route path='/adn/pendencias' element={<Pendencias />} />
+          <Route path='/adm/pendencias' element={<Pendencias />} />
           {/** Rotas Hemocentro*/}
           <Route path='/login/hemocentro' element={<LoginHemocentro />} />
           <Route path='/cadastro/hemocentro' element={<CadastroHemocentro />} />
