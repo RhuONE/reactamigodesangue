@@ -6,6 +6,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BiChevronDown, } from "react-icons/bi";
 import hospitalIcon from '../../images/hospital.jpg'
 import HemocentrosList from '../../components/listagemHemocentros';
+import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 const Hemocentros = () => {
   const [activeButton, setActiveButton] = useState('recentes'); // Estado para controlar qual botão está ativo
@@ -48,6 +50,8 @@ const Hemocentros = () => {
             Authorization: `Bearer ${token}`
           }
         });
+        setError(null);
+        toast.success('Dados carregados com sucesso!'); //Notificação de sucesso
         // Ajustando a lógica para acessar os dados corretamente
         if (Array.isArray(response.data)) {
           setHemocentros(response.data);
@@ -59,7 +63,8 @@ const Hemocentros = () => {
         console.log(response.data);
       } catch (error) {
         setError('Erro ao carregar hemocentros. Tente novamente mais tarde.');
-        console.error('Erro ao buscar hemocentros', error);
+          console.error('Erro ao buscar hemocentros', error);
+          toast.error('Erro ao carregar dados. Tente novamente.');
       } finally {
         setLoading(false);
       }
@@ -93,6 +98,7 @@ const Hemocentros = () => {
 
   return (
     <div className="hemocentros-container">
+      <ToastContainer /> {/** Container para exibir notificações */}
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (

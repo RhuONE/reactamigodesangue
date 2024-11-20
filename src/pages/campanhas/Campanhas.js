@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import './Campanhas.css';
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Campanhas = () => {
   const [campanhas, setCampanhas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const [activeButton, setActiveButton] = useState('todos');
+  const [searchTerm, setSearchTerm] = useState(''); // Estado para o valor da pesquisa
+
 
   useEffect(() => {
     const fetchCampanhas = async () => {
@@ -49,15 +54,46 @@ const Campanhas = () => {
 
   return (
     <div className="campanhas-container">
-      <h2>Campanhas</h2>
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
       ) : (
-        <table>
+        <div className='campanhas-content'>
+          <div className='filtros-container'>
+            <div className='filtro-item'>
+              <label htmlFor='tipo-sanguineo'>Filtrar por Status:</label>
+              <select
+                id='tipo-sanguineo'
+                value={activeButton}
+                onChange={(e) => setActiveButton(e.target.value)}
+                className="tipo-sanguineo-dropdown"
+              >
+                <option value="todos">Todos</option>
+                <option value="ativos">Ativos</option>
+                <option value="inativos">Inativos</option>
+              </select>
+            </div>
+
+            <div className='filtro-item'>
+              <label htmlFor='pesquisa'>Pesquisar:</label>
+              <div className='pesquisaCampo'>
+                <input
+                  id='pesquisa'
+                  type='text'
+                  placeholder='Pesquisar por nome ou email...'
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <AiOutlineSearch className='lupaIcon' />
+              </div>
+            </div>
+          </div>
+
+          <table>
           <thead>
             <tr>
+              <th>Banner</th>
               <th>Nome</th>
               <th>Descrição</th>
               <th>Data de Início</th>
@@ -68,6 +104,7 @@ const Campanhas = () => {
           <tbody>
             {campanhas.map((campanha) => (
               <tr key={campanha.idCampanha}>
+                <td><img src={`http://179.63.40.44:8000/storage/${campanha.fotoCampanha || 'uploads/campanhas/banner-para-campanha-de-doacao.avif'}`}/></td>
                 <td>{campanha.tituloCampanha}</td>
                 <td>{campanha.descCampanha}</td>
                 <td>{new Date(campanha.dataInicioCampanha).toLocaleDateString()}</td>
@@ -78,6 +115,7 @@ const Campanhas = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

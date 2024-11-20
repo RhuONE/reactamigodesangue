@@ -2,7 +2,7 @@ import React from 'react';
 import './SobreNosSection.css';
 import appIniImage from '../images/Blood donation-cuate.svg';
 import appBrancoImg from '../images/IconeAmigoSangueBranco.png';
-import wave from '../images/wave2.svg';
+import wave from '../images/wave3.png';
 import { MdCampaign, MdBloodtype } from "react-icons/md";
 import { HiLocationMarker } from "react-icons/hi";
 import { FaClipboard } from "react-icons/fa";

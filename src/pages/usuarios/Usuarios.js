@@ -6,6 +6,8 @@ import DoadorDetalhesModal from '../../components/telas-funcionario/DoadorDetalh
 
 import api from '../../services/api';
 import './Usuarios.css';
+import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 const Usuarios = () => {
 
@@ -50,8 +52,10 @@ const Usuarios = () => {
         });
         setUsuarios(Array.isArray(response.data.data) ? response.data.data : []);
         setError(null);
+        toast.success('Dados carregados com sucesso!'); //Notificação de sucesso
       } catch (error) {
         setError('Erro ao carregar usuários. Tente novamente mais tarde.');
+        toast.error('Erro ao carregar dados. Tente novamente.');
       } finally {
         setLoading(false);
       }
@@ -119,6 +123,7 @@ const Usuarios = () => {
 
   return (
     <div className="usuarios-container">
+      <ToastContainer /> {/** Container para exibir notificações */}
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
@@ -187,13 +192,14 @@ const Usuarios = () => {
                 
                 <th>Nome</th>
                 <th>Email</th>
-                <th>Tipo Sanguineo</th>
-                <th>
+                <th id='tipoSangue'>Tipo Sanguineo</th>
+                <th id='acoes'>
                   Açoes
                 </th>
-                <th>
+                <th id='notificacao'> 
                   <input
                     type="checkbox"
+                    className='checkbox-notification'
                     onChange={(e) => {
                       if (e.target.checked) {
                         // Seleciona apenas os usuários filtrados
@@ -220,16 +226,17 @@ const Usuarios = () => {
                   
                   <td>{usuario.nomeUsuario}</td>
                   <td>{usuario.emailUsuario}</td>
-                  <td>{usuario.descTipoSanguineo}</td>
+                  <td id='tipoSangue'>{usuario.descTipoSanguineo}</td>
                   
-                  <td>
+                  <td id='acoes'>
                     <>
                       <button onClick={() => abrirDetalhesDoador(usuario)} className="edit-button" >Visualizar</button>
                     </>
                   </td>
-                  <td>
+                  <td id='notificacao'>
                     <input
                       type="checkbox"
+                    className='checkbox-notification'
                       checked={selectedUsers.includes(usuario.idUsuario)}
                       onChange={(e) => {
                         if (e.target.checked) {

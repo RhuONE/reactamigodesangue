@@ -1,41 +1,63 @@
 .campanhas-container {
-    background-color: #f5f5f5;
-    margin-left: 100px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+}
+.campanhas-content{
+    padding: 40px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
+.campanhas-container table{
+    overflow: hidden;
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .campanhas-container thead{
+    background-color: transparent;
+    padding-right: 8px;
+  }
+  .campanhas-container thead tr{
+    display: flex;
+    background-color: #2d3e50;
+    border-top-right-radius: 10px;
+  }
+  .campanhas-content td img{
+    width: 194px;
+    height: 242px;
+    object-fit: cover;
+  }
+  .campanhas-container th{
+    flex: 1;
+    color: #FFF;
+    position: relative;
+  }
+  .campanhas-container tr:has(td){
+    display: flex;
+    background-color: #FFF;
+    transition: .3s;
+  }
+  .campanhas-container td {
+    flex: 1;
+    border-top: none;
+    display: flex;
+  }
+  .campanhas-container tbody{
+    max-height: 100%;
+    overflow-y: auto;
+  }
 h2 {
     margin-bottom: 20px;
     font-size: 1.8rem;
     color: #2c3e50;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-thead {
-    background-color: #2c3e50;
-    color: white;
-}
-
-th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    font-weight: bold;
-}
-
-tbody tr:hover {
-    background-color: #f9f9f9;
-    cursor: pointer;
-}
 
 .edit-button {
     background-color: #18bc9c;
