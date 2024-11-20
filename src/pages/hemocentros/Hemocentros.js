@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
 import api from '../../services/api'; // Certifique-se de que o arquivo da API esteja importado corretamente
 import './Hemocentros.css';
@@ -6,8 +6,12 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BiChevronDown, } from "react-icons/bi";
 import hospitalIcon from '../../images/hospital.jpg'
 import HemocentrosList from '../../components/listagemHemocentros';
+import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingBar from 'react-top-loading-bar'; // Importando a barra de progresso
 
 const Hemocentros = () => {
+  const loadingBarRef = useRef(null); // Referência para a barra de progresso
   const [activeButton, setActiveButton] = useState('recentes'); // Estado para controlar qual botão está ativo
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
@@ -43,11 +47,15 @@ const Hemocentros = () => {
           }
 
       try {
+        loadingBarRef.current.continuousStart(); // Inicia a barra de progresso
+        const toastId = "toastId";
         const response = await api.get('/hemocentros', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
+        setError(null);
+        
         // Ajustando a lógica para acessar os dados corretamente
         if (Array.isArray(response.data)) {
           setHemocentros(response.data);
@@ -56,12 +64,20 @@ const Hemocentros = () => {
         } else {
           setHemocentros([]);
         }
-        console.log(response.data);
+
+        toast.success('Dados carregados com sucesso!', {
+          toastId: toastId,
+          autoClose: 3000,
+        });
       } catch (error) {
         setError('Erro ao carregar hemocentros. Tente novamente mais tarde.');
-        console.error('Erro ao buscar hemocentros', error);
+          console.error('Erro ao buscar hemocentros', error);
+          toast.error('Erro ao carregar dados. Tente novamente.');
       } finally {
         setLoading(false);
+        if (loadingBarRef.current) {
+          loadingBarRef.current.complete();
+        }
       }
     };
 
@@ -93,6 +109,8 @@ const Hemocentros = () => {
 
   return (
     <div className="hemocentros-container">
+      <LoadingBar color="#f11946" ref={loadingBarRef} /> {/* Barra de progresso */}
+      <ToastContainer /> {/** Container para exibir notificações */}
       {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (

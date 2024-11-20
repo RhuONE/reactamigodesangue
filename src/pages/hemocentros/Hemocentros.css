@@ -194,6 +194,7 @@
 .pesquisaFiltroHemo .pesquisaCampo input{
     flex: 1;
     height: 100%;
+    padding: 0;
     padding-left: 35px;
     border-radius: 10px;
     border: none;
@@ -309,22 +310,15 @@ th {
 }
 .deleteHemoBtn, .aceitarHemoBtn{
     background-color: transparent;
+    background-color: #FFF;
     position: relative;
+}
+.deleteHemoBtn:hover, .aceitarHemoBtn:hover{
+    background-color: #FFF;
 }
 .deleteHemoBtn svg, .aceitarHemoBtn svg{
     color: #ccc;
     transition: .2s;
-}
-.deleteHemoBtn::before{
-    content: "";
-    display: block;
-    width: 2px;
-    height: 58px;
-    background: #ccc;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    position: absolute;
 }
 .deleteHemoBtn:hover svg{
     color: #c0392b;

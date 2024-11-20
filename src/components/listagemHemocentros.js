@@ -18,7 +18,7 @@ const HemocentrosList = ({ hemocentros }) => {
       {hemocentros.map((hemocentro) => (
         <div className='card' key={hemocentro.idHemocentro}>
           <div className="baseInfo" onClick={() => toggleCardInfo(hemocentro.idHemocentro)}>
-            <img id="hemoIcon"  src={`http://localhost:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} alt="Ícone do Hemocentro" />
+            <img id="hemoIcon"  src={`http://179.63.40.44:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} alt="Ícone do Hemocentro" />
             <div id="info">
               <h2>{hemocentro.nomeHemocentro}</h2>
               <p>
@@ -42,7 +42,7 @@ const HemocentrosList = ({ hemocentros }) => {
           {openCardId === hemocentro.idHemocentro && (
             <div className='cardInfo' >
               <p><strong>CNPJ:</strong> {hemocentro.cnpjHemocentro}</p>
-              <p><strong>Hospital:</strong> {hemocentro.hospitalHemocentro}</p>
+              <p><strong>Hospital:</strong> {hemocentro.hospitalVinculadoHemocentro}</p>
               <p><strong>CEP:</strong> {hemocentro.cepHemocentro}</p>
               <p><strong>Rua:</strong> {hemocentro.logHemocentro}, {hemocentro.numLogHemocentro}</p>
             </div>
