@@ -5,6 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import DoadorDetalhesModal from '../../components/telas-funcionario/DoadorDetalhesModal';
 import EnviarNotificacaoModal from "../../components/EnviarNotificacaoModal";
 
+import { toast } from 'react-toastify';
+
 
 import api from '../../services/api';
 import './Usuarios.css';
@@ -207,14 +209,9 @@ const Usuarios = () => {
                 
                 <th>Nome</th>
                 <th>Email</th>
-<<<<<<< Updated upstream
-                <th>Tipo Sanguineo</th>
-                <th>
-=======
                 <th id='tipoSangue'>Tipo Sanguineo</th>
                 <th>Aptidao para Doar</th>
                 <th id='acoes'>
->>>>>>> Stashed changes
                   Açoes
                 </th>
                 <th>
@@ -246,28 +243,18 @@ const Usuarios = () => {
                   
                   <td>{usuario.nomeUsuario}</td>
                   <td>{usuario.emailUsuario}</td>
-<<<<<<< Updated upstream
-                  <td>{usuario.descTipoSanguineo}</td>
-                  
-                  <td>
-=======
                   <td id='tipoSangue'>{usuario.descTipoSanguineo}</td>
 
                   <td>
                     {usuario.aptoParaDoar? "Disponível" : "Indisponível"}
                   </td>
                   <td id='acoes'>
->>>>>>> Stashed changes
                     <>
                       <button onClick={() => abrirDetalhesDoador(usuario)} className="edit-button" >Visualizar</button>
                     </>
                   </td>
-<<<<<<< Updated upstream
-                  <td>
-=======
                   
                   <td id='notificacao'>
->>>>>>> Stashed changes
                     <input
                       type="checkbox"
                       checked={selectedUsers.includes(usuario.idUsuario)}
