@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import MetricCard from '../../components/MetricCard';
 import DonationChart from '../../components/DonationChart';
@@ -10,8 +10,11 @@ import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário
 import { FaUser, FaHospital, FaHeartbeat, FaClipboard } from 'react-icons/fa';
 import api from '../../services/api';
 import './Dashboard.css';
+import LoadingBar from 'react-top-loading-bar'; // Importando a barra de progresso
 
 const Dashboard = () => {
+  const loadingBarRef = useRef(null); // Referência para a barra de progresso
+
   const navigate = useNavigate(); // Hook para redirecionar
     const [metrics, setMetric] = useState({
         totalUsuarios : 0,
@@ -42,6 +45,7 @@ const Dashboard = () => {
           }
 
             try {
+        loadingBarRef.current.continuousStart(); // Inicia a barra de progresso
                 const response = await api.get('/dashboard/metrics', {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -67,6 +71,9 @@ const Dashboard = () => {
                 toast.error('Erro ao carregar dados. Tente novamente.'); //Notificação de erro
             } finally {
               setLoading(false); //Sempre finalizar o carregamento
+              if (loadingBarRef.current) {
+                loadingBarRef.current.complete();
+              }
             }
         };
 
@@ -75,6 +82,7 @@ const Dashboard = () => {
   return (
     
     <div className="ADM-dashboard-content">
+      <LoadingBar color="#f11946" ref={loadingBarRef} /> {/* Barra de progresso */}
       <ToastContainer /> {/** Container para exibir notificações */}
       <h1>Dashboard</h1>
       {loading ? (

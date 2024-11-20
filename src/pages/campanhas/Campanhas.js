@@ -53,7 +53,9 @@ const Campanhas = () => {
         });
       } finally {
         setLoading(false);
-        loadingBarRef.current.complete(); // Conclui a barra de progresso
+        if (loadingBarRef.current) {
+          loadingBarRef.current.complete();
+        }
       }
     };
 

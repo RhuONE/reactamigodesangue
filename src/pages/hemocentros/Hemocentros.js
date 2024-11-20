@@ -55,10 +55,7 @@ const Hemocentros = () => {
           }
         });
         setError(null);
-        toast.success('Dados carregados com sucesso!', {
-          toastId: toastId,
-          autoClose: 3000,
-        }); //Notificação de sucesso
+        
         // Ajustando a lógica para acessar os dados corretamente
         if (Array.isArray(response.data)) {
           setHemocentros(response.data);
@@ -67,14 +64,20 @@ const Hemocentros = () => {
         } else {
           setHemocentros([]);
         }
-        console.log(response.data);
+
+        toast.success('Dados carregados com sucesso!', {
+          toastId: toastId,
+          autoClose: 3000,
+        });
       } catch (error) {
         setError('Erro ao carregar hemocentros. Tente novamente mais tarde.');
           console.error('Erro ao buscar hemocentros', error);
           toast.error('Erro ao carregar dados. Tente novamente.');
       } finally {
         setLoading(false);
-        loadingBarRef.current.complete(); // Conclui a barra de progresso
+        if (loadingBarRef.current) {
+          loadingBarRef.current.complete();
+        }
       }
     };
 
