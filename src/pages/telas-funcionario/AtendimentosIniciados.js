@@ -7,6 +7,9 @@ import { AnimatePresence } from 'framer-motion';
 import './AtendimentosIniciados.css';
 import InputMask from 'react-input-mask';
 
+import { ClipLoader } from 'react-spinners';
+
+
 const AtendimentosIniciados = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [cpfMap, setCpfMap] = useState({});
@@ -34,26 +37,37 @@ const AtendimentosIniciados = () => {
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
-    const fetchDoacoes = () => {
-        api.get('/doacoes/atendimentos-iniciados', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: { idHemocentro },
-        })
-        .then(response => {
+    const [isFetching, setIsFetching] = useState(false);
+
+    const [isModalCancelarLoading, setIsModalCancelarLoading] = useState(false);
+
+    const fetchDoacoes = async () => {
+        setIsFetching(true); // Ativa o carregamento
+    
+        try {
+            const response = await api.get('/doacoes/atendimentos-iniciados', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { idHemocentro },
+            });
+    
             const doacoesOrdenadas = response.data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
             setDoacoes(doacoesOrdenadas);
+    
+            // Preload dos nomes dos usuários associados
             doacoesOrdenadas.forEach(doacao => {
                 if (doacao.idUsuario) {
                     fetchNomeUsuario(doacao.idUsuario);
                 }
             });
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao buscar doações:', error);
-        });
+        } finally {
+            setIsFetching(false); // Desativa o carregamento
+        }
     };
+    
 
     const fetchNomeUsuario = (idUsuario) => {
         if (idUsuario && !usuariosMap[idUsuario]) {
@@ -214,13 +228,20 @@ const AtendimentosIniciados = () => {
     const encaminharParaTriagem = (doacaoId) => {
         handleConfirmModal(
             "Você tem certeza que deseja encaminhar esta doação para triagem?",
-            () => {
-                api.put(`/encaminhar-doacao-triagem/${doacaoId}`, null, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                .then(fetchDoacoes)
-                .catch(error => console.error('Erro ao encaminhar para triagem:', error))
-                .finally(() => setIsConfirmModalOpen(false));
+            async () => {
+                setIsModalCancelarLoading(true);
+
+                try {
+                    await api.put(`/encaminhar-doacao-triagem/${doacaoId}`, null, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    fetchDoacoes();
+                }catch (error) {
+                    console.error('Erro ao encaminhar o atendimento:', error);
+                } finally {
+                    setIsModalCancelarLoading(false); // Desativa o carregamento no modal
+                    setIsConfirmModalOpen(false); // Fecha o modal
+                }
             }
         );
     };
@@ -228,13 +249,20 @@ const AtendimentosIniciados = () => {
     const cancelarAtendimento = (doacaoId) => {
         handleConfirmModal(
             "Você tem certeza que deseja cancelar este atendimento?",
-            () => {
-                api.put(`/doacoes/cancelar-atendimento/${doacaoId}`, null, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                .then(fetchDoacoes)
-                .catch(error => console.error('Erro ao cancelar o atendimento:', error))
-                .finally(() => setIsConfirmModalOpen(false));
+            async () => {
+                setIsModalCancelarLoading(true);
+
+                try {
+                    await api.put(`/doacoes/cancelar-atendimento/${doacaoId}`, null, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    fetchDoacoes();
+                } catch (error) {
+                    console.error('Erro ao cancelar o atendimento:', error);
+                } finally {
+                    setIsModalCancelarLoading(false); // Desativa o carregamento no modal
+                    setIsConfirmModalOpen(false); // Fecha o modal
+                }
             }
         );
     };
@@ -289,12 +317,12 @@ const AtendimentosIniciados = () => {
 
     // Filtra as doações com base nos filtros de tipo, status e termo de pesquisa
     const filteredDoacoes = doacoes
-        .filter(doacao => {
-            if (filterType === 'all') return true;
-            if (filterType === 'agendada') return doacao.senha.tipoSenha === 'Agendada';
-            if (filterType === 'nao-agendada') return doacao.senha.tipoSenha === 'Nao Agendada';
-            return true;
-        })
+        // .filter(doacao => {
+        //     if (filterType === 'all') return true;
+        //     if (filterType === 'agendada') return doacao.senha.tipoSenha === 'Agendada';
+        //     if (filterType === 'nao-agendada') return doacao.senha.tipoSenha === 'Nao Agendada';
+        //     return true;
+        // })
         .filter(doacao => {
             if (filterStatus === 'all') return true;
             return doacao.statusDoacao === filterStatus;
@@ -313,14 +341,14 @@ const AtendimentosIniciados = () => {
             <h1 className="atendimentosIniciados-title">Atendimentos Iniciados</h1>
 
             <div className="atendimentosIniciados-filtros">
-                <div className='atendimentosIniciados-filtro-tipo'>
+                {/* <div className='atendimentosIniciados-filtro-tipo'>
                     <label>Filtrar por Tipo:</label>
                     <select onChange={(e) => setFilterType(e.target.value)} value={filterType}>
                         <option value="all">Todos</option>
                         <option value="agendada">Agendadas</option>
                         <option value="nao-agendada">Não Agendadas</option>
                     </select>
-                </div>
+                </div> */}
                 <div className='atendimentosIniciados-filtro-status'>
                     <label>Filtrar por Status:</label>
                     <select onChange={(e) => setFilterStatus(e.target.value)} value={filterStatus}>
@@ -342,66 +370,72 @@ const AtendimentosIniciados = () => {
                 </div>
             </div>
 
-            <ul className="atendimentosIniciados-list">
-                {filteredDoacoes.map(doacao => (
-                    <li key={doacao.idDoacao} className="atendimentosIniciados-item">
-                        <div className="atendimentosIniciados-senhaInfo">
-                            <span className="atendimentosIniciados-senhaNumero">{doacao.senha.descSenha} ({doacao.senha.tipoSenha})</span>
-                            {doacao.idUsuario ? (
-                                <span className="atendimentosIniciados-doadorNome">
-                                    <strong>Nome do Doador:</strong> {usuariosMap[doacao.idUsuario] || "Carregando..."}
+            {isFetching ? (
+                <div className='loading-container'>
+                    <ClipLoader size={40} color="#0a93a1" />
+                    <p>Carregando atendimentos...</p>
+                </div>
+            ) : (
+                <ul className="atendimentosIniciados-list">
+                    {filteredDoacoes.map(doacao => (
+                        <li key={doacao.idDoacao} className="atendimentosIniciados-item">
+                            <div className="atendimentosIniciados-senhaInfo">
+                                <span className="atendimentosIniciados-senhaNumero">{doacao.senha.descSenha} ({doacao.senha.tipoSenha})</span>
+                                {doacao.idUsuario ? (
+                                    <span className="atendimentosIniciados-doadorNome">
+                                        <strong>Nome do Doador:</strong> {usuariosMap[doacao.idUsuario] || "Carregando..."}
+                                    </span>
+                                ) : (
+                                    <div className="atendimentosIniciados-verificarCpf">
+                                        <InputMask
+                                            mask='999.999.999-99'
+                                            placeholder="Digite o CPF"
+                                            className="atendimentosIniciados-inputCpf"
+                                            value={cpfMap[doacao.idDoacao] || ''} 
+                                            onChange={(e) => handleCpfChange(doacao.idDoacao, e.target.value)}
+                                        />
+                                        <button
+                                            className="atendimentosIniciados-btnVerificar"
+                                            onClick={() => verificarCpf(doacao.idDoacao)}
+                                            disabled={
+                                                isVerificandoCpfMap[doacao.idDoacao] 
+                                                || !cpfMap[doacao.idDoacao] 
+                                                || cpfValidandoMap[doacao.idDoacao]}
+                                        >
+                                            {isVerificandoCpfMap[doacao.idDoacao] ? "Carregando..." : "Verificar CPF"}
+                                        </button>
+                                        {errorMessageMap[doacao.idDoacao] && (
+                                            <span className="error-message">{errorMessageMap[doacao.idDoacao]}</span>
+                                        )}
+
+                                    </div>
+                                )}
+                            </div>
+                            <div className="atendimentosIniciados-acoes">
+                                <span className="atendimentosIniciados-statusSenha">
+                                    <strong>Localização:</strong> {doacao.statusDoacao}
                                 </span>
-                            ) : (
-                                <div className="atendimentosIniciados-verificarCpf">
-                                    <InputMask
-                                        mask='999.999.999-99'
-                                        placeholder="Digite o CPF"
-                                        className="atendimentosIniciados-inputCpf"
-                                        value={cpfMap[doacao.idDoacao] || ''} 
-                                        onChange={(e) => handleCpfChange(doacao.idDoacao, e.target.value)}
-                                    />
+                                {doacao.idUsuario && doacao.statusDoacao === "atendimento-iniciado" && (
                                     <button
-                                        className="atendimentosIniciados-btnVerificar"
-                                        onClick={() => verificarCpf(doacao.idDoacao)}
-                                        disabled={
-                                            isVerificandoCpfMap[doacao.idDoacao] 
-                                            || !cpfMap[doacao.idDoacao] 
-                                            || cpfValidandoMap[doacao.idDoacao]}
+                                        className="atendimentosIniciados-btnTriagem"
+                                        onClick={() => encaminharParaTriagem(doacao.idDoacao)}
                                     >
-                                        {isVerificandoCpfMap[doacao.idDoacao] ? "Carregando..." : "Verificar CPF"}
+                                        Encaminhar para Triagem
                                     </button>
-                                    {errorMessageMap[doacao.idDoacao] && (
-                                        <span className="error-message">{errorMessageMap[doacao.idDoacao]}</span>
-                                    )}
-
-                                </div>
-                            )}
-                        </div>
-                        <div className="atendimentosIniciados-acoes">
-                            <span className="atendimentosIniciados-statusSenha">
-                                <strong>Localização:</strong> {doacao.statusDoacao}
-                            </span>
-                            {doacao.idUsuario && doacao.statusDoacao === "atendimento-iniciado" && (
-                                <button
-                                    className="atendimentosIniciados-btnTriagem"
-                                    onClick={() => encaminharParaTriagem(doacao.idDoacao)}
-                                >
-                                    Encaminhar para Triagem
-                                </button>
-                            )}
-                            {doacao.statusDoacao === "atendimento-iniciado" && (
-                                <button
-                                    className="atendimentosIniciados-btnCancelar"
-                                    onClick={() => cancelarAtendimento(doacao.idDoacao)}
-                                >
-                                    Cancelar Atendimento
-                                </button>
-                            )}
-                        </div>
-                    </li>
-                ))}
-            </ul>
-
+                                )}
+                                {doacao.statusDoacao === "atendimento-iniciado" && (
+                                    <button
+                                        className="atendimentosIniciados-btnCancelar"
+                                        onClick={() => cancelarAtendimento(doacao.idDoacao)}
+                                    >
+                                        Cancelar Atendimento
+                                    </button>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
             {/* Modal de Confirmação */}
             <AnimatePresence>
                 {confirmarVerificarCpf && (
@@ -436,6 +470,7 @@ const AtendimentosIniciados = () => {
                         isOpen={isConfirmModalOpen}
                         onRequestClose={() => setIsConfirmModalOpen(false)}
                         onConfirm={confirmAction}
+                        isLoading={isModalCancelarLoading}
                         mensagem={confirmMessage}
                     />
                 )}

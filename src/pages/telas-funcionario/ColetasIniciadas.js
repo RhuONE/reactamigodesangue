@@ -12,6 +12,9 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
 import { AnimatePresence } from 'framer-motion';
 
+import { ClipLoader } from 'react-spinners';
+
+
 // Redirecionar
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +27,15 @@ const ColetasIniciadas = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [isRelatorioModalOpen, setIsRelatorioModalOpen] = useState(false);
     const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
+
+    const [isFirstLoad, setIsFirstLoad] = useState(true); // Controle para carregamento inicial
+    const [isFetching, setIsFetching] = useState(false); // Controle para atualizações subsequentes
+
+    const [loadingActions, setLoadingActions] = useState({}); // Controle de carregamento individual
+
+    const [isLoadingCancelar, setIsLoadingCancelar] = useState(false);
+    const [isLoadingEncaminhar, setIsLoadingEncaminhar] = useState(false);
+
 
     //Credenciais
     const token = localStorage.getItem('token');
@@ -68,61 +80,80 @@ const ColetasIniciadas = () => {
 
 
 
-    const fetchColetasIniciadas = () => {
-        api.get('/doacoes/coletas-iniciadas', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: {
-                idHemocentro,
-            },
-        })
-        .then(response => {
-            setDoacoes(response.data);
-        })
-        .catch(error => {
-            console.error('Erro ao buscar coletas iniciadas:', error);
-        });
-    };
-
-    useEffect(() => {
-        fetchColetasIniciadas();
-    }, []);
-
-    const cancelarColeta = (idDoacao) => {
-            api.put(`/doacoes/cancelar-coleta/${idDoacao}`, null, {
+    const fetchColetasIniciadas = async () => {
+        if (isFirstLoad) {
+            setIsFetching(true); // Exibe o carregamento global na primeira carga
+        }
+    
+        try {
+            const response = await api.get('/doacoes/coletas-iniciadas', {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                }
-            })
-            .then(response => {
-                setIsConfirmacaoCancelarOpen(false);
-                setDoacaoSelecionada(null);
-                fetchColetasIniciadas();
-            })
-            .catch(error => {
-                console.error('Erro ao cancelar coleta:', error);
-                setIsConfirmacaoCancelarOpen(false);
+                },
+                params: { idHemocentro },
             });
-        
-    };
-
-    const encaminharParaLaboratorio = (idDoacao) => {
-        api.put(`/doacoes/encaminhar-laboratorio/${idDoacao}`, null, {
-            headers: {
-                Authorization: `Bearer ${token}`,
+            setDoacoes(response.data);
+            setIsFirstLoad(false); // Desativa o carregamento inicial após a primeira execução
+        } catch (error) {
+            console.error('Erro ao buscar coletas iniciadas:', error);
+        } finally {
+            if (isFirstLoad) {
+                setIsFetching(false); // Finaliza o carregamento global
             }
-        })
-        .then(response => {
+        }
+    };
+    
+
+    useEffect(() => {
+        fetchColetasIniciadas(); // Primeira carga
+        const interval = setInterval(fetchColetasIniciadas, 5000); // Atualizações subsequentes
+        return () => clearInterval(interval);
+    }, []);
+    
+
+    const cancelarColeta = async (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [idDoacao]: true })); // Ativa o carregamento para o botão específico
+        setIsLoadingCancelar(true); // Inicia o estado de carregamento
+
+        try {
+            await api.put(`/doacoes/cancelar-coleta/${idDoacao}`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setIsConfirmacaoCancelarOpen(false);
+            setDoacaoSelecionada(null);
+            fetchColetasIniciadas(); // Atualiza a lista
+        } catch (error) {
+            console.error('Erro ao cancelar coleta:', error);
+        } finally {
+            setIsLoadingCancelar(false); // Finaliza o estado de carregamento
+            setLoadingActions((prev) => ({ ...prev, [idDoacao]: false })); // Desativa o carregamento
+        }
+    };
+    
+
+    const encaminharParaLaboratorio = async (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [idDoacao]: true })); // Ativa o carregamento para o botão específico
+        setIsLoadingEncaminhar(true); // Inicia o estado de carregamento
+
+        try {
+            await api.put(`/doacoes/encaminhar-laboratorio/${idDoacao}`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setIsEncaminharModalOpen(false);
             setDoacaoSelecionada(null);
-            fetchColetasIniciadas();
-        })
-        .catch(error => {
+            fetchColetasIniciadas(); // Atualiza a lista
+        } catch (error) {
             console.error('Erro ao encaminhar para laboratório:', error);
-            setIsEncaminharModalOpen(false);
-        });
+        } finally {
+            setIsLoadingEncaminhar(false); // Finaliza o estado de carregamento
+            setLoadingActions((prev) => ({ ...prev, [idDoacao]: false })); // Desativa o carregamento
+        }
     };
+    
 
     const openRelatorioModal = (doacao) => {
         setDoacaoSelecionada(doacao);
@@ -223,84 +254,112 @@ const ColetasIniciadas = () => {
     return (
         <div className="entrevistasIniciadas-container">
             <h1 className="entrevistasIniciadas-title">Coletas Iniciadas</h1>
-            <ul className="entrevistasIniciadas-list">
-                {doacoes.map(doacao =>  {
-                    const backgroundColor =
-                        doacao.coleta? 
-                             '#e6ffec' // Verde claro se apto
-                            :  '#eaf4fc' // Caso nada cor padrão
 
-                    return (
-                        <li key={doacao.idDoacao} className="entrevistasIniciadas-item" style={{backgroundColor}}>
-                            <div className="entrevistasIniciadas-info">
-                                <span className="triagensIniciadas-senhaNumero">
-                                    {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                                </span>
-                                {doacao.usuario && (
-                                    <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
-                                    {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
-                                    <BsBoxArrowUpRight className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
+            {isFirstLoad && isFetching ? (
+                <div className="loading-container">
+                    <ClipLoader size={40} color="#0a93a1" />
+                    <p>Carregando coletas...</p>
+                </div>
+            ) : (
+
+                <ul className="entrevistasIniciadas-list">
+                    {doacoes.map(doacao =>  {
+                        const backgroundColor =
+                            doacao.coleta? 
+                                '#e6ffec' // Verde claro se apto
+                                :  '#eaf4fc' // Caso nada cor padrão
+
+                        return (
+                            <li key={doacao.idDoacao} className="entrevistasIniciadas-item" style={{backgroundColor}}>
+                                <div className="entrevistasIniciadas-info">
+                                    <span className="triagensIniciadas-senhaNumero">
+                                        {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
                                     </span>
+                                    {doacao.usuario && (
+                                        <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
+                                        {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
+                                        <BsBoxArrowUpRight className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
+                                        </span>
+                                    )}
+                                </div>
+                                <span style={{color : '#969595', fontSize: '20px'}}>
+                                    {/**Espaço para colocar status (pendente, aprovado, reprovado) */}
+                                    {doacao.coleta? 'Coletada' : 'Pendente'}
+                                </span>
+                                <div className="entrevistasIniciadas-acoes">
+                                    
+                                            {doacao.idColeta ? (
+
+                                                    <>
+
+                                                        <button
+                                                                className='triagensIniciadas-btnAtestado'
+                                                                onClick={() => gerarAtestado(doacao)}
+                                                            >
+                                                                Gerar atestado
+                                                        </button>
+
+                                                        <button
+                                                            className="triagensIniciadas-btnEntrevista"
+                                                            onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
+                                                            disabled={loadingActions[doacao.idDoacao]} // Desativa enquanto carrega
+                                                        >
+                                                            {loadingActions[doacao.idDoacao] ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Finalizar coleta'
+                                                            )}
+                                                        </button>
+
+                                                        
+                                                        {/* <button
+                                                            className="triagensIniciadas-btnCancelar"
+                                                            onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                            >
+                                                            Cancelar Triagem
+                                                        </button> */}
+                                                    </>
+                                                ) : (
+                                                    // botões se pendente
+                                                    <>           
+
+                                                        <button
+                                                            className='triagensIniciadas-btnRelatorio'
+                                                            onClick={() => openRelatorioModal(doacao)}
+                                                        >
+                                                            Gerar coleta
+                                                        </button>
+
+
+                                                        <button
+                                                            className="triagensIniciadas-btnCancelar"
+                                                            onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                            disabled={loadingActions[doacao.idDoacao]} // Desativa enquanto carrega
+                                                        >
+                                                            {loadingActions[doacao.idDoacao] ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Cancelar coleta'
+                                                            )}
+                                                        </button>
+
+                                                    </>
+                                                )
+                                        }
+                                    
+                                </div>
+                                {!isFirstLoad && isFetching && (
+                                    <div className="update-indicator">
+                                        Atualizando dados...
+                                    </div>
                                 )}
-                            </div>
-                            <span style={{color : '#969595', fontSize: '20px'}}>
-                                {/**Espaço para colocar status (pendente, aprovado, reprovado) */}
-                                {doacao.coleta? 'Coletada' : 'Pendente'}
-                            </span>
-                            <div className="entrevistasIniciadas-acoes">
-                                
-                                        {doacao.idColeta ? (
 
-                                                <>
-
-                                                    <button
-                                                            className='triagensIniciadas-btnAtestado'
-                                                            onClick={() => gerarAtestado(doacao)}
-                                                        >
-                                                            Gerar atestado
-                                                    </button>
-
-                                                    <button
-                                                        className="triagensIniciadas-btnEntrevista"
-                                                        onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
-                                                    >
-                                                        Finalizar coleta
-                                                    </button>
-                                                    
-                                                    {/* <button
-                                                        className="triagensIniciadas-btnCancelar"
-                                                        onClick={() => abrirModalCancelar(doacao.idDoacao)}
-                                                        >
-                                                        Cancelar Triagem
-                                                    </button> */}
-                                                </>
-                                            ) : (
-                                                // botões se pendente
-                                                <>           
-
-                                                    <button
-                                                        className='triagensIniciadas-btnRelatorio'
-                                                        onClick={() => openRelatorioModal(doacao)}
-                                                    >
-                                                        Gerar coleta
-                                                    </button>
-
-
-                                                    <button
-                                                        className="triagensIniciadas-btnCancelar"
-                                                        onClick={() => abrirModalCancelar(doacao.idDoacao)}
-                                                        >
-                                                        Cancelar coleta
-                                                    </button>
-                                                </>
-                                            )
-                                       }
-                                  
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
+                            </li>
+                            
+                        );
+                    })}
+                </ul>
+            )}
 
             {/* Modal de Relatório de Coleta */}
             <RelatorioColetaModal
@@ -324,6 +383,7 @@ const ColetasIniciadas = () => {
                         isOpen={isConfirmacaoCancelarOpen}
                         onRequestClose={() => setIsConfirmacaoCancelarOpen(false)}
                         onConfirm={() => cancelarColeta(doacaoSelecionada)}
+                        isLoading={isLoadingCancelar} // Passa o estado de carregamento
                         mensagem="Você tem certeza que deseja cancelar a coleta?"
                     />
                 )}
@@ -335,6 +395,7 @@ const ColetasIniciadas = () => {
                         isOpen={isEncaminharModalOpen}
                         onRequestClose={() => setIsEncaminharModalOpen(false)}
                         onConfirm={() => encaminharParaLaboratorio(doacaoSelecionada)}
+                        isLoading={isLoadingEncaminhar} // Passa o estado de carregamento
                         mensagem="Finalizar coleta e encaminhar para o laboratório?"
                     />
                 )}

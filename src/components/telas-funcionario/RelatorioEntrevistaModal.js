@@ -36,7 +36,7 @@ const RelatorioEntrevistaModal = ({ isOpen, onRequestClose, onSubmitRelatorio })
             // Simula a chamada de API para envio dos dados
             const response = await onSubmitRelatorio(dados);
             setFeedbackMessage(response.message || 'Relatório salvo com sucesso!');
-            setTimeout(() => setFeedbackMessage(''), 3000);
+            setTimeout(() => setFeedbackMessage(''), 10000);
             onRequestClose();
         } catch (error) {
             console.error('Erro ao salvar relatório:', error);

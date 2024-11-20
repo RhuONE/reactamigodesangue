@@ -3,6 +3,12 @@ import Modal from 'react-modal';
 import './RelatorioColetaModal.css';
 import api from '../../services/api';
 
+import { FaDownload, FaPrint } from 'react-icons/fa'; // Importação dos ícones de download e impressão
+
+
+import { ClipLoader } from 'react-spinners';
+
+
 Modal.setAppElement('#root');
 
 const RelatorioColetaModal = ({ isOpen, onRequestClose, onSubmitRelatorio, doacaoSelecionada }) => {
@@ -12,32 +18,43 @@ const RelatorioColetaModal = ({ isOpen, onRequestClose, onSubmitRelatorio, doaca
     const [isQrCodeGenerated, setIsQrCodeGenerated] = useState(false);
     const [showForm, setShowForm] = useState(false); // Controle para exibir o formulário
 
+    
+    const [isGeneratingQrCode, setIsGeneratingQrCode] = useState(false);
+    const [isSavingRelatorio, setIsSavingRelatorio] = useState(false);
+
+
     const token = localStorage.getItem('token');
 
     const gerarQrCode = async (idDoacao) => {
+        setIsGeneratingQrCode(true); // Ativa o estado de carregamento
         try {
             const response = await api.get(`/doacoes/${idDoacao}/qrcode`, {
-                responseType: 'blob', // Para receber a imagem como arquivo
+                responseType: 'blob',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
             const url = URL.createObjectURL(response.data);
-            setQrCodeUrl(url); // Atualiza o QR Code
-            setIsQrCodeGenerated(true); // Indica que o QR Code foi gerado
+            setQrCodeUrl(url);
+            setIsQrCodeGenerated(true);
         } catch (error) {
             console.error('Erro ao gerar QR Code:', error);
+        } finally {
+            setIsGeneratingQrCode(false); // Finaliza o carregamento
         }
     };
+    
 
     const handleSalvarRelatorio = () => {
+        setIsSavingRelatorio(true); // Ativa o estado de carregamento
         const relatorio = {
             quantidadeMl,
             observacoes,
         };
         onSubmitRelatorio(relatorio);
+        setIsSavingRelatorio(false); // Finaliza o carregamento
     };
-
+    
     const baixarQrCode = () => {
         const canvas = document.createElement('canvas');
         const img = new Image();
@@ -94,21 +111,31 @@ const RelatorioColetaModal = ({ isOpen, onRequestClose, onSubmitRelatorio, doaca
                                 type="button"
                                 className="salvar-btn"
                                 onClick={() => gerarQrCode(doacaoSelecionada.idDoacao)}
+                                disabled={isGeneratingQrCode} // Desativa enquanto carrega
                             >
-                                Gerar QR Code
+                                {isGeneratingQrCode ? <ClipLoader size={16} color="#fff" /> : 'Gerar QR Code'}
                             </button>
+
                         </div>
                     ) : (
                         <div>
                             <p>QR Code gerado com sucesso! Escolha uma das opções abaixo:</p>
                             <div className="qr-code-preview">
                                 <img src={qrCodeUrl} alt="QR Code da Bolsa de Sangue" style={{ width: '300px', height: '300px' }} />
-                                <div style={{ marginTop: '10px' }}>
-                                    <button onClick={baixarQrCode} className="btn btn-primary">
-                                        Baixar QR Code
+                                <div className="qr-code-actions">
+                                    <button
+                                        onClick={baixarQrCode}
+                                        className="icon-button"
+                                        title="Baixar QR Code"
+                                    >
+                                        <FaDownload size={24} />
                                     </button>
-                                    <button onClick={imprimirQrCode} className="btn btn-secondary">
-                                        Imprimir QR Code
+                                    <button
+                                        onClick={imprimirQrCode}
+                                        className="icon-button"
+                                        title="Imprimir QR Code"
+                                    >
+                                        <FaPrint size={24} />
                                     </button>
                                 </div>
                             </div>
@@ -152,9 +179,11 @@ const RelatorioColetaModal = ({ isOpen, onRequestClose, onSubmitRelatorio, doaca
                             type="button"
                             onClick={handleSalvarRelatorio}
                             className="salvar-btn"
+                            disabled={isSavingRelatorio} // Desativa enquanto carrega
                         >
-                            Salvar Relatório
+                            {isSavingRelatorio ? <ClipLoader size={16} color="#fff" /> : 'Salvar Relatório'}
                         </button>
+
                     </div>
                 </form>
             )}
