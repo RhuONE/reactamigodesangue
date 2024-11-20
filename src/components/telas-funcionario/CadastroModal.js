@@ -119,6 +119,13 @@ const CadastroModal = ({ isOpen, onRequestClose, onCadastrarUsuario }) => {
             }
         }
 
+        if (name === 'rg' && value) {
+            const rgRegex = /^\d{2}\.\d{3}\.\d{3}-\d$/; // Formato 99.999.999-9
+            if (!rgRegex.test(value)) {
+                errors[name] = 'RG inválido. Verifique o formato.';
+            }
+        }
+
         setFormErrors(errors);
     };
 
@@ -300,8 +307,9 @@ const CadastroModal = ({ isOpen, onRequestClose, onCadastrarUsuario }) => {
                         onChange={handleInputChange}
                     />
                     {formErrors.cpf && <div className="error-message">{formErrors.cpf}</div>}
-                    <input
+                    <InputMask
                         className="cadastroModal-input"
+                        mask="99.999.999-9"
                         name="rg"
                         placeholder="RG"
                         value={formData.rg}

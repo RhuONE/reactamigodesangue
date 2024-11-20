@@ -16,6 +16,9 @@ import VisualizarTriagemModal from '../../components/telas-funcionario/Visualiza
 import jsPDF from 'jspdf'; // Importação da biblioteca jsPDF
 import 'jspdf-autotable'; // Opcional, para ajudar com a formatação de tabelas
 
+import { ClipLoader } from 'react-spinners';
+
+
 const TriagensIniciadas = () => {
 
     //Estado que armazena as doacoes
@@ -37,8 +40,17 @@ const TriagensIniciadas = () => {
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
+    //Estados de carregamento
+    const [isFirstLoad, setIsFirstLoad] = useState(true); // Para exibir um loader na primeira carga
+    const [isFetching, setIsFetching] = useState(false); // Para exibir carregamento durante as atualizações periódicas
+    const [loadingActions, setLoadingActions] = useState({}); // Para controlar o carregamento individual dos botões
+    const [isEncaminharLoading, setIsEncaminharLoading] = useState(false); // Carregamento do modal de encaminhar
+    const [isCancelarLoading, setIsCancelarLoading] = useState(false); // Carregamento do modal de cancelar
+    
+
     //Função de recuperar doacoes
     const fetchDoacoes = () => {
+        setIsFetching(true); // Indica que os dados estão sendo carregados
         api.get(`/doacoes/triagens-iniciadas`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -48,14 +60,18 @@ const TriagensIniciadas = () => {
             },
         })
         .then(response => {
-            console.log('Dados de doações:', response.data); // Verifica a estrutura dos dados
             const doacoesOrdenadas = response.data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
             setDoacoes(doacoesOrdenadas);
         })
         .catch(error => {
             console.error('Erro ao buscar doações para triagem:', error);
+        })
+        .finally(() => {
+            setIsFetching(false); // Finaliza o carregamento
+            setIsFirstLoad(false); // Define que a primeira carga foi concluída
         });
     };
+    
 
     useEffect(() => {
         fetchDoacoes();
@@ -134,108 +150,107 @@ const TriagensIniciadas = () => {
 
     //Função de cancelar triagem
     const cancelarTriagem = (idDoacao) => {
-        
-            api.put(`/doacoes/cancelar-triagem/${idDoacao}`, null, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then(() => {
-                setIsCancelarModalOpen(false);
-                setDoacaoSelecionada(null);
-                fetchDoacoes();
-            })
-            .catch(error => {
-                console.error('Erro ao cancelar a Triagem:', error);
-                setIsCancelarModalOpen(false);
-            });
-        
+        setLoadingActions((prev) => ({ ...prev, [`cancel-${idDoacao}`]: true })); // Identificador único para cancelar
+        setIsCancelarLoading(true); // Ativa o loader do modal de cancelar
+    
+        api.put(`/doacoes/cancelar-triagem/${idDoacao}`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(() => {
+            setIsCancelarModalOpen(false); // Fecha o modal
+            fetchDoacoes(); // Atualiza a lista
+        })
+        .catch(error => {
+            console.error('Erro ao cancelar a triagem:', error);
+        })
+        .finally(() => {
+            setLoadingActions((prev) => ({ ...prev, [`cancel-${idDoacao}`]: false })); // Desativa o loader
+            setIsCancelarLoading(false); // Ativa o loader do modal de cancelar
+        });
     };
+    
 
     //Função de encaminhar para entrevista
     const encaminharParaEntrevista = (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [`encaminhar-${idDoacao}`]: true })); // Identificador único para encaminhar
+        setIsEncaminharLoading(true); // Ativa o loader do modal de encaminhar
+    
         api.put(`/doacoes/encaminhar-entrevista/${idDoacao}`, null, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
         .then(() => {
-            setIsEncaminharModalOpen(false);
-            setDoacaoSelecionada(null);
-            fetchDoacoes();
+            setIsEncaminharModalOpen(false); // Fecha o modal
+            fetchDoacoes(); // Atualiza a lista
         })
         .catch(error => {
             console.error('Erro ao encaminhar para entrevista:', error);
-            setIsEncaminharModalOpen(false);
+        })
+        .finally(() => {
+            setLoadingActions((prev) => ({ ...prev, [`encaminhar-${idDoacao}`]: false })); // Desativa o loader
+            setIsEncaminharLoading(false); // Ativa o loader do modal de encaminhar
         });
     };
+    
 
     return (
         <div className="triagensIniciadas-container">
             <h1 className="triagensIniciadas-title">Triagens Iniciadas</h1>
-            <ul className="triagensIniciadas-list">
-                    {doacoes.map(doacao => {
-                        const backgroundColor = 
-                            doacao.triagem?.aptidaoParaDoar === '1'
-                                ? '#e6ffec' // Verde claro pra apto
-                                : doacao.triagem?.aptidaoParaDoar === '0'
-                                ? '#f7dfe1' //  Vermelhor claro para inpto
-                                : '#eaf4fc'
-                        return (
-                            <li key={doacao.idDoacao} className="triagensIniciadas-item" style={{ backgroundColor }}>
-                                <div className="triagensIniciadas-senhaInfo">
-                                    <span className="triagensIniciadas-senhaNumero">
-                                        {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                                    </span>
-                                    {doacao.usuario && (
-                                        <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
-                                        {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
-                                        <BsBoxArrowUpRight  className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
-                                    </span>
-                                    )}
-                                </div>
-                                <span  style={{color : '#969595', fontSize : '20px'}}>
-                                    {doacao.triagem ?.aptidaoParaDoar === '1' ? 'Aprovado' : doacao.triagem?.aptidaoParaDoar === '0' ? 'Reprovado' : 'Pendente'}
-                                 </span>
-                                <div className="triagensIniciadas-acoes">
-                                    {doacao.statusDoacao === "triagem-iniciada" && (
-                                        <>
-                                            {doacao.idTriagem ? (
-                                                doacao.triagem && doacao.triagem.aptidaoParaDoar === '1'? (
-                                                    // Botão de encaminhar se apto para doar
-                                                    <>
-                                                    
-                                                    <button
-                                                        className="triagensIniciadas-btnEntrevista"
-                                                        onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
-                                                    >
-                                                        Encaminhar para Entrevista
-                                                    </button>
-                                                    
-                                                    <button
-                                                        className="triagensIniciadas-btnRelatorio"
-                                                        onClick={() => openVisualizarRelatorioModal(doacao)}
-                                                    >
-                                                        Visualizar Relatório
-                                                    </button>
 
-                                                    <button
-                                                            className="triagensIniciadas-btnCancelar"
-                                                            onClick={() => abrirModalCancelar(doacao.idDoacao)}
+            {isFirstLoad ? (
+                <div className='loading-container'>
+                <ClipLoader size={40} color='#0a93a1' />
+                <p>Carregando triagens...</p>
+            </div>
+            ) : (
+
+                <ul className="triagensIniciadas-list">
+                        {doacoes.map(doacao => {
+                            const backgroundColor = 
+                                doacao.triagem?.aptidaoParaDoar === '1'
+                                    ? '#e6ffec' // Verde claro pra apto
+                                    : doacao.triagem?.aptidaoParaDoar === '0'
+                                    ? '#f7dfe1' //  Vermelhor claro para inpto
+                                    : '#eaf4fc'
+                            return (
+                                <li key={doacao.idDoacao} className="triagensIniciadas-item" style={{ backgroundColor }}>
+                                    <div className="triagensIniciadas-senhaInfo">
+                                        <span className="triagensIniciadas-senhaNumero">
+                                            {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
+                                        </span>
+                                        {doacao.usuario && (
+                                            <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
+                                            {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
+                                            <BsBoxArrowUpRight  className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
+                                        </span>
+                                        )}
+                                    </div>
+                                    <span  style={{color : '#969595', fontSize : '20px'}}>
+                                        {doacao.triagem ?.aptidaoParaDoar === '1' ? 'Aprovado' : doacao.triagem?.aptidaoParaDoar === '0' ? 'Reprovado' : 'Pendente'}
+                                    </span>
+                                    <div className="triagensIniciadas-acoes">
+                                        {doacao.statusDoacao === "triagem-iniciada" && (
+                                            <>
+                                                {doacao.idTriagem ? (
+                                                    doacao.triagem && doacao.triagem.aptidaoParaDoar === '1'? (
+                                                        // Botão de encaminhar se apto para doar
+                                                        <>
+                                                        
+                                                        <button
+                                                            className="triagensIniciadas-btnEntrevista"
+                                                            onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
+                                                            disabled={loadingActions[`encaminhar-${doacao.idDoacao}`]} // Verifica o estado de carregamento para encaminhar
                                                         >
-                                                            Cancelar Triagem
+                                                            {loadingActions[`encaminhar-${doacao.idDoacao}`] ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Encaminhar para Entrevista'
+                                                            )}
                                                         </button>
-                                                    </>
-                                                ) : (
-                                                    // Botão de visualização do relatório se inapto ou triagem não encontrada
-                                                    <>  
 
-                                                        {/* <button
-                                                            className="triagensIniciadas-btnAtestado"
-                                                            onClick={() => gerarAtestado(doacao)}
-                                                        >
-                                                            Gerar Atestado
-                                                        </button> */}
 
                                                         <button
                                                             className="triagensIniciadas-btnRelatorio"
@@ -247,39 +262,80 @@ const TriagensIniciadas = () => {
                                                         <button
                                                             className="triagensIniciadas-btnCancelar"
                                                             onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                            disabled={loadingActions[`cancel-${doacao.idDoacao}`]} // Verifica o estado de carregamento para cancelar
                                                         >
-                                                            Finalizar Triagem
+                                                            {loadingActions[`cancel-${doacao.idDoacao}`] ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Cancelar Triagem'
+                                                            )}
                                                         </button>
+                                                        </>
+                                                    ) : (
+                                                        // Botão de visualização do relatório se inapto ou triagem não encontrada
+                                                        <>  
+
+                                                            {/* <button
+                                                                className="triagensIniciadas-btnAtestado"
+                                                                onClick={() => gerarAtestado(doacao)}
+                                                            >
+                                                                Gerar Atestado
+                                                            </button> */}
+
+                                                            <button
+                                                                className="triagensIniciadas-btnRelatorio"
+                                                                onClick={() => openVisualizarRelatorioModal(doacao)}
+                                                            >
+                                                                Visualizar Relatório
+                                                            </button>
+
+                                                            <button
+                                                                className="triagensIniciadas-btnCancelar"
+                                                                onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                                disabled={loadingActions[`cancel-${doacao.idDoacao}`]} // Verifica o estado de carregamento para cancelar
+                                                            >
+                                                                {loadingActions[`cancel-${doacao.idDoacao}`] ? (
+                                                                    <ClipLoader size={16} color="#fff" />
+                                                                ) : (
+                                                                    'Finalizar Triagem'
+                                                                )}
+                                                            </button>
+                                                        </>
+                                                    )
+                                                ) : (
+                                                    // Botão para gerar o relatório se ainda não tiver sido feito
+                                                    <>
+                                                    <button
+                                                        className="triagensIniciadas-btnRelatorio"
+                                                        onClick={() => openRelatorioModal(doacao)}
+                                                    >
+                                                        Gerar Relatório
+                                                    </button>
+
+                                                    <button
+                                                        className="triagensIniciadas-btnCancelar"
+                                                        onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                        disabled={loadingActions[`cancel-${doacao.idDoacao}`]} // Verifica o estado de carregamento para cancelar
+                                                    >
+                                                        {loadingActions[`cancel-${doacao.idDoacao}`] ? (
+                                                            <ClipLoader size={16} color="#fff" />
+                                                        ) : (
+                                                            'Cancelar Triagem'
+                                                        )}
+                                                    </button>
+
                                                     </>
-                                                )
-                                            ) : (
-                                                // Botão para gerar o relatório se ainda não tiver sido feito
-                                                <>
-                                                <button
-                                                    className="triagensIniciadas-btnRelatorio"
-                                                    onClick={() => openRelatorioModal(doacao)}
-                                                >
-                                                    Gerar Relatório
-                                                </button>
+                                                )}
+                                                
+                                            </>
+                                        )}
+                                    </div>
 
-                                                <button
-                                                    className="triagensIniciadas-btnCancelar"
-                                                    onClick={() => abrirModalCancelar(doacao.idDoacao)}
-                                                >
-                                                    Cancelar Triagem
-                                                </button>
-
-                                                </>
-                                            )}
-                                            
-                                        </>
-                                    )}
-                                </div>
-
-                            </li>
-                        );
-                    })}
-            </ul>
+                                </li>
+                            );
+                        })}
+                </ul>
+            )}
 
             {/* Modal de Relatório de Triagem */}
             <RelatorioTriagemModal
@@ -310,6 +366,7 @@ const TriagensIniciadas = () => {
                         isOpen={isEncaminharModalOpen}
                         onRequestClose={() => setIsEncaminharModalOpen(false)}
                         onConfirm={() => encaminharParaEntrevista(doacaoSelecionada)}
+                        isLoading={isEncaminharLoading} // Passa o estado de carregamento
                         mensagem="Você tem certeza que deseja encaminhar para entrevista?"
                     />
                 )}
@@ -321,6 +378,7 @@ const TriagensIniciadas = () => {
                         isOpen={isCancelarModalOpen}
                         onRequestClose={() => setIsCancelarModalOpen(false)}
                         onConfirm={() => cancelarTriagem(doacaoSelecionada)}
+                        isLoading={isCancelarLoading} // Passa o estado de carregamento
                         mensagem="Você tem certeza que deseja cancelar a triagem?"
                     />
                 )}
