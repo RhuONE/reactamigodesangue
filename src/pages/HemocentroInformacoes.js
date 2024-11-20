@@ -75,7 +75,7 @@ const HemocentroInformacoes = () => {
                 <h2>{hemocentro.nomeHemocentro}</h2>
                 <img 
                     style={{width: 200}}
-                    src={`http://localhost:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`}
+                    src={`http://179.63.40.44:8000/storage/${hemocentro.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`}
                     alt="Banner do hemocentro"
                 />
                 <p><strong>Endereço:</strong> {hemocentro.logHemocentro}, {hemocentro.numLogHemocentro}</p>

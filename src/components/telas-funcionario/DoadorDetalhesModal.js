@@ -9,7 +9,7 @@ const DoadorDetalhesModal = ({ isOpen, onRequestClose, doador }) => {
 
     useEffect(() => {
         if (doador?.fotoUsuario) {
-            const baseUrl = 'http://localhost:8000/storage/';
+            const baseUrl = 'http://179.63.40.44:8000/storage/';
             setFotoPreview(`${baseUrl}${doador.fotoUsuario}`);
         } else {
             setFotoPreview(null);
@@ -34,7 +34,7 @@ const DoadorDetalhesModal = ({ isOpen, onRequestClose, doador }) => {
                     <div className='centralizado'>
                         <div className='exibirEditarModal-foto-container'>
                             <img 
-                                src={fotoPreview || 'http://localhost:8000/storage/uploads/usuarios/perfil-padrao.jpg'} 
+                                src={fotoPreview || 'http://179.63.40.44:8000/storage/uploads/usuarios/perfil-padrao.jpg'} 
                                 alt="Foto do usuário" 
                                 className="foto-preview" 
                             />

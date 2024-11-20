@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from "react-icons/ai";
 
 import DoadorDetalhesModal from '../../components/telas-funcionario/DoadorDetalhesModal';
+import EnviarNotificacaoModal from "../../components/EnviarNotificacaoModal";
+
 
 import api from '../../services/api';
 import './Usuarios.css';
@@ -29,6 +31,47 @@ const Usuarios = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState(''); // Estado para o valor da pesquisa
+  const [selectedAptidao, setSelectedAptidao] = useState("todos");
+
+  const [isNotificacaoModalOpen, setIsNotificacaoModalOpen] = useState(false);
+
+  const abrirModalNotificacao = () => {
+    if (selectedUsers.length === 0) {
+      alert("Selecione ao menos um usuário para enviar notificações.");
+      return;
+    }
+    setIsNotificacaoModalOpen(true);
+  };
+
+  const fecharModalNotificacao = () => {
+    setIsNotificacaoModalOpen(false);
+  };
+
+  const handleEnviarNotificacoes = async (mensagem) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/notificacoes/enviar",
+        {
+          usuarios: selectedUsers,
+          mensagem,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Notificações enviadas com sucesso!");
+        setSelectedUsers([]);
+      }
+    } catch (error) {
+      toast.error("Erro ao enviar notificações. Tente novamente.");
+      console.error(error);
+    }
+  };
+
 
   const navigate = useNavigate();
 
@@ -60,49 +103,7 @@ const Usuarios = () => {
     fetchUsuarios();
   }, [navigate]);
 
-  const enviarNotificacoes = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Token de autenticação não encontrado. Faça login novamente.");
-        return;
-      }
   
-      const response = await api.post(
-        "/notificacoes/enviar",
-        {
-          usuarios: selectedUsers, // IDs selecionados
-          mensagem: "Mensagem personalizada para os usuários",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      // Verifica se a resposta é um sucesso
-      if (response.status === 200) {
-        alert("Notificações enviadas com sucesso!");
-        setSelectedUsers([]); // Limpa a seleção após o envio
-      } else {
-        console.error("Erro inesperado:", response.data);
-        alert("Erro ao enviar notificações. Tente novamente mais tarde.");
-      }
-    } catch (error) {
-      // Captura detalhes do erro retornado pela API
-      if (error.response) {
-        console.error("Erro do servidor:", error.response.data);
-        alert(`Erro ao enviar notificações: ${error.response.data.error || "Desconhecido"}`);
-      } else if (error.request) {
-        console.error("Erro na requisição:", error.request);
-        alert("Não foi possível enviar a requisição. Verifique sua conexão com a internet.");
-      } else {
-        console.error("Erro desconhecido:", error.message);
-        alert("Ocorreu um erro inesperado. Tente novamente.");
-      }
-    }
-  };
   
   
 
@@ -114,7 +115,12 @@ const Usuarios = () => {
     const matchesBloodType =
       activeButton === 'todos' || usuario.descTipoSanguineo === activeButton;
 
-    return matchesSearch && matchesBloodType;
+    const matchesAptidao =
+      selectedAptidao === "todos" ||
+      (selectedAptidao === "aptos" && usuario.aptoParaDoar) ||
+      (selectedAptidao === "naoAptos" && !usuario.aptoParaDoar);
+
+    return matchesSearch && matchesBloodType && matchesAptidao;
   });
 
   return (
@@ -148,6 +154,20 @@ const Usuarios = () => {
             </div>
 
             <div className='filtro-item'>
+              <label htmlFor='aptidao'>Filtrar por Aptidão:</label>
+              <select
+                id='aptidao'
+                value={selectedAptidao}
+                onChange={(e) => setSelectedAptidao(e.target.value)}
+                className="aptidao-dropdown"
+              >
+                <option value="todos">Todos</option>
+                <option value="aptos">Aptos para doar</option>
+                <option value="naoAptos">Não aptos para doar</option>
+              </select>
+            </div>
+
+            <div className='filtro-item'>
               <label htmlFor='pesquisa'>Pesquisar:</label>
               <div className='pesquisaCampo'>
                 <input
@@ -171,7 +191,7 @@ const Usuarios = () => {
           </p>
 
             <button
-              onClick={() => enviarNotificacoes()}
+              onClick={abrirModalNotificacao}
               disabled={selectedUsers.length === 0}
               className="notificacao-button"
             >
@@ -187,8 +207,14 @@ const Usuarios = () => {
                 
                 <th>Nome</th>
                 <th>Email</th>
+<<<<<<< Updated upstream
                 <th>Tipo Sanguineo</th>
                 <th>
+=======
+                <th id='tipoSangue'>Tipo Sanguineo</th>
+                <th>Aptidao para Doar</th>
+                <th id='acoes'>
+>>>>>>> Stashed changes
                   Açoes
                 </th>
                 <th>
@@ -220,14 +246,28 @@ const Usuarios = () => {
                   
                   <td>{usuario.nomeUsuario}</td>
                   <td>{usuario.emailUsuario}</td>
+<<<<<<< Updated upstream
                   <td>{usuario.descTipoSanguineo}</td>
                   
                   <td>
+=======
+                  <td id='tipoSangue'>{usuario.descTipoSanguineo}</td>
+
+                  <td>
+                    {usuario.aptoParaDoar? "Disponível" : "Indisponível"}
+                  </td>
+                  <td id='acoes'>
+>>>>>>> Stashed changes
                     <>
                       <button onClick={() => abrirDetalhesDoador(usuario)} className="edit-button" >Visualizar</button>
                     </>
                   </td>
+<<<<<<< Updated upstream
                   <td>
+=======
+                  
+                  <td id='notificacao'>
+>>>>>>> Stashed changes
                     <input
                       type="checkbox"
                       checked={selectedUsers.includes(usuario.idUsuario)}
@@ -248,11 +288,22 @@ const Usuarios = () => {
           </table>
         </div>
       )}
-    <DoadorDetalhesModal
-      isOpen={isDetalhesDoadorOpen}
-      onRequestClose={fecharDetalhesDoador}
-      doador={usuarioSelecionado}
-    />
+    <>
+      {/* Modal de Envio de Notificação */}
+      <EnviarNotificacaoModal
+        isOpen={isNotificacaoModalOpen}
+        onRequestClose={fecharModalNotificacao}
+        onSend={handleEnviarNotificacoes}
+        selectedUsers={selectedUsers}
+      />
+   
+
+      <DoadorDetalhesModal
+        isOpen={isDetalhesDoadorOpen}
+        onRequestClose={fecharDetalhesDoador}
+        doador={usuarioSelecionado}
+      />
+    </>
     </div>
   );
 };
