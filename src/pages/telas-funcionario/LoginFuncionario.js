@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import api from '../../services/api'; // Importa a configuração da API
 import './LoginFuncionario.css'; // Importa o arquivo CSS para estilização
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import logo from '../../images/LogoAmgSangue.png';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { ClipLoader } from 'react-spinners'; // Importando o spinner
 
@@ -33,6 +36,7 @@ const LoginFuncionario = () => {
             localStorage.setItem('funcao', funcao); // Salva a função do usuário
             localStorage.setItem('idHemocentro', idHemocentro); // Salva o hemocentro associado
 
+            toast.success('Login realizado com sucesso!');
             // Redireciona para a página correta com base na função do usuário
             if (funcao === 'recepcao') {
                 navigate('/recepcao/recepcao');
@@ -53,6 +57,7 @@ const LoginFuncionario = () => {
             }
         } catch (error) {
             // Exibe mensagem de erro se as credenciais estiverem incorretas
+            toast.error('Erro ao realizar login. Verifique as credenciais.');
             setErrorMessage('Email ou senha incorretos. Tente novamente.');
         } finally {
             setIsLoading(false);
@@ -61,27 +66,30 @@ const LoginFuncionario = () => {
 
     return (
         <div className="login-container">
+            <ToastContainer />
+            <img src={logo} alt='logo' />
+
             <h1>Login de Funcionário</h1>
             <form onSubmit={handleLogin}>
                 <div className="form-group">
                     <label>Email:</label>
-                    <input 
-                        type="text" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        required 
-                        placeholder="Digite seu email" 
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="Digite seu email"
                         disabled={isLoading} // Desativa enquanto está carregando
                     />
                 </div>
                 <div className="form-group">
                     <label>Senha:</label>
-                    <input 
-                        type="password" 
-                        value={senha} 
-                        onChange={(e) => setSenha(e.target.value)} 
-                        required 
-                        placeholder="Digite sua senha" 
+                    <input
+                        type="password"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        required
+                        placeholder="Digite sua senha"
                         disabled={isLoading} // Desativa enquanto está carregando
                     />
                 </div>

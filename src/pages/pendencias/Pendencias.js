@@ -2,10 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { BiCurrentLocation, BiChevronDown } from "react-icons/bi";
-import imgBase from '../../images/hospital.jpg';
 import './Pendencias.css';
+import { ToastContainer, toast } from 'react-toastify';
+import ConfirmationModal from '../../components/modalConfirm';
 
 const Pendencias = () => {
+
+  const [modalConfirm, setModalConfirm] = useState(false);
+  const [mensagemModal, setMensagemModal] = useState('');
+  const [actionToConfirm, setActionToConfirm] = useState('');
+  const [idToConfirm, setIdToConfirm] = useState(null);
+
+  const handleOpenModal = (action, id, nome) => {
+    if(action === 'aprovar'){
+      setMensagemModal(`Você realmente deseja Aprovar, ${nome}?`);
+    }
+    if(action === 'negar'){
+      setMensagemModal(`Você realmente deseja Negar, ${nome}?`);
+    }
+
+    setActionToConfirm(action);
+    setIdToConfirm(id);
+    setModalConfirm(true);
+  };
+
+  const handleConfirm = async () => {
+    const toastId = "approval-toast";
+  
+    if (actionToConfirm === 'aprovar') {
+      if (!toast.isActive(toastId)) {
+        toast.success('Hemocentro aprovado com sucesso!', {
+          toastId: toastId,
+          autoClose: 3000,
+        });
+      }
+  
+      await handleApprove(idToConfirm);
+    } else if (actionToConfirm === 'negar') {
+      const errorToastId = "deny-toast";
+      if (!toast.isActive(errorToastId)) {
+        toast.error('Hemocentro negado com sucesso!', {
+          toastId: errorToastId,
+          autoClose: 3000,
+        });
+      }
+  
+      await handleDeny(idToConfirm);
+    }
+  
+    setModalConfirm(false);
+  };
+  
+  const handleCancel = () => {
+    setModalConfirm(false);
+    toast.info('Operação Cancelada.');
+  };
+
+
   const [pendencias, setPendencias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -57,6 +110,7 @@ const Pendencias = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      toast.success('Hemocentro aprovado com sucesso!');
       setPendencias(pendencias.filter((pendencia) => pendencia.idHemocentro !== id));
     } catch (error) {
       console.error('Erro ao aprovar hemocentro', error);
@@ -82,15 +136,22 @@ const Pendencias = () => {
 
   return (
     <div className="pendencias-container">
+      <ToastContainer/>
+      <ConfirmationModal
+        isOpen={modalConfirm}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        message={mensagemModal}
+      />
       <div className='pendencias-header'>
         <h1>Pendências</h1> 
         <p>{pendencias.length}</p>
       </div>
-      {/* {loading ? (
+      {loading ? (
         <div className="loader">Carregando...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
-      ) : ( */}
+      ) : ( 
           <div className='cards'>
             {/* <div className='card'>
                 <div className="baseInfo">
@@ -113,10 +174,10 @@ const Pendencias = () => {
 
                 </div>
               </div> */}
-            {pendencias.map((pendencia) => (
+            {pendencias && pendencias.length > 0 ? pendencias.map((pendencia) => (
               <div className='card' key={pendencia.idHemocentro}>
                 <div className="baseInfo">
-                  <img id="hemoIcon" src={`http://localhost:8000/storage/${pendencia.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} />
+                  <img id="hemoIcon" src={`http://179.63.40.44:8000/storage/${pendencia.fotoHemocentro || 'uploads/hemocentros/foto-generica-hemocentro.webp'}`} />
                   <div id="info">
                     <h2>{pendencia.nomeHemocentro}</h2>
                     <p>
@@ -126,8 +187,8 @@ const Pendencias = () => {
                   </div>
 
                   <div className='btns'>
-                    <button id="aceitarHemo" onClick={() => handleApprove(pendencia.idHemocentro)}>Aceitar</button>
-                    <button id="negarHemo" onClick={() => handleDeny(pendencia.idHemocentro)}>Negar</button>
+                    <button id="aceitarHemo" onClick={() => handleOpenModal('aprovar', pendencia.idHemocentro, pendencia.nomeHemocentro)}>Aceitar</button>
+                    <button id="negarHemo" onClick={() => handleOpenModal('negar', pendencia.idHemocentro, pendencia.nomeHemocentro)}>Negar</button>
                   </div>
                   <BiChevronDown/>
                 </div>
@@ -135,9 +196,11 @@ const Pendencias = () => {
 
                 </div>
               </div>
-            ))}
+            )) : (
+              <p>Nenhum hemocentro Pendente</p>
+            )}
         </div>
-      {/* )} */}
+      )} 
     </div>
   );
 };

@@ -6,10 +6,16 @@ import './CadastroHemocentro.css';
 import logo from '../../images/cadastroHemocentro.png';
 import wave from '../../images/wave.png';
 import imgIcon from '../../images/imgIcon.png';
+import { toast, ToastContainer } from 'react-toastify';
+import SuccessModal from '../../components/modalSuccess';
+import ErrorModal from '../../components/modalError';
 
 
 
 const CadastroHemocentro = () => {
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     nomeHemocentro: '',
     descHemocentro: '',
@@ -389,11 +395,10 @@ const [error, setError] = useState({
       try {
         const response = await api.post('/hemocentro', formDataToSend);
         console.log('Cadastro realizado com sucesso:', response.data);
-        alert('Hemocentro cadastrado com sucesso!');
-        navigate('/login/hemocentro');
+        setSuccessOpen(true);
       } catch (error) {
         console.error('Erro ao cadastrar hemocentro:', error.response?.data);
-        alert('Erro ao cadastrar hemocentro. Verifique os dados e tente novamente.');
+        setErrorOpen(true);
       }
     }
   };
@@ -401,6 +406,16 @@ const [error, setError] = useState({
 
   return (
     <div className="cadastro-hemocentro">
+      <SuccessModal
+          isOpen={successOpen}
+          onClose={() => navigate('/login/hemocentro')}
+          message="Cadastro realizado com sucesso!"
+      />
+      <ErrorModal
+        isOpen={errorOpen}
+        onClose={() => setErrorOpen(false)}
+        message="Ocorreu um erro no cadastro. Verifique as Informações"
+      />
       <div className="side-img">
             <img src={logo} />
             <img src={wave} id="wave"/>

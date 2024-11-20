@@ -127,7 +127,7 @@ const HemocentroCampanhas = () => {
                                 campanhas.map((campanha) => (
                                     <div className="item" key={campanha.idCampanha}>
                                         <img 
-                                            src={`http://localhost:8000/storage/${campanha.fotoCampanha || 'uploads/campanhas/banner-para-campanha-de-doacao.avif'}`} 
+                                            src={`http://179.63.40.44:8000/storage/${campanha.fotoCampanha || 'uploads/campanhas/banner-para-campanha-de-doacao.avif'}`} 
                                             alt="banner da campanha" 
                                         />
                                         <div className="info">
