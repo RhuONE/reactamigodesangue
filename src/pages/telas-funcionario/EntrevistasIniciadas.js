@@ -20,6 +20,9 @@ import { AnimatePresence } from 'framer-motion';
 // Redirecionar
 import { useNavigate } from 'react-router-dom';
 
+import { ClipLoader } from 'react-spinners';
+
+
 //pdf
 import jsPDF from 'jspdf'; // Importação da biblioteca jsPDF
 import 'jspdf-autotable'; // Opcional, para ajudar com a formatação de tabelas
@@ -50,6 +53,11 @@ const EntrevistasIniciadas = () => {
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
+    const [loadingActions, setLoadingActions] = useState({}); // Controle de carregamento individual por ação
+    const [isModalLoading, setIsModalLoading] = useState(false); // Controle de carregamento dos modais
+    const [isFetching, setIsFetching] = useState(false); // Controle de carregamento geral
+
+
     //Navigate para redirecionar para tela
     const navigate = useNavigate();
 
@@ -63,6 +71,7 @@ const EntrevistasIniciadas = () => {
 
     // Função para buscar as entrevistas
     const fetchEntrevistasIniciadas = () => {
+        setIsFetching(true); // Ativa o estado de carregamento
         api.get(`/doacoes/entrevistas-iniciadas`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -76,6 +85,9 @@ const EntrevistasIniciadas = () => {
         })
         .catch(error => {
             console.error('Erro ao buscar entrevistas iniciadas:', error);
+        })
+        .finally(() => {
+            setIsFetching(false); // Desativa o estado de carregamento
         });
     };
 
@@ -154,7 +166,12 @@ const EntrevistasIniciadas = () => {
 
     //Função de cancelar entrevista
     const cancelarEntrevista = (idDoacao) => {
-
+        setLoadingActions((prev) => ({
+            ...prev,
+            [idDoacao]: { ...prev[idDoacao], cancelar: true }, // Carregando "Cancelar" para essa doação
+        }));
+        setIsModalLoading(true); // Ativa o carregamento do modal
+    
         api.put(`/doacoes/cancelar-entrevista/${idDoacao}`, null, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -168,13 +185,28 @@ const EntrevistasIniciadas = () => {
         .catch(error => {
             console.error('Erro ao cancelar a Entrevista:', error);
             setIsConfirmacaoCancelarOpen(false);
-        });
+        })
+        .finally(() => {
+            setLoadingActions((prev) => ({
+                ...prev,
+                [idDoacao]: { ...prev[idDoacao], cancelar: false }, // Desativa o carregamento
+            }));
+            setIsModalLoading(false); // Desativa o carregamento do modal
+        })
 
     }
 
 
     //Função de encaminhar para coleta
     const encaminharParaColeta = (idDoacao) => {
+
+        setLoadingActions((prev) => ({
+            ...prev,
+            [idDoacao]: { ...prev[idDoacao], encaminhar: true }, // Carregando "Encaminhar" para essa doação
+        }));
+
+        setIsModalLoading(true); // Ativa o carregamento do modal
+
         api.put(`/doacoes/encaminhar-coleta/${idDoacao}`, null, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -189,6 +221,13 @@ const EntrevistasIniciadas = () => {
         .catch(error => {
             console.error('Erro ao encaminhar para coleta:', error);
             setIsEncaminharModalOpen(false);
+        })
+        .finally(() => {
+            setLoadingActions((prev) => ({
+                ...prev,
+                [idDoacao]: { ...prev[idDoacao], encaminhar: false }, // Desativa o carregamento
+            }));
+            setIsModalLoading(false); // Desativa o carregamento do modal
         });
     };
 
@@ -207,113 +246,141 @@ const EntrevistasIniciadas = () => {
     return (
         <div className="entrevistasIniciadas-container">
             <h1 className="entrevistasIniciadas-title">Entrevistas Iniciadas</h1>
-            <ul className="entrevistasIniciadas-list">
-                {doacoes.map(doacao =>  {
-                    const backgroundColor =
-                        doacao.entrevista?.aptoParaDoacao === '1'
-                            ? '#e6ffec' // Verde claro se apto
-                            : doacao.entrevista?.aptoParaDoacao === '0'
-                            ? '#f7dfe1' // Vermelho claro para não apto
-                            : '#eaf4fc' // Caso nada cor padrão
 
-                    return (
-                        <li key={doacao.idDoacao} className="entrevistasIniciadas-item" style={{backgroundColor}}>
-                            <div className="entrevistasIniciadas-info">
-                                <span className="triagensIniciadas-senhaNumero">
-                                    {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                                </span>
-                                {doacao.usuario && (
-                                    <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
-                                    {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
-                                    <BsBoxArrowUpRight className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
+            {isFetching ? (
+                <div className='loading-container'>
+                    <ClipLoader size={40} color="#0a93a1" />
+                    <p>Carregando entrevistas...</p>
+                </div>
+            ) : (
+
+                <ul className="entrevistasIniciadas-list">
+                    {doacoes.map(doacao =>  {
+                        const backgroundColor =
+                            doacao.entrevista?.aptoParaDoacao === '1'
+                                ? '#e6ffec' // Verde claro se apto
+                                : doacao.entrevista?.aptoParaDoacao === '0'
+                                ? '#f7dfe1' // Vermelho claro para não apto
+                                : '#eaf4fc' // Caso nada cor padrão
+
+                        return (
+                            <li key={doacao.idDoacao} className="entrevistasIniciadas-item" style={{backgroundColor}}>
+                                <div className="entrevistasIniciadas-info">
+                                    <span className="triagensIniciadas-senhaNumero">
+                                        {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
                                     </span>
-                                )}
-                            </div>
-                            <span style={{color : '#969595', fontSize: '20px'}}>
-                                {/**Espaço para colocar status (pendente, aprovado, reprovado) */}
-                                {doacao.entrevista?.aptoParaDoacao === '1' ? 'Aprovado' : doacao.entrevista?.aptoParaDoacao === '0' ? 'Reprovado' : 'Pendente'}
-                            </span>
-                            <div className="entrevistasIniciadas-acoes">
-                                {doacao.statusDoacao === "entrevista-iniciada" && (
-                                    <>
-                                        {doacao.idEntrevista ? (
-                                            doacao.entrevista && doacao.entrevista?.aptoParaDoacao === '1' ? (
-                                                // Botões se apto
-                                                <>
-                                                    <button
-                                                        className="triagensIniciadas-btnEntrevista"
-                                                        onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
-                                                    >
-                                                        Encaminhar para Coleta
-                                                    </button>
-                                                    
-                                                    <button
-                                                        className='triagensIniciadas-btnRelatorio'
-                                                        onClick={() => openVisualizarRelatorioModal(doacao)}
-                                                    >
-                                                        Visualizar Relatório
-                                                    </button>
-
-                                                    <button
-                                                        className="triagensIniciadas-btnCancelar"
-                                                        onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                    {doacao.usuario && (
+                                        <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagensIniciadas-doadorNome">
+                                        {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
+                                        <BsBoxArrowUpRight className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
+                                        </span>
+                                    )}
+                                </div>
+                                <span style={{color : '#969595', fontSize: '20px'}}>
+                                    {/**Espaço para colocar status (pendente, aprovado, reprovado) */}
+                                    {doacao.entrevista?.aptoParaDoacao === '1' ? 'Aprovado' : doacao.entrevista?.aptoParaDoacao === '0' ? 'Reprovado' : 'Pendente'}
+                                </span>
+                                <div className="entrevistasIniciadas-acoes">
+                                    {doacao.statusDoacao === "entrevista-iniciada" && (
+                                        <>
+                                            {doacao.idEntrevista ? (
+                                                doacao.entrevista && doacao.entrevista?.aptoParaDoacao === '1' ? (
+                                                    // Botões se apto
+                                                    <>
+                                                        <button
+                                                            className="triagensIniciadas-btnEntrevista"
+                                                            onClick={() => abrirModalEncaminhar(doacao.idDoacao)}
+                                                            disabled={loadingActions[doacao.idDoacao]?.encaminhar} // Desativa enquanto "Encaminhar" está carregando
                                                         >
-                                                        Cancelar Triagem
-                                                    </button>
-                                                </>
+                                                            {loadingActions[doacao.idDoacao]?.encaminhar ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Encaminhar para Coleta'
+                                                            )}
+                                                        </button>
+                                                        <button
+                                                            className='triagensIniciadas-btnRelatorio'
+                                                            onClick={() => openVisualizarRelatorioModal(doacao)}
+                                                        >
+                                                            Visualizar Relatório
+                                                        </button>
+
+                                                        <button
+                                                            className="triagensIniciadas-btnCancelar"
+                                                            onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                            disabled={loadingActions[doacao.idDoacao]?.cancelar} // Desativa enquanto "Cancelar" está carregando
+                                                        >
+                                                            {loadingActions[doacao.idDoacao]?.cancelar ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Cancelar Entrevista'
+                                                            )}
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    // botões se inpto
+                                                    <>
+                                                        {/* <button
+                                                            className="triagensIniciadas-btnAtestado"
+                                                            onClick={() =>gerarAtestado(doacao)}
+                                                        >
+                                                            Gerar atestado
+                                                        </button>               */}
+
+                                                        <button
+                                                            className='triagensIniciadas-btnRelatorio'
+                                                            onClick={() => openVisualizarRelatorioModal(doacao)}
+                                                        >
+                                                            Visualizar Relatório
+                                                        </button>
+
+
+                                                        <button
+                                                            className="triagensIniciadas-btnCancelar"
+                                                            onClick={() => abrirModalCancelar(doacao.idDoacao)}
+                                                            disabled={loadingActions[doacao.idDoacao]?.cancelar} // Desativa enquanto "Cancelar" está carregando
+                                                        >
+                                                            {loadingActions[doacao.idDoacao]?.cancelar ? (
+                                                                <ClipLoader size={16} color="#fff" />
+                                                            ) : (
+                                                                'Finalizar Entrevista'
+                                                            )}
+                                                        </button>
+                                                    </>
+                                                )
                                             ) : (
-                                                // botões se inpto
+                                                // Botão para quem estiver pendente
                                                 <>
-                                                      {/* <button
-                                                        className="triagensIniciadas-btnAtestado"
-                                                        onClick={() =>gerarAtestado(doacao)}
-                                                    >
-                                                        Gerar atestado
-                                                    </button>               */}
-
                                                     <button
-                                                        className='triagensIniciadas-btnRelatorio'
-                                                        onClick={() => openVisualizarRelatorioModal(doacao)}
+                                                        className="triagensIniciadas-btnRelatorio"
+                                                        onClick={() => openRelatorioModal(doacao)}
                                                     >
-                                                        Visualizar Relatório
+                                                        Gerar Relatório
                                                     </button>
-
 
                                                     <button
                                                         className="triagensIniciadas-btnCancelar"
                                                         onClick={() => abrirModalCancelar(doacao.idDoacao)}
-                                                        >
-                                                        Finalizar Triagem
+                                                        disabled={loadingActions[doacao.idDoacao]?.cancelar} // Desativa enquanto "Cancelar" está carregando
+                                                    >
+                                                        {loadingActions[doacao.idDoacao]?.cancelar ? (
+                                                            <ClipLoader size={16} color="#fff" />
+                                                        ) : (
+                                                            'Cancelar Entrevista'
+                                                        )}
                                                     </button>
-                                                </>
-                                            )
-                                        ) : (
-                                            // Botão para quem estiver pendente
-                                            <>
-                                                <button
-                                                    className="triagensIniciadas-btnRelatorio"
-                                                    onClick={() => openRelatorioModal(doacao)}
-                                                >
-                                                    Gerar Relatório
-                                                </button>
 
-                                                <button
-                                                    className="triagensIniciadas-btnCancelar"
-                                                    onClick={() => abrirModalCancelar(doacao.idDoacao)}
-                                                >
-                                                    Cancelar Triagem
-                                                </button>
-
-                                                </>
-                                        )}
-                                        
-                                    </>
-                                )}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
+                                                    </>
+                                            )}
+                                            
+                                        </>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
 
             {/** Modal de Relatorio */}
             <RelatorioEntrevistaModal
@@ -343,6 +410,7 @@ const EntrevistasIniciadas = () => {
                         isOpen={isConfirmacaoCancelarOpen}
                         onRequestClose={() => setIsConfirmacaoCancelarOpen(false)}
                         onConfirm={() => cancelarEntrevista(doacaoSelecionada)}
+                        isLoading={isModalLoading} // Estado de carregamento do modal
                         mensagem="Você tem certeza que deseja cancelar a entrevista?"
                     />
                 )}
@@ -354,6 +422,7 @@ const EntrevistasIniciadas = () => {
                         isOpen={isEncaminharModalOpen}
                         onRequestClose={() => setIsEncaminharModalOpen(false)}
                         onConfirm={() => encaminharParaColeta(doacaoSelecionada)}
+                        isLoading={isModalLoading} // Estado de carregamento do modal
                         mensagem="Você tem certeza que deseja encaminhar para coleta?"
                     />
                 )}

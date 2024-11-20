@@ -8,6 +8,8 @@ import DoadorDetalhesModal from '../../components/telas-funcionario/DoadorDetalh
 //Import ícone de mostrar mais 
 import { BsBoxArrowUpRight } from "react-icons/bs";
 
+import { ClipLoader } from 'react-spinners';
+
 
 //Modal de confirmacao de ação
 import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
@@ -18,23 +20,21 @@ import { useNavigate } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 const Triagem = () => {
-
-    //Estado de doacoes
     const [doacoes, setDoacoes] = useState([]);
-    //Estado de Modal com detalhes do doador
     const [isDoadorDetalhesModalOpen, setIsDoadorDetalhesModalOpen] = useState(false);
-    //Estado com doacao selecionada
-    const [doacaoSelecionada, setDoacaoSelecionada] = useState(null); // Armazena a doação selecionada
-    //Navigate para redirecionar para tela
+    const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
     const navigate = useNavigate();
-    //Estado de abertura para modal de confirmação
     const [isConfirmacaoModalOpen, setIsConfirmacaoModalOpen] = useState(false);
 
-    //Recupera credenciais de login do "armazenamento local"
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
-    //Função para autenticar credenciais, caso não, redireciona para login
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
+    const [loadingActions, setLoadingActions] = useState({});
+    const [loadingIniciar, setLoadingIniciar] = useState({});
+    const [isModalLoading, setIsModalLoading] = useState(false);
+
     useEffect(() => {
         const funcao = localStorage.getItem('funcao');
         if (!token || funcao !== 'triagem') {
@@ -42,8 +42,8 @@ const Triagem = () => {
         }
     }, [navigate]);
 
-    // Função para buscar as doações para triagem no backend
     const fetchDoacoes = () => {
+        setIsFetching(true);
         api.get('/doacoes/senhas/triagem', {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -57,6 +57,10 @@ const Triagem = () => {
         })
         .catch(error => {
             console.error('Erro ao buscar doações:', error);
+        })
+        .finally(() => {
+            setIsFetching(false);
+            setIsFirstLoad(false);
         });
     };
 
@@ -69,26 +73,8 @@ const Triagem = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // Função para abrir o modal de detalhes do doador
-    const openDoadorDetalhesModal = (doacao) => {
-        setDoacaoSelecionada(doacao);
-        setIsDoadorDetalhesModalOpen(true);
-    };
-
-    // Função para fechar o modal de detalhes do doador
-    const closeDoadorDetalhesModal = () => {
-        setIsDoadorDetalhesModalOpen(false);
-        setDoacaoSelecionada(null);
-    };
-
-    // Função para abrir modal de confirmação 
-    const abrirModalConfirmacao = (idDoacao) => {
-        setDoacaoSelecionada(idDoacao);
-        setIsConfirmacaoModalOpen(true);
-    }
-
-    // Função para chamar uma doação (muda o status para "chamada-triagem")
     const chamarDoacao = (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [idDoacao]: true }));
         api.put(`/doacoes/senhas/chamar-triagem/${idDoacao}`, null, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -99,75 +85,106 @@ const Triagem = () => {
         })
         .catch(error => {
             console.error('Erro ao chamar doação para triagem:', error);
+        })
+        .finally(() => {
+            setLoadingActions((prev) => ({ ...prev, [idDoacao]: false }));
         });
     };
 
-    // Função para iniciar triagem (muda o status para "triagem-iniciada")
     const iniciarTriagem = (idDoacao) => {
-            console.log(idDoacao);
-            api.put(`/doacoes/senhas/iniciar-triagem/${idDoacao}`, null, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            .then(response => {
-                setIsConfirmacaoModalOpen(false);
-                setDoacaoSelecionada(null);
-                fetchDoacoes();
-                navigate('/triagem/triagens-iniciadas');
-            })
-            .catch(error => {
-                console.error('Erro ao iniciar triagem:', error);
-                setIsConfirmacaoModalOpen(false);
-            });
-        
+        setLoadingIniciar((prev) => ({ ...prev, [idDoacao]: true }));
+        setIsModalLoading(true);
+
+        api.put(`/doacoes/senhas/iniciar-triagem/${idDoacao}`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setIsConfirmacaoModalOpen(false);
+            setDoacaoSelecionada(null);
+            fetchDoacoes();
+            navigate('/triagem/triagens-iniciadas');
+        })
+        .catch(error => {
+            console.error('Erro ao iniciar triagem:', error);
+        })
+        .finally(() => {
+            setLoadingIniciar((prev) => ({ ...prev, [idDoacao]: false }));
+            setIsModalLoading(false);
+        });
+    };
+
+    const abrirModalConfirmacao = (idDoacao) => {
+        setDoacaoSelecionada(idDoacao);
+        setIsConfirmacaoModalOpen(true);
+    };
+
+    const openDoadorDetalhesModal = (doacao) => {
+        setDoacaoSelecionada(doacao);
+        setIsDoadorDetalhesModalOpen(true);
+    };
+
+    const closeDoadorDetalhesModal = () => {
+        setIsDoadorDetalhesModalOpen(false);
+        setDoacaoSelecionada(null);
     };
 
     return (
         <div className="triagem-container">
-            <h1 className="triagem-title">Triagem - Doações para Triagem</h1>
-            <h2 className='triagem-subtitle'>Chame o doador ou inicie o atendimento</h2>
-            <ul className="triagem-senha-list">
-                {doacoes.map(doacao => (
-                    <li key={doacao.idDoacao} className="triagem-senha-item">
-                        <span className="triagem-senha-numero">
-                            {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                        </span>
-                        <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagem-doador-nome">
-                            {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : "Nome do doador não disponível"}
-                            <BsBoxArrowUpRight  className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
-                        </span>
-                        <div>
-                            <button 
-                                className="triagem-chamar-btn" 
-                                onClick={() => chamarDoacao(doacao.idDoacao)}
-                            >
-                                Chamar
-                            </button>
-                            <button 
-                                className="triagem-iniciar-btn" 
-                                onClick={() => abrirModalConfirmacao(doacao.idDoacao)}
-                            >
-                                Iniciar Triagem
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-            {/* Modal de Detalhes do Doador */}
+            
+                    <h1 className="triagem-title">Triagem - Doações para Triagem</h1>
+                    <h2 className="triagem-subtitle">Chame o doador ou inicie o atendimento</h2>
+            {isFirstLoad ? (
+                <div className='loading-container'>
+                    <ClipLoader size={40} color='#0a93a1' />
+                    <p>Carregando senhas...</p>
+                </div>
+            ) : (
+                <>
+                    <ul className="triagem-senha-list">
+                        {doacoes.map((doacao) => (
+                            <li key={doacao.idDoacao} className="triagem-senha-item">
+                                <span className="triagem-senha-numero">
+                                    {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : 'Sem informação de senha'}
+                                </span>
+                                <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagem-doador-nome">
+                                    {doacao.usuario ? `Doador: ${doacao.usuario.nomeUsuario}` : 'Nome do doador não disponível'}
+                                    <BsBoxArrowUpRight className="triagem-mostrar-mais-icone" size={22} style={{ marginLeft: '10px' }} />
+                                </span>
+                                <div>
+                                    <button
+                                        className="triagem-chamar-btn"
+                                        onClick={() => chamarDoacao(doacao.idDoacao)}
+                                        disabled={loadingActions[doacao.idDoacao]}
+                                    >
+                                        {loadingActions[doacao.idDoacao] ? <ClipLoader size={16} color="#fff" /> : 'Chamar'}
+                                    </button>
+                                    <button
+                                        className="triagem-iniciar-btn"
+                                        onClick={() => abrirModalConfirmacao(doacao.idDoacao)}
+                                        disabled={loadingIniciar[doacao.idDoacao]}
+                                    >
+                                        {loadingIniciar[doacao.idDoacao] ? <ClipLoader size={16} color="#fff" /> : 'Iniciar Triagem'}
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
             <DoadorDetalhesModal
                 isOpen={isDoadorDetalhesModalOpen}
                 onRequestClose={closeDoadorDetalhesModal}
                 doador={doacaoSelecionada ? doacaoSelecionada.usuario : null}
             />
-
-            {/** Modal de Confirmação */}
             <AnimatePresence>
                 {isConfirmacaoModalOpen && (
                     <ConfirmacaoModal
                         isOpen={isConfirmacaoModalOpen}
                         onRequestClose={() => setIsConfirmacaoModalOpen(false)}
                         onConfirm={() => iniciarTriagem(doacaoSelecionada)}
+                        isLoading={isModalLoading}
                         mensagem="Você tem certeza que deseja iniciar a triagem?"
                     />
                 )}
@@ -177,3 +194,4 @@ const Triagem = () => {
 };
 
 export default Triagem;
+

@@ -1,43 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-
-//estilos porém nem vou usar, pois to usando do triagem
 import './Coleta.css';
 
-//Import ícone de mostrar mais 
+// Ícone para mostrar mais
 import { BsBoxArrowUpRight } from "react-icons/bs";
 
-//Import detalhes doador
+// Modal de detalhes do doador
 import DoadorDetalhesModal from '../../components/telas-funcionario/DoadorDetalhesModal';
 
-//Modal de confirmacao de ação
+// Modal de confirmação
 import ConfirmacaoModal from '../../components/telas-funcionario/ConfirmacaoModal';
 import { AnimatePresence } from 'framer-motion';
 
-// Import navigate para login
+import { ClipLoader } from 'react-spinners';
+
+// Navegação para login
 import { useNavigate } from 'react-router-dom';
 
 const Coleta = () => {
-
-    //Estado de doacoes
+    // Estado das doações
     const [doacoes, setDoacoes] = useState([]);
-
-    //Estado de detalhes do doador
     const [isDoadorDetalhesModalOpen, setIsDoadorDetalhesModalOpen] = useState(false);
     const [doacaoSelecionada, setDoacaoSelecionada] = useState(null);
-
-    //Modal de confirmação
     const [isConfirmacaoModalOpen, setIsConfirmacaoModalOpen] = useState(false);
 
-    //Credenciais autenticadas
+    // Estado de carregamento
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
+    const [loadingActions, setLoadingActions] = useState({});
+
+    // Token e ID do hemocentro
     const token = localStorage.getItem('token');
     const idHemocentro = localStorage.getItem('idHemocentro');
 
-    //Navigate para redirecionar para teça
     const navigate = useNavigate();
 
-     //Função para autenticar credenciais, caso não, redireciona para login
-     useEffect(() => {
+    // Autenticação inicial para verificar credenciais
+    useEffect(() => {
         const funcao = localStorage.getItem('funcao');
         if (!token || funcao !== 'coleta') {
             navigate('/login/funcionario');
@@ -56,121 +55,158 @@ const Coleta = () => {
         setDoacaoSelecionada(null);
     };
 
-    // Função para abrir modal de confirmação 
+    // Função para abrir o modal de confirmação
     const abrirModalConfirmacao = (idDoacao) => {
         setDoacaoSelecionada(idDoacao);
         setIsConfirmacaoModalOpen(true);
-    }
-
-
-    const fetchDoacoesColeta = () => {
-        api.get('/doacoes/senhas/coleta', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: {
-                idHemocentro,
-            },
-        })
-        .then(response => {
-            setDoacoes(response.data);
-        })
-        .catch(error => {
-            console.error('Erro ao buscar doações para coleta:', error);
-        });
     };
 
-    useEffect(() => {
-        fetchDoacoesColeta();
-        const interval = setInterval(() => {
-            fetchDoacoesColeta();
-        }, 5000);
-    }, []);
+    // Função para buscar as doações aguardando coleta
+    const fetchDoacoesColeta = async () => {
+        if (isFirstLoad) setIsFetching(true); // Mostra o spinner inicial
 
-    const chamarColeta = (idDoacao) => {
-        api.put(`/doacoes/senhas/chamar-coleta/${idDoacao}`, null, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        })
-        .then(response => {
-            fetchDoacoesColeta();
-            
-        })
-        .catch(error => {
-            console.error('Erro ao chamar coleta:', error);
-        });
-    };
-
-    const iniciarColeta = (idDoacao) => {
-        
-            api.put(`/doacoes/senhas/iniciar-coleta/${idDoacao}`, null, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            .then(response => {
-                setIsConfirmacaoModalOpen(false);
-                setDoacaoSelecionada(null);
-                fetchDoacoesColeta();
-                navigate('/coleta/coletas-iniciadas');
-            })
-            .catch(error => {
-                console.error('Erro ao iniciar coleta:', error);
+        try {
+            const response = await api.get('/doacoes/senhas/coleta', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { idHemocentro },
             });
-        
+
+            setDoacoes(response.data);
+            setIsFirstLoad(false); // Após a primeira carga, desativa o carregamento inicial
+        } catch (error) {
+            console.error('Erro ao buscar doações para coleta:', error);
+        } finally {
+            if (isFirstLoad) setIsFetching(false); // Finaliza o carregamento inicial
+        }
     };
+
+    // Função para chamar coleta
+    const chamarColeta = async (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [idDoacao]: { ...prev[idDoacao], chamar: true } }));
+
+        try {
+            await api.put(`/doacoes/senhas/chamar-coleta/${idDoacao}`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            fetchDoacoesColeta(); // Atualiza os dados após chamar coleta
+        } catch (error) {
+            console.error('Erro ao chamar coleta:', error);
+        } finally {
+            setLoadingActions((prev) => ({ ...prev, [idDoacao]: { ...prev[idDoacao], chamar: false } }));
+        }
+    };
+
+    // Função para iniciar coleta
+    const iniciarColeta = async (idDoacao) => {
+        setLoadingActions((prev) => ({ ...prev, [idDoacao]: { ...prev[idDoacao], iniciar: true } }));
+
+        try {
+            await api.put(`/doacoes/senhas/iniciar-coleta/${idDoacao}`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setIsConfirmacaoModalOpen(false);
+            setDoacaoSelecionada(null);
+            fetchDoacoesColeta(); // Atualiza os dados após iniciar coleta
+            navigate('/coleta/coletas-iniciadas');
+        } catch (error) {
+            console.error('Erro ao iniciar coleta:', error);
+        } finally {
+            setLoadingActions((prev) => ({ ...prev, [idDoacao]: { ...prev[idDoacao], iniciar: false } }));
+        }
+    };
+
+    // Atualiza os dados periodicamente
+    useEffect(() => {
+        fetchDoacoesColeta(); // Faz a primeira chamada
+
+        const interval = setInterval(() => {
+            fetchDoacoesColeta(); // Atualizações subsequentes
+        }, 5000);
+
+        return () => clearInterval(interval); // Limpa o intervalo ao desmontar
+    }, []);
 
     return (
         <div className="triagem-container">
             <h1 className="triagem-title">Doações Aguardando Coleta</h1>
-            <h2 className='triagem-subtitle'>Chame o doador ou inicie o atendimento</h2>
-            <ul className="triagem-list">
-                {doacoes.map(doacao => (
-                    <li key={doacao.idDoacao} className="triagem-senha-item">
-                        <span className="triagem-senha">
-                            {doacao.senha ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})` : "Sem informação de senha"}
-                        </span>
-                        <span onClick={() => openDoadorDetalhesModal(doacao)} className="triagem-doador-nome">
-                            Doador: {doacao.usuario.nomeUsuario || "Nome do doador não disponível"}
-                            <BsBoxArrowUpRight  className='triagem-mostrar-mais-icone' size={22} style={{marginLeft: '10px'}}/>
-                        </span>
-                        <div className="triagem-acoes">
-                            <button 
-                                className="triagem-chamar-btn" 
-                                onClick={() => chamarColeta(doacao.idDoacao)}
-                            >
-                                Chamar Coleta
-                            </button>
-                            <button 
-                                className="triagem-iniciar-btn" 
-                                onClick={() => abrirModalConfirmacao(doacao.idDoacao)}>
-                                    Iniciar Coleta
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            <h2 className="triagem-subtitle">Chame o doador ou inicie o atendimento</h2>
 
-            {/* Modal de Detalhes do Doador */}
+            {isFirstLoad && isFetching ? (
+                <div className="loading-container">
+                    <ClipLoader size={40} color="#0a93a1" />
+                    <p>Carregando senhas...</p>
+                </div>
+            ) : (
+                <>
+                    <ul className="triagem-list">
+                        {doacoes.map((doacao) => (
+                            <li key={doacao.idDoacao} className="triagem-senha-item">
+                                <span className="triagem-senha">
+                                    {doacao.senha
+                                        ? `${doacao.senha.descSenha} (${doacao.senha.tipoSenha})`
+                                        : 'Sem informação de senha'}
+                                </span>
+                                <span
+                                    onClick={() => openDoadorDetalhesModal(doacao)}
+                                    className="triagem-doador-nome"
+                                >
+                                    Doador: {doacao.usuario?.nomeUsuario || 'Nome do doador não disponível'}
+                                    <BsBoxArrowUpRight
+                                        className="triagem-mostrar-mais-icone"
+                                        size={22}
+                                    />
+                                </span>
+                                <div className="triagem-acoes">
+                                    <button
+                                        className="triagem-chamar-btn"
+                                        onClick={() => chamarColeta(doacao.idDoacao)}
+                                        disabled={loadingActions[doacao.idDoacao]?.chamar}
+                                    >
+                                        {loadingActions[doacao.idDoacao]?.chamar ? (
+                                            <ClipLoader size={16} color="#fff" />
+                                        ) : (
+                                            'Chamar Coleta'
+                                        )}
+                                    </button>
+                                    <button
+                                        className="triagem-iniciar-btn"
+                                        onClick={() => abrirModalConfirmacao(doacao.idDoacao)}
+                                        disabled={loadingActions[doacao.idDoacao]?.iniciar}
+                                    >
+                                        {loadingActions[doacao.idDoacao]?.iniciar ? (
+                                            <ClipLoader size={16} color="#fff" />
+                                        ) : (
+                                            'Iniciar Coleta'
+                                        )}
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    {!isFirstLoad && isFetching && (
+                        <div className="update-indicator">Atualizando dados...</div>
+                    )}
+                </>
+            )}
+
             <DoadorDetalhesModal
                 isOpen={isDoadorDetalhesModalOpen}
                 onRequestClose={closeDoadorDetalhesModal}
-                doador={doacaoSelecionada ? doacaoSelecionada.usuario : null}
+                doador={doacaoSelecionada?.usuario || null}
             />
 
-            {/** Modal de Confirmação */}
             <AnimatePresence>
                 {isConfirmacaoModalOpen && (
                     <ConfirmacaoModal
                         isOpen={isConfirmacaoModalOpen}
                         onRequestClose={() => setIsConfirmacaoModalOpen(false)}
                         onConfirm={() => iniciarColeta(doacaoSelecionada)}
+                        isLoading={loadingActions[doacaoSelecionada?.idDoacao]?.iniciar}
                         mensagem="Você tem certeza que deseja iniciar a coleta?"
                     />
                 )}
             </AnimatePresence>
-
         </div>
     );
 };
