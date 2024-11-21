@@ -53,6 +53,7 @@ import HistoricoExames from './pages/telas-funcionario/HistoricoExames';
 import SidebarLaboratorio from './components/sidebarlaboratorio/SidebarLaboratorio';
 import SidebarEstoquista from './components/sidebarestoquista/SidebarEstoquista';
 import EstoquePendentes from './pages/telas-funcionario/EstoquePendentes';
+import Doadores from './pages/usuarios/Doadores';
 
 
 function Layout() {
@@ -107,6 +108,7 @@ function Layout() {
           <Route path='/hemocentro/dashboard' element={<HemocentroDashboard />} />
           <Route path='/hemocentro/informacoes' element={<HemocentroInformacoes /> } />
           <Route path='/hemocentro/doacoes' element={<Doacoes />} />
+          <Route path='/hemocentro/doadores' element={<Doadores />} />
           <Route path='/hemocentro/funcionarios' element={<HemocentroFuncionarios /> } />
           <Route path='/hemocentro/campanhas' element={<HemocentroCampanhas />} />
           {/** Rotas Funcionario */}

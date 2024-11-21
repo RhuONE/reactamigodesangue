@@ -10,11 +10,19 @@ import { toast, ToastContainer } from 'react-toastify';
 import SuccessModal from '../../components/modalSuccess';
 import ErrorModal from '../../components/modalError';
 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 const CadastroHemocentro = () => {
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const [formData, setFormData] = useState({
     nomeHemocentro: '',
@@ -569,9 +577,18 @@ const [error, setError] = useState({
                         <span id="emailInvalido">{error.emailInvalido}</span>
                     </div>
                     <div className="inputDiv">
-                    <input type="password" name="senhaHemocentro" value={formData.senhaHemocentro} onChange={handleChange} placeholder="" />
-                        <label htmlFor="senhaInput">Senha</label>
-                        <span id="senhaInvalido">{error.senhaInvalido}</span>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="senhaHemocentro"
+                        value={formData.senhaHemocentro}
+                        onChange={handleChange}
+                        
+                      />
+                      <span className="password-toggle" onClick={togglePasswordVisibility}>
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                      <label htmlFor="senhaInput">Senha</label>
+                      <span id="senhaInvalido">{error.senhaInvalido}</span>
                     </div>
                     <div className="inputDiv">
                         <input type="password" name="confirmSenha" value={confirmSenha} onChange={handleChangeConfirmSenha} placeholder="" />

@@ -107,6 +107,66 @@ const Hemocentros = () => {
     setHemocentrosFiltrados(hemocentrosFiltradosPorNome);
   }, [filtro, pesquisa, hemocentros]);
 
+
+  const arquivarHemocentro = async (idHemocentro) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Você não está autenticado!');
+      return;
+    }
+  
+    try {
+      const response = await api.put(`/hemocentros/arquivar/${idHemocentro}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      toast.success('Hemocentro arquivado com sucesso!');
+      // Atualiza a lista de hemocentros após arquivar
+      setHemocentros((prevHemocentros) =>
+        prevHemocentros.map((h) =>
+          h.idHemocentro === idHemocentro
+            ? { ...h, statusHemocentro: 'arquivado' }
+            : h
+        )
+      );
+    } catch (error) {
+      console.error('Erro ao arquivar hemocentro:', error);
+      toast.error('Erro ao arquivar hemocentro. Tente novamente.');
+    }
+  };
+
+  const ativarHemocentro = async (idHemocentro) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Você não está autenticado!');
+      return;
+    }
+  
+    try {
+      const response = await api.put(`/hemocentros/aceitar/${idHemocentro}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      toast.success('Hemocentro ativado com sucesso!');
+      // Atualiza a lista de hemocentros após arquivar
+      setHemocentros((prevHemocentros) =>
+        prevHemocentros.map((h) =>
+          h.idHemocentro === idHemocentro
+            ? { ...h, statusHemocentro: 'ativo' }
+            : h
+        )
+      );
+    } catch (error) {
+      console.error('Erro ao ativar hemocentro:', error);
+      toast.error('Erro ao ativar hemocentro. Tente novamente.');
+    }
+  };
+
+
   return (
     <div className="hemocentros-container">
       <LoadingBar color="#f11946" ref={loadingBarRef} /> {/* Barra de progresso */}
@@ -205,7 +265,7 @@ const Hemocentros = () => {
               </tr>
             </thead>
           </table>
-          <HemocentrosList hemocentros={hemocentrosFiltrados} />
+          <HemocentrosList hemocentros={hemocentrosFiltrados} onArquivar={arquivarHemocentro} onAtivar={ativarHemocentro}/>
         </div>
       )}
     </div>

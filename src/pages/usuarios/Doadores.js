@@ -14,7 +14,7 @@ import './Usuarios.css';
 import { toast, ToastContainer } from 'react-toastify'; // Importando Toastify
 import 'react-toastify/dist/ReactToastify.css';
 
-const Usuarios = () => {
+const Doadores = () => {
 
   const loadingBarRef = useRef(null); // Referência para a barra de progresso
 
@@ -86,7 +86,7 @@ const Usuarios = () => {
       const token = localStorage.getItem('token');
       const tipoUsuario = localStorage.getItem('tipoUsuario');
 
-      if (!token || tipoUsuario !== 'administrador') {
+      if (!token || tipoUsuario !== 'hemocentro') {
         navigate('/login');
         return;
       }
@@ -98,7 +98,12 @@ const Usuarios = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setUsuarios(Array.isArray(response.data.data) ? response.data.data : []);
+
+        const usuariosArray = Object.values(response.data.data);
+
+
+        setUsuarios(usuariosArray);
+
         setError(null);
         toast.success('Dados carregados com sucesso!'); //Notificação de sucesso
       } catch (error) {
@@ -323,4 +328,4 @@ const Usuarios = () => {
   );
 };
 
-export default Usuarios;
+export default Doadores;

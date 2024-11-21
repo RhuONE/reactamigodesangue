@@ -198,3 +198,10 @@
     background-color: #087f8a;
   }
   
+  .icon-visualizar {
+  transition: color 0.3s;
+}
+
+.icon-visualizar:hover {
+  color: #007b83; /* Cor mais escura ao passar o mouse */
+}

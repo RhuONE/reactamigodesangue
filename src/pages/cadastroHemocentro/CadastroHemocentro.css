@@ -384,3 +384,33 @@ form h3{
     cursor: pointer;
 }
 
+.toggle-password-visibility {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0a93a1; /* Use o azul-esverdeado já usado no design */
+    font-size: 0.9rem;
+    margin-left: 10px;
+  }
+
+  .passwordInput {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .passwordInput input {
+    width: 100%;
+    padding-right: 40px; /* Espaço reservado para o ícone */
+    box-sizing: border-box;
+  }
+  
+  .password-toggle {
+    margin-top: 10px;
+  }
+  
+  .password-toggle:hover {
+    color: #076f74; /* Tom mais escuro no hover */
+  }
+  
+  

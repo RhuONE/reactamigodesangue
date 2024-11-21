@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
+import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBullhorn } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 import './Sidebar.css';
 import logoExpand from '../../images/LogoAmgSangueText.png';
@@ -45,7 +45,7 @@ const Sidebar = () => {
                         <Link to='/adm/hemocentros'> <FaHospital /> <p>Hemocentros</p></Link>
                     </li>
                     <li className={location.pathname === '/adm/campanhas' ? 'active' : ''}>
-                        <Link to='/adm/campanhas'> <FaClipboardList /> <p>Campanhas</p></Link>
+                        <Link to='/adm/campanhas'> <FaBullhorn /> <p>Campanhas</p></Link>
                     </li>
                     <li className={location.pathname === '/adm/pendencias' ? 'active' : ''}>
                         <Link to='/adm/pendencias'><FaExclamationCircle /> <p>Pendências</p></Link>
