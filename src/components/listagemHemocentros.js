@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BiCurrentLocation, BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaTrash  } from 'react-icons/fa';
 import hospitalIcon from '../images/hospital.jpg'; // Ajuste o caminho da imagem
 
-const HemocentrosList = ({ hemocentros }) => {
+const HemocentrosList = ({ hemocentros, onArquivar, onAtivar }) => {
   // Estado para armazenar o ID do card atualmente aberto
   const [openCardId, setOpenCardId] = useState(null);
 
@@ -12,6 +12,9 @@ const HemocentrosList = ({ hemocentros }) => {
     setOpenCardId(openCardId === id ? null : id);
     console.log(openCardId);
   };
+
+  
+  
 
   return (
     <div className='cardsListagem'>
@@ -32,8 +35,14 @@ const HemocentrosList = ({ hemocentros }) => {
               {hemocentro.statusHemocentro}
             </p>
             <div className='btns'>
-              <button className='aceitarHemoBtn'><FaEdit /></button>
-              <button className='deleteHemoBtn'><FaTrash /></button>
+              <button className='aceitarHemoBtn' onClick={() => onAtivar(hemocentro.idHemocentro)}><FaCheck /></button>
+              <button 
+                className='deleteHemoBtn'
+                onClick={() => onArquivar(hemocentro.idHemocentro)}
+
+                >
+                  <FaTrash />
+              </button>
             </div>
             {openCardId === hemocentro.idHemocentro ? <BiChevronUp /> : <BiChevronDown />}
           </div>

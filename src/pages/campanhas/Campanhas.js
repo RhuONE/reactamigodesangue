@@ -114,7 +114,18 @@ const Campanhas = () => {
             </thead>
             <tbody>
               {campanhas
+                .filter((campanha) => {
+                  // Filtro por status
+                  if (activeButton === "ativos" && campanha.statusCampanha !== "ativo") {
+                    return false;
+                  }
+                  if (activeButton === "inativos" && campanha.statusCampanha !== "inativo") {
+                    return false;
+                  }
+                  return true;
+                })
                 .filter((campanha) =>
+                  // Filtro por pesquisa
                   campanha.tituloCampanha.toLowerCase().includes(searchTerm.toLowerCase())
                 )
                 .map((campanha) => (
@@ -122,7 +133,7 @@ const Campanhas = () => {
                     <td>
                       <img
                         src={`http://179.63.40.44:8000/storage/${
-                          campanha.fotoCampanha || 'uploads/campanhas/banner-para-campanha-de-doacao.avif'
+                          campanha.fotoCampanha || "uploads/campanhas/banner-para-campanha-de-doacao.avif"
                         }`}
                         alt="Banner"
                       />

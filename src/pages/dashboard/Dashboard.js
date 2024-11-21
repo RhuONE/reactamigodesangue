@@ -94,7 +94,7 @@ const Dashboard = () => {
       ) : (
         <>
           <div className="ADM-dashboard-metrics">
-            <MetricCard title="Total de Usuários" value={metrics.totalUsuarios} icon={<FaUser />} />
+            <MetricCard title="Total de Doadores" value={metrics.totalUsuarios} icon={<FaUser />} />
             <MetricCard title="Total de Hemocentros" value={metrics.totalHemocentros} icon={<FaHospital />} />
             <MetricCard title="Doações Realizadas" value={metrics.totalDoacoes} icon={<FaHeartbeat />} />
             <MetricCard title="Campanhas Ativas" value={metrics.campanhasAtivas} icon={<FaClipboard />} />

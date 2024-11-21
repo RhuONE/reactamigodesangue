@@ -19,10 +19,14 @@ const PacientesAguardando = () => {
         })
             .then(response => {
                 const { senhaAtual, historicoSenhas } = response.data;
+    
                 setSenhaAtual(senhaAtual.senha.descSenha);
                 setTipoSenha(senhaAtual.senha.tipoSenha);
                 setStatusSenha(senhaAtual.statusDoacao);
-                setHistoricoSenhas(historicoSenhas); // Atualiza o estado com o histórico de senhas
+    
+                // Converte o objeto `historicoSenhas` em um array
+                const historicoArray = Object.values(historicoSenhas);
+                setHistoricoSenhas(historicoArray);
             })
             .catch(error => {
                 console.error('Erro ao buscar a senha atual:', error);
@@ -46,7 +50,6 @@ const PacientesAguardando = () => {
             {senhaAtual ? (
                 <div className="pacientes-aguardando-senha-display">
                     <h2>Sua senha: <span className="pacientes-aguardando-senha">{senhaAtual}</span></h2>
-                    <p>Tipo de Doação: <span className="pacientes-aguardando-tipo">{tipoSenha}</span></p>
                     <p>Status: <span className='pacientes-aguardando-tipo'>{statusSenha}</span> </p>
                 </div>
             ) : (
@@ -60,8 +63,8 @@ const PacientesAguardando = () => {
                     <ul className="pacientes-aguardando-historico-lista">
                         {historicoSenhas.map((senha, index) => (
                             <li key={index} className="pacientes-aguardando-historico-item">
-                                <span className="pacientes-aguardando-historico-senha">{senha.numeroSenha}</span>
-                                <span className="pacientes-aguardando-historico-tipo">({senha.tipoSenha})</span>
+                                <span className="pacientes-aguardando-historico-senha">{senha.senha?.descSenha}</span>
+                                <span className="pacientes-aguardando-historico-tipo"> - {senha.statusDoacao}</span>
                             </li>
                         ))}
                     </ul>

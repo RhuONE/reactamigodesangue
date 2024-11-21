@@ -1,34 +1,71 @@
-.informacoes-hemocentro-content {
+.hemocentro-page {
+    max-width: 900px;
     margin: 20px auto;
-    max-width: 800px;
-    text-align: center;
-}
-
-.hemocentro-info-card {
-    background: #fff;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f4f4f9;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hemocentro-page h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  .hemocentro-section {
     margin-bottom: 20px;
-}
-
-.hemocentro-info-card h2 {
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hemocentro-section h2 {
     margin-bottom: 10px;
-}
-
-.hemocentro-info-card p {
+    color: #0a93a1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .hemocentro-section h2 svg {
+    margin-right: 10px;
+  }
+  
+  .hemocentro-section p {
     margin: 5px 0;
-}
-.informacoes-hemocentro-content .edit-button {
-    background-color: #e74c3c;
+    font-size: 14px;
+  }
+  
+  .hemocentro-section input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .hemocentro-section button {
+    padding: 10px 20px;
+    background: #0a93a1;
     color: #fff;
     border: none;
-    padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.informacoes-hemocentro-content .edit-button:hover {
-    background-color: #c0392b;
-}
+    transition: background 0.3s;
+  }
+  
+  .hemocentro-section button:hover {
+    background: #086f7a;
+  }
+  
+  .save-message {
+    margin-top: 10px;
+    color: green;
+    font-size: 14px;
+  }
+  
+  .validation-message {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+  }

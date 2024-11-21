@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaExclamationCircle, FaBars } from 'react-icons/fa';
+import { FaTachometerAlt, FaUser, FaHospital, FaClipboardList, FaUserCog, FaHeart, FaBullhorn } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 import './SidebarHemocentro.css';
 import logoExpand from '../images/LogoAmgSangueText.png';
@@ -55,16 +55,19 @@ const SidebarHemocentro = () => {
                         <Link to='/hemocentro/dashboard'> <FaTachometerAlt /> <p>Dashboard</p></Link>
                     </li>
                     <li className={location.pathname === '/hemocentro/informacoes' ? 'active' : ''}>
-                        <Link to='/hemocentro/informacoes'> <FaUser /> <p>Informações</p></Link>
+                        <Link to='/hemocentro/informacoes'> <FaHospital /> <p>Informações</p></Link>
+                    </li>
+                    <li className={location.pathname === '/hemocentro/doadores' ? 'active' : ''}>
+                        <Link to='/hemocentro/doadores'> <FaUser /> <p>Doadores</p></Link>
                     </li>
                     <li className={location.pathname === '/hemocentro/doacoes' ? 'active' : ''}>
-                        <Link to='/hemocentro/doacoes'> <FaHospital /> <p>Doações</p></Link>
+                        <Link to='/hemocentro/doacoes'> <FaHeart /> <p>Doações</p></Link>
                     </li>
                     <li className={location.pathname === '/hemocentro/funcionarios' ? 'active' : ''}>
-                        <Link to='/hemocentro/funcionarios'> <FaClipboardList /> <p>Funcionários</p></Link>
+                        <Link to='/hemocentro/funcionarios'> <FaUserCog /> <p>Funcionários</p></Link>
                     </li>
                     <li className={location.pathname === '/hemocentro/campanhas' ? 'active' : ''}>
-                        <Link to='/hemocentro/campanhas'><FaExclamationCircle /> <p>Campanhas</p></Link>
+                        <Link to='/hemocentro/campanhas'><FaBullhorn /> <p>Campanhas</p></Link>
                     </li>
                     <li className={`logoutBtn`} onClick={handleLogout}>
                         <Link><BiLogOut /> <p>Sair</p></Link>
