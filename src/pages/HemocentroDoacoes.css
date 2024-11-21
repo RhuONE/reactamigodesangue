@@ -1,8 +1,16 @@
-.doacoes-content {
-    margin: 20px;
+.doacoes-container {
     margin-left: 100px;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
-
+.doacoes-content{
+    padding: 40px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 .doacoes-table {
     width: 100%;
     border-collapse: collapse;
@@ -11,18 +19,93 @@
     border-radius: 10px;
 }
 
-.doacoes-table th,
-.doacoes-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-}
+.filtros-container {
+    display: flex;
+    justify-content: space-between; /* Mantém os itens separados */
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .filtro-item {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+    flex: 1; /* Faz com que os itens ocupem espaço proporcional */
+  }
+  
+  .filtro-item label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .tipo-sanguineo-dropdown,
+  .pesquisaCampo #pesquisa {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Faz com que o campo ocupe toda a largura */
+  }
+  
+  .pesquisaCampo {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .pesquisaCampo input {
+    padding-right: 2rem; /* Dá espaço para o ícone da lupa */
+  }
+  
+  .lupaIcon {
+    position: absolute;
+    right: 10px;
+    color: #666;
+  }
 
-.doacoes-table th {
-    background-color: #0ba5b3;
-    font-weight: bold;
-    color: #000;
-}
+.doacoes-table{
+    overflow: hidden;
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .doacoes-table thead{
+    background-color: transparent;
+    padding-right: 8px;
+  }
+  .doacoes-table thead tr{
+    display: flex;
+    background-color: #2d3e50;
+    border-top-right-radius: 10px;
+  }
+  .doacoes-table th{
+    flex: 1;
+    color: #FFF;
+    position: relative;
+  }
+  .doacoes-table tr:has(td){
+    display: flex;
+    background-color: #FFF;
+    transition: .3s;
+  }
+  .doacoes-table tr:has(td):hover{
+    filter: brightness(0.95);
+  }
+  .doacoes-table td {
+    flex: 1;
+    border-top: none;
+    display: flex;
+  }
+  .doacoes-table tbody{
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
 .error-message {
     color: red;
     font-weight: bold;

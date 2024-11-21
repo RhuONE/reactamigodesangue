@@ -1,10 +1,15 @@
-.funcionarios-content {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.funcionarios-container {
+    margin-left: 100px;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.funcionarios-content{
+    padding: 40px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .funcionarios-content h1 {
@@ -13,29 +18,44 @@
     color: #2c3e50;
 }
 
-.funcionarios-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.funcionarios-table th, .funcionarios-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-}
-
-.funcionarios-table th {
-    background-color: #2c3e50;
-    color: white;
-}
-
-.funcionarios-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.funcionarios-table tr:hover {
-    background-color: #ddd;
-}
+.funcionarios-table{
+    overflow: hidden;
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .funcionarios-table thead{
+    background-color: transparent;
+    padding-right: 8px;
+  }
+  .funcionarios-table thead tr{
+    display: flex;
+    background-color: #2d3e50;
+    border-top-right-radius: 10px;
+  }
+  .funcionarios-table th{
+    flex: 1;
+    color: #FFF;
+    position: relative;
+  }
+  .funcionarios-table tr:has(td){
+    display: flex;
+    background-color: #FFF;
+    transition: .3s;
+  }
+  .funcionarios-table tr:has(td):hover{
+    background-color: #eceaea;
+  }
+  .funcionarios-table td {
+    flex: 1;
+    border-top: none;
+    display: flex;
+  }
+  .funcionarios-table tbody{
+    max-height: 100%;
+    overflow-y: auto;
+  }
 
 .add-funcionario-btn {
     background-color: #28a745;
@@ -46,9 +66,56 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    margin-top: 15px; /* Ajusta o espaçamento */
+    margin: 0;
+    align-self: flex-end;
 }
 
 .add-funcionario-btn:hover {
+    background-color: #218838;
+}
+
+.funcionarios-btnAcoes{
+    -webkit-box-shadow: 0px 6px 34px -14px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 34px -14px rgba(0,0,0,0.75);
+    box-shadow: 0px 6px 34px -14px rgba(0,0,0,0.75);
+
+    background-color: #FFF;
+    color: #000;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 1.5rem;
+}
+.funcionarios-btnAcoes:hover{
+    background-color: #FFF;
+}
+
+.funcionarios-btnAcoes.editar{
+    color: cadetblue;
+}
+.funcionarios-btnAcoes.editar:hover{
+    background-color: cadetblue;
+    color: #FFF;
+}
+.funcionarios-btnAcoes.arquivar{
+    color: #ed1724;
+}
+.funcionarios-btnAcoes.arquivar:hover{
+    background-color: #ed1724;
+    color: #FFF;
+}
+
+.funcionarios-btnAcoes.ativar{
+    color: #28a745;
+}
+.funcionarios-btnAcoes.ativar:hover{
+    background-color: #28a745;
+    color: #FFF;
+}
+.funcionarios-acoes{
+    gap: 8px;
+    max-width: 184px;
+}
+
+.tooltipAtivar{
     background-color: #218838;
 }
