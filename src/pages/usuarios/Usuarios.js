@@ -37,6 +37,7 @@ const Usuarios = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const toastId = "toastId";
     const fetchUsuarios = async () => {
       const token = localStorage.getItem('token');
       const tipoUsuario = localStorage.getItem('tipoUsuario');
@@ -55,7 +56,13 @@ const Usuarios = () => {
         });
         setUsuarios(Array.isArray(response.data.data) ? response.data.data : []);
         setError(null);
-        toast.success('Dados carregados com sucesso!'); //Notificação de sucesso
+        
+        if (!toast.isActive(toastId)) {
+          toast.success('HDados carregados com sucesso!', {
+            toastId: toastId,
+            autoClose: 3000,
+          });
+        }
       } catch (error) {
         setError('Erro ao carregar usuários. Tente novamente mais tarde.');
         toast.error('Erro ao carregar dados. Tente novamente.');
